@@ -29,4 +29,7 @@ public class Partida {
 	public ArrayList<Jugador> getJugadores() {
 		return jugadores;
 	}
+	
+	
+	
 }

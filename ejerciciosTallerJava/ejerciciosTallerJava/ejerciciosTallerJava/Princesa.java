@@ -1,5 +1,7 @@
 package ejerciciosTallerJava;
 
+import java.util.Iterator;
+
 public class Princesa extends Carta {
 
 	public Princesa() {
