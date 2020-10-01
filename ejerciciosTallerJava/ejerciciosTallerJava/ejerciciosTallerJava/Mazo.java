@@ -36,6 +36,10 @@ public class Mazo {
 		mazo.push(new Princesa());
 	}
 	
+	public Carta eliminarPrimeraCarta() {
+		return mazo.pop();
+	}
+	
 	public boolean mazoVacio() {
 		return cantCartas == 0;
 	}
