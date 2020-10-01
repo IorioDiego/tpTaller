@@ -16,4 +16,10 @@ public class Mucama extends Carta{
 	public int getFuerzaCarta() {
 		return 4;
 	}
+
+	@Override
+	public void activarEfecto(Jugador jugador, Partida partida) {
+		// TODO Auto-generated method stub
+		
+	}
 }

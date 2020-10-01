@@ -18,4 +18,10 @@ public class Principe extends Carta{
 		return 5;
 	}
 
+	@Override
+	public void activarEfecto(Jugador jugador, Partida partida) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

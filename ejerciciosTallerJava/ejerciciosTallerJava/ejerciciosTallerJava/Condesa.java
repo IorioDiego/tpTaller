@@ -16,4 +16,10 @@ public class Condesa extends Carta{
 	public int getFuerzaCarta() {
 		return 7;
 	}
+
+	@Override
+	public void activarEfecto(Jugador jugador, Partida partida) {
+		// TODO Auto-generated method stub
+		
+	}
 }

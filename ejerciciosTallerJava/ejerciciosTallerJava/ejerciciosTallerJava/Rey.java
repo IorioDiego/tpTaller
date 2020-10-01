@@ -15,4 +15,10 @@ public class Rey extends Carta{
 	public int getFuerzaCarta() {
 		return 6;
 	}
+
+	@Override
+	public void activarEfecto(Jugador jugador, Partida partida) {
+		// TODO Auto-generated method stub
+		
+	}
 }

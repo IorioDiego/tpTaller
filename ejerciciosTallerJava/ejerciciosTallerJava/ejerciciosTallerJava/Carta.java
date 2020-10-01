@@ -22,5 +22,5 @@ public abstract class Carta {
 	
 	public abstract int getCantidadCartasPersonaje();
 	public abstract int getFuerzaCarta();
-	//public abstract void activarEfecto();
+	public abstract void activarEfecto(Jugador jugador,Partida partida);
 }

@@ -15,4 +15,10 @@ public class Baron extends Carta{
 	public int getFuerzaCarta() {
 		return 3;
 	}
+
+	@Override
+	public void activarEfecto(Jugador jugador, Partida partida) {
+		// TODO Auto-generated method stub
+		
+	}
 }

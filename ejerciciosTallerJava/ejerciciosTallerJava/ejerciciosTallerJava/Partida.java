@@ -25,4 +25,8 @@ public class Partida {
 		
 		///POR CADA RONDA TIENE QUE PASAR ESTO--->TAL VEZ PUEDE IR EN TABLERO
 	}
+	
+	public ArrayList<Jugador> getJugadores() {
+		return jugadores;
+	}
 }

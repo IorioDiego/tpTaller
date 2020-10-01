@@ -17,4 +17,10 @@ public class Guardia extends Carta{
 	public int getFuerzaCarta(){
 		return 1;
 	}
+
+	@Override
+	public void activarEfecto(Jugador jugador, Partida partida) {
+		// TODO Auto-generated method stub
+		
+	}
 }
