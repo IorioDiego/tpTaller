@@ -54,8 +54,10 @@ public class Mazo {
 		
 		//mazo.peek().mostrarCarta();
 		try {
-			cantCartas--;
+			if(cantCartas == 1)
+				int flag=1;
 			jugador.tomarCarta(mazo.remove(0));
+			cantCartas--;
 		} catch (IndexOutOfBoundsException e) {
 			e.getStackTrace();
 			//finalizar partida
