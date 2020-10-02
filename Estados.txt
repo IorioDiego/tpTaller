@@ -1,0 +1,4 @@
+Estados del jugador
+Si el jugador se queda sin cartas pasa a estado eliminado
+Si el jugador desecha una condesa para a estado protegido
+
