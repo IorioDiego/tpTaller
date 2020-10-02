@@ -11,30 +11,30 @@ public class Main {
 		mazo.mezclar();
 		mazo.mezclar();
 		
-		jugador1.tomarCartaDelMazo(mazo);
+		//jugador1.tomarCartaDelMazo(mazo);
 		System.out.println("\n");
 
-		jugador1.tomarCartaDelMazo(mazo);
+		//jugador1.tomarCartaDelMazo(mazo);
 		System.out.println("\n");
 		
 		System.out.println("El jugador 1 descarta: ");
 		jugador1.cambiarCartaDescarte();
-		jugador1.descartar();
+		jugador1.descartar(0);
 		System.out.println("\n");
 		
-		jugador1.tomarCartaDelMazo(mazo);
+		//jugador1.tomarCartaDelMazo(mazo);
 		System.out.println("\n");
 		
 		System.out.println("El jugador 1 descarta: ");
-		jugador1.descartar();
+		jugador1.descartar(1);
 		
 		System.out.println("\n");
-		jugador1.tomarCartaDelMazo(mazo);
+		//jugador1.tomarCartaDelMazo(mazo);
 		System.out.println("\n");
 		
 		System.out.println("El jugador 1 descarta: ");
 		jugador1.cambiarCartaDescarte();
-		jugador1.descartar();
+		jugador1.descartar(0);
 
 		
 		jugador1.mostrarDescarte();

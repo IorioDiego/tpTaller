@@ -1,43 +1,44 @@
 package ejerciciosTallerJava;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
 public class Mazo {
 	
 	private int cantCartas = 16;
-	private Stack<Carta> mazo = new Stack<Carta>();
+	private ArrayList<Carta> mazo = new ArrayList<Carta>();
 	
 	
 	public Mazo() {
 		
-		mazo.push(new Guardia());
-		mazo.push(new Guardia());
-		mazo.push(new Guardia());
-		mazo.push(new Guardia());
-		mazo.push(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
 		
-		mazo.push(new Sacerdote());
-		mazo.push(new Sacerdote());
+		mazo.add(new Sacerdote());
+		mazo.add(new Sacerdote());
 		
-		mazo.push(new Baron());
-		mazo.push(new Baron());
+		mazo.add(new Baron());
+		mazo.add(new Baron());
 		
-		mazo.push(new Mucama());
-		mazo.push(new Mucama());
+		mazo.add(new Mucama());
+		mazo.add(new Mucama());
 		
-		mazo.push(new Principe());
-		mazo.push(new Principe());
+		mazo.add(new Principe());
+		mazo.add(new Principe());
 		
-		mazo.push(new Rey());
+		mazo.add(new Rey());
 
-		mazo.push(new Condesa());
+		mazo.add(new Condesa());
 		
-		mazo.push(new Princesa());
+		mazo.add(new Princesa());
 	}
 	
 	public Carta eliminarPrimeraCarta() {
-		return mazo.pop();
+		return mazo.remove(0);
 	}
 	
 	public boolean mazoVacio() {
@@ -49,12 +50,21 @@ public class Mazo {
 		Collections.shuffle(mazo);
 	}
 	
-	public Carta darCarta() {
-		cantCartas--;
+	public void darCarta(Jugador jugador) throws IndexOutOfBoundsException {
+		
 		//mazo.peek().mostrarCarta();
-		return mazo.pop();
+		try {
+			cantCartas--;
+			jugador.tomarCarta(mazo.remove(0));
+		} catch (IndexOutOfBoundsException e) {
+			e.getStackTrace();
+			//finalizar partida
+			// TODO: handle exception
+		}
+	
 	}
 	
+
 //	public void mostrarMazo() {
 //		
 //		for (Carta x : mazo) {

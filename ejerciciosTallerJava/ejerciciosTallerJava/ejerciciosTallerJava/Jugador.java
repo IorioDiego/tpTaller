@@ -1,5 +1,6 @@
 package ejerciciosTallerJava;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Jugador {
@@ -8,7 +9,8 @@ public class Jugador {
 		private int id;
 		private Carta carta1;
 		private Carta cartaTemporal;
-		private Stack<Carta> descarte = new Stack<Carta>();
+		private ArrayList<Carta> descarte = new ArrayList<Carta>();
+		private ArrayList<Carta> mano= new ArrayList<Carta>();
 		
 		public Jugador(String nombre, int id) {
 			this.nombre = nombre;
@@ -25,15 +27,24 @@ public class Jugador {
 			this.cartaTemporal = aux;
 		}
 		
-		public void descartar() {
+		public void descartar(int i) {
 			
-			descarte.push(cartaTemporal);
+			descarte.add(mano.remove(i));
 			
-			cartaTemporal.mostrarCarta();
+			//return mano.remove(i); //retorno una carta y la asigno a una carta
+									// y despues la pongo en el descarte del tablero y 
+									// del jugador
+			
+			//cartaTemporal.mostrarCarta();
 			//cartaTemporal.activarEfecto();
-			
-			
-		}	
+		}
+		
+		public void tomarCarta(Carta nuevaCarta) {
+			mano.add(nuevaCarta);
+		}
+		
+
+		
 //		public Carta descartar() {
 //			
 //			Carta aux = cartaTemporal;
@@ -64,18 +75,18 @@ public class Jugador {
 			return suma;
 		}
 		
-		public void tomarCartaDelMazo(Mazo mazo) {
-			
-			if(this.carta1 == null) {
-				this.carta1 = mazo.darCarta();
-				this.carta1.mostrarCarta();
-			}
-				
-			else {
-				this.cartaTemporal = mazo.darCarta();
-				this.cartaTemporal.mostrarCarta();
-			}
-				
-		}
+//		public void tomarCartaDelMazo(Mazo mazo) {
+//			
+//			if(this.carta1 == null) {
+//				this.carta1 = mazo.darCarta(this);
+//				this.carta1.mostrarCarta();
+//			}
+//				
+//			else {
+//				this.cartaTemporal = mazo.darCarta();
+//				this.cartaTemporal.mostrarCarta();
+//			}
+//				
+//		}
 
 }

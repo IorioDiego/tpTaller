@@ -18,10 +18,13 @@ public class Partida {
 	{
 		Mazo mazo = new Mazo();
 		mazo.mezclar();
-		for (Jugador jugador : jugadores) {
-			jugador.tomarCartaDelMazo(mazo);
-		}
 		Carta primCarta=mazo.eliminarPrimeraCarta();
+		
+		for (Jugador jugador : jugadores) {
+			mazo.darCarta(jugador);
+		}
+		
+	
 		
 		///POR CADA RONDA TIENE QUE PASAR ESTO--->TAL VEZ PUEDE IR EN TABLERO
 	}
