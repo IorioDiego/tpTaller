@@ -1,6 +1,6 @@
 package letterLove;
 
-import java.util.Iterator;
+
 
 import game.Jugador;
 import game.Partida;
@@ -24,13 +24,7 @@ public class Princesa extends Carta {
 
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida) {
-		for (Iterator<Jugador> iterador = partida.getJugadores().iterator(); iterador.hasNext();) {
-			Jugador player = iterador.next();
-			if (player == jugador) {
-				iterador.remove();
-			}
-		}
-
+		jugador.seJugoPrincesa();
 	}
 
 }

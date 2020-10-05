@@ -21,7 +21,11 @@ public class Baron extends Carta{
 
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida) {
-		// TODO Auto-generated method stub
-		
+		Jugador oponente = jugador.seleccionarJugador(partida);
+		int resultado = jugador.compararMano( oponente );
+		if( resultado >0  )
+				oponente.seJugoBaron();
+		else if( resultado < 0) 
+			jugador.seJugoBaron();
 	}
 }

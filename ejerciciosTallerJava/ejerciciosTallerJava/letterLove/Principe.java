@@ -23,8 +23,9 @@ public class Principe extends Carta{
 
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida) {
-		// TODO Auto-generated method stub
-		
+		Jugador oponente = jugador.seleccionarJugador(partida);
+		oponente.descartar(oponente.sacarCartaDeMano(0)); 
+		partida.getMazo().darCarta(jugador);
 	}
 
 }

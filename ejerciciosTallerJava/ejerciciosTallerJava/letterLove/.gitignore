@@ -12,3 +12,11 @@
 /Sacerdote.class
 /Partida.class
 /Descarte.class
+/Estado.class
+/Protegido.class
+/Eliminado.class
+/Normal.class
+/seRoboCarta.class
+/EstadoCarta.class
+/Bloqueada.class
+/Desbloqueada.class

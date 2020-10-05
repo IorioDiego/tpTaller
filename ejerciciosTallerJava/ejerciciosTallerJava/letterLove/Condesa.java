@@ -22,7 +22,7 @@ public class Condesa extends Carta{
 
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida) {
-		// TODO Auto-generated method stub
+		//TODO
 		
 	}
 }

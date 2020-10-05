@@ -3,6 +3,8 @@ package letterLove;
 import game.Jugador;
 import game.Partida;
 
+import java.util.ArrayList;
+
 public class Mucama extends Carta{
 	
 	public Mucama() {
@@ -22,7 +24,6 @@ public class Mucama extends Carta{
 
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida) {
-		// TODO Auto-generated method stub
-		
+		jugador.seJugoMucama();
 	}
 }

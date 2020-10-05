@@ -21,7 +21,7 @@ public class Sacerdote extends Carta{
 
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida) {
-		// TODO Auto-generated method stub
+		jugador.seleccionarJugador(partida).mostrarMano();
 		
 	}
 }
