@@ -1,7 +1,9 @@
-package ejerciciosTallerJava;
+package game;
 
 import java.util.ArrayList;
 import java.util.Stack;
+
+import letterLove.Carta;
 
 public class Jugador {
 

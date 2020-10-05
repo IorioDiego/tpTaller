@@ -1,4 +1,7 @@
-package ejerciciosTallerJava;
+package letterLove;
+
+import game.Jugador;
+import game.Partida;
 
 public class Principe extends Carta{
 	

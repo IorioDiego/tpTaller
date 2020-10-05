@@ -1,4 +1,6 @@
-package ejerciciosTallerJava;
+package game;
+
+import letterLove.Mazo;
 
 public class Main {
 		

@@ -1,10 +1,12 @@
-package ejerciciosTallerJava;
+package letterLove;
 
-public class Mucama extends Carta{
+import game.Jugador;
+import game.Partida;
+
+public class Sacerdote extends Carta{
 	
-	public Mucama() {
-		super(4, "Mucama", "El jugador está protegido y no puede ser afectado por cartas "
-				+ "de otros jugadores hasta su siguiente turno");
+	public Sacerdote() {
+		super(2, "Sacerdote", "Elige otro jugador para ver la cartas en su mano");
 		
 	}
 	
@@ -14,7 +16,7 @@ public class Mucama extends Carta{
 
 	@Override
 	public int getFuerzaCarta() {
-		return 4;
+		return 2;
 	}
 
 	@Override

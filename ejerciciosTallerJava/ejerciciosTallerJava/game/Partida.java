@@ -1,6 +1,9 @@
-package ejerciciosTallerJava;
+package game;
 
 import java.util.ArrayList;
+
+import letterLove.Carta;
+import letterLove.Mazo;
 
 public class Partida {
 	private int afecto;

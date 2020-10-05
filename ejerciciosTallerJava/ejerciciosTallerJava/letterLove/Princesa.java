@@ -1,6 +1,9 @@
-package ejerciciosTallerJava;
+package letterLove;
 
 import java.util.Iterator;
+
+import game.Jugador;
+import game.Partida;
 
 public class Princesa extends Carta {
 

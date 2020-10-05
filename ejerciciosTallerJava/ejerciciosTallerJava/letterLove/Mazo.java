@@ -1,8 +1,10 @@
-package ejerciciosTallerJava;
+package letterLove;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
+
+import game.Jugador;
 
 public class Mazo {
 	
@@ -53,9 +55,11 @@ public class Mazo {
 	public void darCarta(Jugador jugador) throws IndexOutOfBoundsException {
 		
 		//mazo.peek().mostrarCarta();
+		
 		try {
+			int flag=0;
 			if(cantCartas == 1)
-				int flag=1;
+				flag=1;
 			jugador.tomarCarta(mazo.remove(0));
 			cantCartas--;
 		} catch (IndexOutOfBoundsException e) {
