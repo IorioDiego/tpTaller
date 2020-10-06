@@ -9,6 +9,7 @@ import letterLove.Princesa;
 import letterLove.Rey;
 import letterLove.Principe;
 import letterLove.Sacerdote;
+import letterLove.ultimaCartaException;
 import letterLove.Carta;
 import letterLove.Mazo;
 
@@ -34,33 +35,38 @@ public class Partida {
 		listaCartas.add(new Princesa());
 
 	}
-	
-	
 
 	public  Mazo getMazo() {
 		return mazo;
 	}
 
-
-
 	public void setMazo(Mazo mazo) {
 		this.mazo = mazo;
 	}
 
-
-
 	public void iniciarPartida() {
 		Mazo mazo = new Mazo();
 		mazo.mezclar();
-		Carta primCarta = mazo.eliminarPrimeraCarta();
+		mazo.eliminarPrimeraCarta();
 
 		for (Jugador jugador : jugadores) {
-			mazo.darCarta(jugador);
+			entregarCarta(jugador);
 		}
-
 		/// POR CADA RONDA TIENE QUE PASAR ESTO--->TAL VEZ PUEDE IR EN TABLERO
 	}
-
+	
+	public void entregarCarta(Jugador jugador)
+	{	
+		//try
+		//{
+			Carta cartaTomada = mazo.darCarta();
+			jugador.tomarCarta(cartaTomada);
+		//}
+		//catch (ultimaCartaException e) {
+			//System.out.println("hola");
+		//}
+	}
+	
 	public ArrayList<Jugador> getJugadores() {
 		return jugadores;
 	}

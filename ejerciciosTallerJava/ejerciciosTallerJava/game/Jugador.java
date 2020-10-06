@@ -1,16 +1,14 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
-import letterLove.Baron;
+
+
 import letterLove.Condesa;
-import letterLove.Guardia;
-import letterLove.Mucama;
-import letterLove.Princesa;
+
 import letterLove.Rey;
 import letterLove.Principe;
-import letterLove.Sacerdote;
+
 
 import letterLove.Carta;
 
@@ -41,7 +39,7 @@ public class Jugador {
 
 	public int elegirCartaParaJugar() {// izquierda 0, derecha 1 
 		// evento doble click en carta
-		return 0;
+		return 1;
 	}
 
 	public void descartar(Carta cartaJugada) {
@@ -54,8 +52,9 @@ public class Jugador {
 		// cartaTemporal.mostrarCarta();
 		// cartaTemporal.activarEfecto();
 	}
-
+	
 	public void tomarCarta(Carta nuevaCarta) {
+			
 		if (mano.contains(new Condesa()) && (mano.contains(new Rey()) || mano.contains(new Principe()))) {
 			if (nuevaCarta.equals(new Condesa())) {
 				descartar(nuevaCarta);
@@ -117,7 +116,12 @@ public class Jugador {
 	public void seJugoMucama() {
 		estado = estado.seJugoMucama();
 	}
-
+	
+	public Estado getEstado()
+	{
+		return this.estado;
+	}
+	
 	public void seJugoPrincesa() {
 		estado = estado.seJugoPrincesa();
 
@@ -133,10 +137,10 @@ public class Jugador {
 
 	public Jugador seleccionarJugador(Partida partida) {
 		/// TODO evento de seleccion de jugador
-		int i = 0;
+		int i = 1;
 		return partida.elegirJugador(i);
 	}
-
+	
 	public Carta sacarCartaDeMano(int i) {
 		return mano.remove(i);
 	}
@@ -169,8 +173,14 @@ public class Jugador {
 	public void mostrarMano() {
 		for (Carta carta : descarte) {
 			System.out.println(carta);
-		}
-		
+		}	
 	}
+
+	@Override
+	public String toString() {
+		return "Jugador [nombre=" + nombre + ", id=" + id + ", carta1=" + carta1 + ", cartaTemporal=" + cartaTemporal
+				+ ", descarte=" + descarte + ", mano=" + mano + ", estado=" + estado + "]";
+	}
+	
 	
 }

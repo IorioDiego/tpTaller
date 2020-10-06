@@ -23,5 +23,8 @@ public abstract class Estado {
 		return this;
 	}
 	
-	
+	@Override
+	public boolean equals(Object obj) {
+		return obj.getClass().getName().equals(this.getClass().getName());
+	}
 }
