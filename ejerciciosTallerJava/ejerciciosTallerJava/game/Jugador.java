@@ -2,13 +2,10 @@ package game;
 
 import java.util.ArrayList;
 
-
-
 import letterLove.Condesa;
 
 import letterLove.Rey;
 import letterLove.Principe;
-
 
 import letterLove.Carta;
 
@@ -37,7 +34,7 @@ public class Jugador {
 //			this.cartaTemporal = aux;
 //		}
 
-	public int elegirCartaParaJugar() {// izquierda 0, derecha 1 
+	public int elegirCartaParaJugar() {// izquierda 0, derecha 1
 		// evento doble click en carta
 		return 1;
 	}
@@ -52,18 +49,27 @@ public class Jugador {
 		// cartaTemporal.mostrarCarta();
 		// cartaTemporal.activarEfecto();
 	}
-	
+
 	public void tomarCarta(Carta nuevaCarta) {
-			
-		if (mano.contains(new Condesa()) && (mano.contains(new Rey()) || mano.contains(new Principe()))) {
-			if (nuevaCarta.equals(new Condesa())) {
-				descartar(nuevaCarta);
-			}	
-			else
-				descartar(mano.get(0));
-		} else
+
+		if (nuevaCarta.equals(new Condesa()) && (mano.contains(new Rey()) || mano.contains(new Principe())))
+			descartar(nuevaCarta);
+		else {
+			if (mano.contains(new Condesa()) && (nuevaCarta.equals(new Rey()) || nuevaCarta.equals(new Principe())))
+				descartar(sacarCartaDeMano(0));
 			mano.add(nuevaCarta);
+		}
 		estado = estado.seRoboCarta();
+
+//		if (mano.contains(new Condesa()) && (mano.contains(new Rey()) || mano.contains(new Principe()))) {
+//			if (nuevaCarta.equals(new Condesa())) {
+//				descartar(nuevaCarta);
+//			}	
+//			else
+//				descartar(mano.get(0));
+//		} else
+//		mano.add(nuevaCarta);
+//		estado = estado.seRoboCarta();
 	}
 
 //		public Carta descartar() {
@@ -77,11 +83,11 @@ public class Jugador {
 //			return aux; 
 //			
 //		}
-	
-	public Carta getMano() {//para cuando tiene uno solo
+
+	public Carta getMano() {// para cuando tiene uno solo
 		return mano.get(0);
 	}
-	
+
 	public void mostrarDescarte() {
 
 		System.out.println("\nEl jugador: " + id + "\nNombre: " + nombre + "\ntiene en su descarte: \n");
@@ -116,12 +122,11 @@ public class Jugador {
 	public void seJugoMucama() {
 		estado = estado.seJugoMucama();
 	}
-	
-	public Estado getEstado()
-	{
+
+	public Estado getEstado() {
 		return this.estado;
 	}
-	
+
 	public void seJugoPrincesa() {
 		estado = estado.seJugoPrincesa();
 
@@ -140,7 +145,7 @@ public class Jugador {
 		int i = 1;
 		return partida.elegirJugador(i);
 	}
-	
+
 	public Carta sacarCartaDeMano(int i) {
 		return mano.remove(i);
 	}
@@ -162,18 +167,18 @@ public class Jugador {
 	}
 
 	public void intercabiarMano(Jugador oponente) {
-			ArrayList <Carta>cambioDemano= new ArrayList<>(this.mano);
-			this.mano.clear();
-			this.mano.addAll(oponente.mano);
-			oponente.mano.clear();
-			oponente.mano.addAll(cambioDemano);
-			
-			}
-	
+		ArrayList<Carta> cambioDemano = new ArrayList<>(this.mano);
+		this.mano.clear();
+		this.mano.addAll(oponente.mano);
+		oponente.mano.clear();
+		oponente.mano.addAll(cambioDemano);
+
+	}
+
 	public void mostrarMano() {
 		for (Carta carta : descarte) {
 			System.out.println(carta);
-		}	
+		}
 	}
 
 	@Override
@@ -181,6 +186,5 @@ public class Jugador {
 		return "Jugador [nombre=" + nombre + ", id=" + id + ", carta1=" + carta1 + ", cartaTemporal=" + cartaTemporal
 				+ ", descarte=" + descarte + ", mano=" + mano + ", estado=" + estado + "]";
 	}
-	
-	
+
 }

@@ -17,7 +17,7 @@ public class Partida {
 	private int afecto;
 	private int cantJugadores;
 	private ArrayList<Jugador> jugadores;
-	private static ArrayList<Carta> listaCartas = new  ArrayList<Carta>(); 
+	private ArrayList<Carta> listaCartas = new  ArrayList<Carta>(); 
 	private Mazo mazo;
 	
 	public Partida(int afecto, int cantJugadores, ArrayList<Jugador> jugadores) {
@@ -55,8 +55,6 @@ public class Partida {
 		/// POR CADA RONDA TIENE QUE PASAR ESTO--->TAL VEZ PUEDE IR EN TABLERO
 	}
 	
-
-	
 	public ArrayList<Jugador> getJugadores() {
 		return jugadores;
 	}
@@ -65,16 +63,18 @@ public class Partida {
 		return jugadores.get(i);
 	}
 	
-	public static void mostrarLista() {
+	public void mostrarLista() {
+		int i=0;
 		for (Carta carta : listaCartas) {
-			System.out.println(carta);
+			System.out.println("Opcion: " + i + "-->" + carta.getNombre());
+			i++;
 		}
 	}
 	
-	public Carta seleccionarCarta() {
+	public Carta seleccionarCarta(int index) {
 	//TODO evento de seleecion
-		int i = 0;
-		return listaCartas.get(i);
+		//int i = 0;
+		return listaCartas.get(index);
 	}
 		
 	
