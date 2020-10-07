@@ -50,22 +50,12 @@ public class Partida {
 		mazo.eliminarPrimeraCarta();
 
 		for (Jugador jugador : jugadores) {
-			entregarCarta(jugador);
+			mazo.darCarta(jugador);
 		}
 		/// POR CADA RONDA TIENE QUE PASAR ESTO--->TAL VEZ PUEDE IR EN TABLERO
 	}
 	
-	public void entregarCarta(Jugador jugador)
-	{	
-		//try
-		//{
-			Carta cartaTomada = mazo.darCarta();
-			jugador.tomarCarta(cartaTomada);
-		//}
-		//catch (ultimaCartaException e) {
-			//System.out.println("hola");
-		//}
-	}
+
 	
 	public ArrayList<Jugador> getJugadores() {
 		return jugadores;

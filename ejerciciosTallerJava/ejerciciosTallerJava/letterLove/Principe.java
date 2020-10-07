@@ -25,7 +25,7 @@ public class Principe extends Carta{
 	public void activarEfecto(Jugador jugador, Partida partida) {
 		Jugador oponente = jugador.seleccionarJugador(partida);
 		oponente.descartar(oponente.sacarCartaDeMano(0)); 
-		partida.entregarCarta(jugador);
+		partida.getMazo().darCarta(jugador);
 	}
 
 }

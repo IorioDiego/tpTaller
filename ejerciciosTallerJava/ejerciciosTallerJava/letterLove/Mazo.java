@@ -3,6 +3,8 @@ package letterLove;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import game.Jugador;
+
 public class Mazo {
 
 	private int cantCartas = 16;
@@ -48,13 +50,12 @@ public class Mazo {
 		Collections.shuffle(mazo);
 	}
 
-	public Carta darCarta() //throws ultimaCartaException 
+	public void darCarta(Jugador jugador) 
 	{
 		
-		//if(cantCartas==1)
-			//throw new ultimaCartaException("hola");
 		cantCartas--;
-		return mazo.remove(0);
+		jugador.tomarCarta(mazo.remove(0));
+		
 	}
 	
 
