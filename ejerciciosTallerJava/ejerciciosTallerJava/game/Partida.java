@@ -13,13 +13,17 @@ import letterLove.ultimaCartaException;
 import letterLove.Carta;
 import letterLove.Mazo;
 
-public class Partida {
+public class Partida extends Observer {
 	private int afecto;
 	private int cantJugadores;
 	private ArrayList<Jugador> jugadores;
-	private ArrayList<Carta> listaCartas = new  ArrayList<Carta>(); 
+	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
 	private Mazo mazo;
-	
+
+	public Partida() {
+
+	}
+
 	public Partida(int afecto, int cantJugadores, ArrayList<Jugador> jugadores) {
 		this.afecto = afecto;
 		this.cantJugadores = cantJugadores;
@@ -36,7 +40,27 @@ public class Partida {
 
 	}
 
-	public  Mazo getMazo() {
+	@Override
+	public void notificarse() {
+		int fuerza = 0, ganador,empate=0;
+		int [] jugEmpatados = new int[jugadores.size()];
+		for (int i = 0; i < jugadores.size(); i++) {
+			if (!jugadores.get(0).equals(new Eliminado())) {
+				if (jugadores.get(0).getMano().getFuerza() > fuerza) {
+					fuerza = jugadores.get(0).getMano().getFuerza();
+					empate=0;
+				}if(jugadores.get(0).getMano().getFuerza() == fuerza)
+				{	
+					jugEmpatados[i]=i;
+					empate=1;
+				}
+				
+			}
+		}	
+	}
+	
+
+	public Mazo getMazo() {
 		return mazo;
 	}
 
@@ -54,7 +78,7 @@ public class Partida {
 		}
 		/// POR CADA RONDA TIENE QUE PASAR ESTO--->TAL VEZ PUEDE IR EN TABLERO
 	}
-	
+
 	public ArrayList<Jugador> getJugadores() {
 		return jugadores;
 	}
@@ -62,21 +86,11 @@ public class Partida {
 	public Jugador elegirJugador(int i) {
 		return jugadores.get(i);
 	}
-	
-	public void mostrarLista() {
-		int i=0;
-		for (Carta carta : listaCartas) {
-			System.out.println("Opcion: " + i + "-->" + carta.getNombre());
-			i++;
-		}
-	}
-	
+
 	public Carta seleccionarCarta(int index) {
-	//TODO evento de seleecion
-		//int i = 0;
+		// TODO evento de seleecion
+		// int i = 0;
 		return listaCartas.get(index);
 	}
-		
-	
 
 }

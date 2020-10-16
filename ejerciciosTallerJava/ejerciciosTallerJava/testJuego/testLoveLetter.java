@@ -41,7 +41,6 @@ public class testLoveLetter {
 		assertEquals(cartaJugador, oponente.getMano());
 		assertEquals(cartaOponente, jugador.getMano());
 
-		/// VER COMO SE ELIGE EL INDICE DE JUGADOR
 	}
 
 	@Test
@@ -77,12 +76,9 @@ public class testLoveLetter {
 		oponente.sacarCartaDeMano(0);
 		jugador.tomarCarta(new Condesa());
 		oponente.tomarCarta(new Mucama());
-		int comp = jugador.getMano().getFuerza() - oponente.getMano().getFuerza();
 		jugador.tomarCarta(new Baron());
 		jugador.jugarCarta(partida);
-
 		assertEquals(new Eliminado(), oponente.getEstado());
-
 	}
 
 	@Test
@@ -93,7 +89,6 @@ public class testLoveLetter {
 		oponente.sacarCartaDeMano(0);
 		jugador.tomarCarta(new Guardia());
 		oponente.tomarCarta(new Guardia());
-		int comp = jugador.getMano().getFuerza() - oponente.getMano().getFuerza();
 		jugador.tomarCarta(new Baron());
 		jugador.jugarCarta(partida);
 
@@ -101,6 +96,8 @@ public class testLoveLetter {
 		assertEquals(new Normal(), jugador.getEstado());
 	}
 	
+	///Siempre se elige sacerdote para eliminar
+	///Siempre se elige el jugador 1
 	@Test
 	public void DescartarGuardiaNoElimino() {
 		Jugador jugador = jugadores.get(0);
@@ -117,7 +114,7 @@ public class testLoveLetter {
 		Jugador jugador = jugadores.get(0);
 		Jugador oponente = jugadores.get(1);
 		oponente.sacarCartaDeMano(0);
-		oponente.tomarCarta(new Mucama());
+		oponente.tomarCarta(new Sacerdote());
 		jugador.tomarCarta(new Guardia());
 		jugador.jugarCarta(partida);
 		assertEquals(new Eliminado(), oponente.getEstado());
@@ -166,5 +163,4 @@ public class testLoveLetter {
 		jugador.jugarCarta(partida);
 		assertEquals(new Eliminado(), jugador.getEstado());
 	}
-
 }

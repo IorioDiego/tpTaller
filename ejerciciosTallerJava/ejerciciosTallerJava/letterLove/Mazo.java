@@ -5,9 +5,9 @@ import java.util.Collections;
 
 import game.Jugador;
 
-public class Mazo {
+public class Mazo extends Observable {
 
-	private int cantCartas = 16;
+	//private int cantCartas = 16;
 	private ArrayList<Carta> mazo = new ArrayList<Carta>();
 
 	public Mazo() {
@@ -41,9 +41,9 @@ public class Mazo {
 		return mazo.remove(0);	
 	}
 
-	public boolean mazoVacio() {
-		return cantCartas == 0;
-	}
+//	public boolean mazoVacio() {
+//		return cantCartas == 0;
+//	}
 
 	public void mezclar() {
 		Collections.shuffle(mazo);
@@ -51,10 +51,15 @@ public class Mazo {
 	}
 
 	public void darCarta(Jugador jugador) 
-	{
-		
-		cantCartas--;
-		jugador.tomarCarta(mazo.remove(0));
+	{	
+		try
+		{	
+			//cantCartas--;
+			jugador.tomarCarta(mazo.remove(0));
+			
+		}catch(Exception ex) {
+			this.notificar();
+		}
 		
 	}
 	

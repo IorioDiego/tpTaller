@@ -26,12 +26,9 @@ public class Guardia extends Carta{
 
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida) {
-		Scanner entrada = new Scanner(System.in);
 		Jugador oponente = jugador.seleccionarJugador(partida);
-		partida.mostrarLista();
-		System.out.print("Ingrese opcion: ");
-	    int opcion=Integer.parseInt(entrada.nextLine());
-		if(oponente.tengoLaCarta(partida.seleccionarCarta(opcion)))
+		int i=0; ///---->>siempre elige sacerdote
+		if(oponente.tengoLaCarta(partida.seleccionarCarta(i)))
 			oponente.seJugoGuardia();
 	}
 }
