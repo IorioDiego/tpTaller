@@ -23,6 +23,11 @@ public abstract class Estado {
 		return this;
 	}
 	
+	public Estado seReiniciaRonda()
+	{
+		return this;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		return obj.getClass().getName().equals(this.getClass().getName());

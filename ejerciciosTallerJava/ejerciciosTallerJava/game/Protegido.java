@@ -6,4 +6,9 @@ public class Protegido extends Estado{
 	public Estado seRoboCarta() {
 		return new Normal();
 	}
+	
+	@Override
+	public Estado seReiniciaRonda() {
+		return new Normal();
+	}
 }
