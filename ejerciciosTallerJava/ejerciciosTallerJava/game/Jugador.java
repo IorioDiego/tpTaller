@@ -13,6 +13,7 @@ public class Jugador {
 
 	private String nombre;
 	private int id;
+	private int afectosConseguidos;
 	private Carta carta1;
 	private Carta cartaTemporal;
 	private ArrayList<Carta> descarte = new ArrayList<Carta>();
@@ -22,7 +23,15 @@ public class Jugador {
 	public Jugador(String nombre, int id) {
 		this.nombre = nombre;
 		this.id = id;
+		this.afectosConseguidos=0;
 	}
+
+	
+	
+	public void ganarRonda() {
+		afectosConseguidos++;
+	}
+
 
 	public void mostrarJugador() {
 		System.out.println("Nombre: " + nombre + "\nID: " + id);
@@ -186,5 +195,5 @@ public class Jugador {
 		return "Jugador [nombre=" + nombre + ", id=" + id + ", carta1=" + carta1 + ", cartaTemporal=" + cartaTemporal
 				+ ", descarte=" + descarte + ", mano=" + mano + ", estado=" + estado + "]";
 	}
-
+	
 }

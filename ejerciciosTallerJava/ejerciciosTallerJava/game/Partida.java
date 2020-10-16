@@ -42,21 +42,56 @@ public class Partida extends Observer {
 
 	@Override
 	public void notificarse() {
-		int fuerza = 0, ganador,empate=0;
-		int [] jugEmpatados = new int[jugadores.size()];
-		for (int i = 0; i < jugadores.size(); i++) {
-			if (!jugadores.get(0).equals(new Eliminado())) {
-				if (jugadores.get(0).getMano().getFuerza() > fuerza) {
-					fuerza = jugadores.get(0).getMano().getFuerza();
+		int fuerza = 0, ganador=0,empate=0;
+		
+		//int [] jugEmpatados = new int[jugadores.size()];
+		//jugEmpatados[0]=0;
+		int primeroValido=0;
+		ArrayList<Integer> jEmpatados= new ArrayList();
+		
+		
+		
+		while (jugadores.get(primeroValido).getEstado().equals(new Eliminado())) {
+			primeroValido++;
+		}
+		
+		jEmpatados.add(primeroValido);
+		fuerza = jugadores.get(primeroValido).getMano().getFuerza();
+		
+		for (int i = primeroValido+1 ; i < jugadores.size(); i++) {
+			if (!jugadores.get(i).getEstado().equals(new Eliminado())) {
+		
+				if (jugadores.get(i).getMano().getFuerza() > fuerza) {
+				
+					fuerza = jugadores.get(i).getMano().getFuerza();
 					empate=0;
-				}if(jugadores.get(0).getMano().getFuerza() == fuerza)
+					ganador=i;
+					jEmpatados.clear();
+				
+				}if(jugadores.get(i).getMano().getFuerza() == fuerza)
 				{	
-					jugEmpatados[i]=i;
+					//jugEmpatados[i]=i;
+					jEmpatados.add(i);
 					empate=1;
 				}
 				
 			}
-		}	
+		}
+		
+		if( empate == 1) {
+			ganador=0;
+			fuerza = jugadores.get(jEmpatados.get(0)).sumarDescarte();
+			for (int i = 1; i < jEmpatados.size(); i++) {
+				if(jugadores.get(jEmpatados.get(i)).sumarDescarte()> fuerza) {
+					fuerza=jugadores.get(jEmpatados.get(i)).getMano().getFuerza();
+					ganador=i;
+				}	
+			}
+			
+		}
+		
+		jugadores.get(ganador).ganarRonda();
+			
 	}
 	
 
