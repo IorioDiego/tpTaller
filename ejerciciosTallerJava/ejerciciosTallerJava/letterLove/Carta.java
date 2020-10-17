@@ -15,27 +15,6 @@ public abstract class Carta {
 		this.descEfecto = descEfecto;
 	}
 
-//	public void mostrarCarta() {
-//		System.out.println("Valor: " + fuerza + "\nNombre: " + nombre + 
-//									"\nDescripcion Efecto: " + descEfecto);
-//	}
-
-	@Override
-	public String toString() {
-		return "Valor: " + fuerza + "\nNombre: " + nombre + "\nDescripcion Efecto: " + descEfecto;
-	}
-
-	public int getFuerza() {
-		return fuerza;
-	}
-	
-	
-	public String getNombre() {
-		return nombre;
-	}
-
-
-	// hacer compare to
 	public abstract int getCantidadCartasPersonaje();
 
 	public abstract int getFuerzaCarta();
@@ -58,4 +37,26 @@ public abstract class Carta {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return "Valor: " + fuerza + "\nNombre: " + nombre + "\nDescripcion Efecto: " + descEfecto;
+	}
+	
+	public int getFuerza() {
+		return fuerza;
+	}
+	
+	
+	public String getNombre() {
+		return nombre;
+	}
+	
+	
+//	@Override
+//	public String toString() {
+//		return "Valor: " + fuerza + "\nNombre: " + nombre ;
+//	}
+
+	
 }

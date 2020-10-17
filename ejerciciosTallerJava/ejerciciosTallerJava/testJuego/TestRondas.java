@@ -13,7 +13,7 @@ import game.Jugador;
 import game.Normal;
 import game.Partida;
 
-public class TestMetodosInternos {
+public class TestRondas {
 
 	private Partida partida;
 	private ArrayList<Jugador> jugadores;
@@ -27,8 +27,6 @@ public class TestMetodosInternos {
 		jugadores.add(new Jugador("Leandro", 4));
 		partida = new Partida(3, 4, jugadores);
 		partida.iniciarPartida();
-		// partida.getMazo().register(partida);
-
 	}
 
 	@Test

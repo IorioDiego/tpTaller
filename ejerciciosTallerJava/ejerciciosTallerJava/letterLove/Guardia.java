@@ -1,8 +1,7 @@
 package letterLove;
 
-import java.util.Scanner;
 
-import game.Estado;
+
 import game.Jugador;
 import game.Partida;
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import game.Jugador;
-import game.Partida;
 
 public class Mazo extends Observable {
 
@@ -41,14 +40,16 @@ public class Mazo extends Observable {
 		return mazo.remove(0);
 	}
 
+
 	public void mezclar() {
 		Collections.shuffle(mazo);
 		Collections.shuffle(mazo);
 	}
 
-	public void darCarta(Jugador jugador) {
-		try {
-
+	public void darCarta(Jugador jugador) 
+	{	
+		try
+		{	
 			jugador.tomarCarta(mazo.remove(0));
 
 		} catch (Exception ex) {

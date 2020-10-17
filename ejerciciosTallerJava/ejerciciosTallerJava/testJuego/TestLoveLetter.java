@@ -5,14 +5,14 @@ import game.*;
 
 import static org.junit.Assert.assertEquals;
 
+
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.org.apache.xpath.internal.compiler.OpCodes;
 
-public class testLoveLetter {
+public class TestLoveLetter {
 
 	private Partida partida;
 	private ArrayList<Jugador> jugadores;
@@ -32,8 +32,10 @@ public class testLoveLetter {
 	public void DescartarRey() {
 		Jugador jugador = jugadores.get(0);
 		Jugador oponente = jugadores.get(1);
+		jugador.sacarCartaDeMano(0);            ///
+		jugador.tomarCarta(new Guardia());      /// --> para evitar que si toca condesa no me descarte al Rey
 		jugador.tomarCarta(new Rey());
-
+		
 		Carta cartaJugador = jugador.getMano();
 		Carta cartaOponente = oponente.getMano();
 		jugador.jugarCarta(partida);
@@ -61,7 +63,6 @@ public class testLoveLetter {
 		oponente.sacarCartaDeMano(0);
 		jugador.tomarCarta(new Mucama());
 		oponente.tomarCarta(new Condesa());
-		int comp = jugador.getMano().getFuerza() - oponente.getMano().getFuerza();
 		jugador.tomarCarta(new Baron());
 		jugador.jugarCarta(partida);
 
@@ -162,5 +163,31 @@ public class testLoveLetter {
 		jugador.tomarCarta(new Princesa());
 		jugador.jugarCarta(partida);
 		assertEquals(new Eliminado(), jugador.getEstado());
+	}
+	
+	@Test
+	public void DescartoPrincipeOponenteConPrincesa() {
+		Jugador jugador = jugadores.get(0);
+		Jugador oponente = jugadores.get(1);
+		oponente.sacarCartaDeMano(0);
+		jugador.sacarCartaDeMano(0);            ///
+		jugador.tomarCarta(new Guardia());      /// --> para evitar que si toca condesa no me descarte al principe
+		oponente.tomarCarta(new Princesa());
+		jugador.tomarCarta(new Principe());
+		jugador.jugarCarta(partida);
+		assertEquals(new Eliminado(), oponente.getEstado());
+	}
+	
+	@Test
+	public void DescartoPrincipeOponenteSinPrincesa() {
+		Jugador jugador = jugadores.get(0);
+		Jugador oponente = jugadores.get(1);
+		oponente.sacarCartaDeMano(0);
+		jugador.sacarCartaDeMano(0);            ///
+		jugador.tomarCarta(new Guardia());      /// --> para evitar que si toca condesa no me descarte al principe
+		oponente.tomarCarta(new Rey());
+		jugador.tomarCarta(new Principe());
+		jugador.jugarCarta(partida);
+		assertEquals(new Rey(), oponente.getDescarte(0));
 	}
 }

@@ -1,9 +1,9 @@
 package letterLove;
 
-public class ultimaCartaException extends Exception {
+public class UltimaCartaException extends Exception {
 	private static final long serialVersionUID = -495059613251522648L;
 	
-	public ultimaCartaException(String mensaje) {
+	public UltimaCartaException(String mensaje) {
 		super(mensaje);
 	}
 	

@@ -1,17 +1,20 @@
 package letterLove;
 
+
+
 import game.Jugador;
 import game.Partida;
 
-public class Principe extends Carta{
-	
+public class Principe extends Carta {
+
 	public Principe() {
-		super(5, "Principe", " elige otro jugador (incluso a sí mismo) para descartar su mano y robar una "
-				+ "carta nueva. Si la Princesa es descartada de esta manera, el jugador que la descartó "
-				+ "es eliminado de la ronda");
-		
+		super(5, "Principe",
+				" elige otro jugador (incluso a sí mismo) para descartar su mano y robar una "
+						+ "carta nueva. Si la Princesa es descartada de esta manera, el jugador que la descartó "
+						+ "es eliminado de la ronda");
+
 	}
-	
+
 	public int getCantidadCartasPersonaje() {
 		return 2;
 	}
@@ -24,8 +27,13 @@ public class Principe extends Carta{
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida) {
 		Jugador oponente = jugador.seleccionarJugador(partida);
-		oponente.descartar(oponente.sacarCartaDeMano(0)); 
-		partida.getMazo().darCarta(jugador);
+		if (oponente.getMano().equals(new Princesa())) {
+			oponente.seJugoPrincesa();
+		} else
+		{
+			oponente.descartar(oponente.sacarCartaDeMano(0));
+			partida.getMazo().darCarta(jugador);
+		}
 	}
 
 }

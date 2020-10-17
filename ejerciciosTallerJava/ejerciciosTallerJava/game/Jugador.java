@@ -24,28 +24,39 @@ public class Jugador extends Observable {
 		this.afectosConseguidos = 0;
 	}
 
-	public int getAfectosConseguidos() {
-		return afectosConseguidos;
+	public Estado getEstado() {
+		return this.estado;
 	}
 
+	public void seJugoMucama() {
+		estado = estado.seJugoMucama();
+	}
 
-	//el return es solamente para probar el test
+	public void seReiniciaRonda() {
+		estado = estado.seReiniciaRonda();
+
+	}
+
+	public void seJugoBaron() {
+		estado = estado.seJugoBaron();
+		notificarEstadoEliminado();
+	}
+
+	public void seJugoGuardia() {
+		estado = estado.seJugoGuardia();
+		notificarEstadoEliminado();
+	}
+
+	public void seJugoPrincesa() {
+		estado = estado.seJugoPrincesa();
+		notificarEstadoEliminado();
+	}
+	
 	public void ganarRonda(int afectos) {
-		if(++afectosConseguidos == afectos)
+		if (++afectosConseguidos == afectos)
 			notificarEndGame();
 	}
-
-
-
-	public int elegirCartaParaJugar() {// izquierda 0, derecha 1
-		// evento doble click en carta
-		return 1;
-	}
-
-	public void descartar(Carta cartaJugada) {
-		descarte.add(cartaJugada);
-	}
-
+	
 	public void tomarCarta(Carta nuevaCarta) {
 
 		if (nuevaCarta.equals(new Condesa()) && (mano.contains(new Rey()) || mano.contains(new Principe())))
@@ -59,69 +70,6 @@ public class Jugador extends Observable {
 	}
 
 
-
-	public Carta getMano() {// para cuando tiene uno solo
-		return mano.get(0);
-	}
-
-	public void mostrarDescarte() {
-
-		System.out.println("\nEl jugador: " + id + "\nNombre: " + nombre + "\ntiene en su descarte: \n");
-
-		for (Carta carta : descarte) {
-			System.out.println(carta);
-		}
-	}
-
-	public int sumarDescarte() {
-		int suma = 0;
-		for (Carta carta : descarte) {
-			suma += carta.getFuerzaCarta();
-		}
-		return suma;
-	}
-
-
-	public void seJugoMucama() {
-		estado = estado.seJugoMucama();
-	}
-
-	public Estado getEstado() {
-		return this.estado;
-	}
-
-	public void seJugoPrincesa() {
-		estado = estado.seJugoPrincesa();
-		notificarEstadoEliminado();
-
-
-	}
-
-	public void seReiniciaRonda() {
-		estado = estado.seReiniciaRonda();
-
-	}
-
-	public void seJugoBaron() {
-		estado = estado.seJugoBaron();
-		notificarFinMazo();
-	}
-
-	public void seJugoGuardia() {
-		estado = estado.seJugoGuardia();
-		notificarFinMazo();
-	}
-
-	public Jugador seleccionarJugador(Partida partida) {
-		/// TODO evento de seleccion de jugador
-		int i = 1;
-		return partida.elegirJugador(i);
-	}
-
-	public Carta sacarCartaDeMano(int i) {
-		return mano.remove(i);
-	}
-
 	public void jugarCarta(Partida partida) {// recive indice del evento
 		int indiceAux = this.elegirCartaParaJugar();
 		Carta cartaElegida = sacarCartaDeMano(indiceAux);
@@ -134,10 +82,7 @@ public class Jugador extends Observable {
 		return this.mano.get(0).getFuerzaCarta() - oponente.mano.get(0).getFuerzaCarta();
 	}
 
-	public boolean tengoLaCarta(Carta carta) {
-		return this.mano.contains(carta);
-	}
-
+	
 	public void intercabiarMano(Jugador oponente) {
 		ArrayList<Carta> cambioDemano = new ArrayList<>(this.mano);
 		this.mano.clear();
@@ -146,16 +91,28 @@ public class Jugador extends Observable {
 		oponente.mano.addAll(cambioDemano);
 
 	}
+	
+	public boolean tengoLaCarta(Carta carta) {
+		return this.mano.contains(carta);
+	}
+	
+	public Carta getDescarte(int index) {
+		return descarte.get(index);
+	}
+
+	public Carta sacarCartaDeMano(int i) {
+		return mano.remove(i);
+	}
 
 	public void mostrarMano() {
-		for (Carta carta : descarte) {
+		for (Carta carta : mano) {
 			System.out.println(carta);
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "Jugador [nombre=" + nombre + ", id=" + id + ", estado=" + estado + "]";
+		return "Jugador [nombre=" + nombre + ", afectos=" + afectosConseguidos + ", estado=" + estado + "]";
 	}
 
 	public void vaciarMano() {
@@ -165,9 +122,46 @@ public class Jugador extends Observable {
 	public int getTamañoMano() {
 		return mano.size();
 	}
-	
-	
 
 	
+	public int elegirCartaParaJugar() {// izquierda 0, derecha 1
+		// evento doble click en carta
+		return 1;
+	}
+
+	public void descartar(Carta cartaJugada) {
+		descarte.add(cartaJugada);
+	}
+	
+	public Jugador seleccionarJugador(Partida partida) {
+		/// evento de seleccion de jugador
+		int i = 1;
+		return partida.elegirJugador(i);
+	}
+	
+	public int sumarDescarte() {
+		int suma = 0;
+		for (Carta carta : descarte) {
+			suma += carta.getFuerzaCarta();
+		}
+		return suma;
+	}
+	
+	public Carta getMano() {// para cuando tiene uno solo
+		return mano.get(0);
+	}
+
+	public void mostrarDescarte() {
+
+		System.out.println("\nEl jugador: " + id + "\nNombre: " + nombre + "\ntiene en su descarte: \n");
+
+		for (Carta carta : descarte) {
+			System.out.println(carta);
+		}
+	}
+	
+	public int getAfectosConseguidos() {
+		return afectosConseguidos;
+	}
 
 }

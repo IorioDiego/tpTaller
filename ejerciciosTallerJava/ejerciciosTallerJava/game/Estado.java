@@ -1,10 +1,7 @@
 package game;
 
-import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
-
 public abstract class Estado {
 	
-	// guardia -baron- princesa (eliminado) - mucama(protegido)
 	public  Estado seJugoMucama() {
 		return this;
 	}
