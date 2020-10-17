@@ -199,13 +199,4 @@ public class TestRondas {
 		assertEquals(1, jugadores.get(3).getAfectosConseguidos());
 	}
 
-	@Test
-	public void ganador() {
-		jugadores.get(0).ganarRonda(partida.getAfecto());
-		jugadores.get(0).ganarRonda(partida.getAfecto());
-		jugadores.get(0).ganarRonda(partida.getAfecto());
-		jugadores.get(0).ganarRonda(partida.getAfecto());
-
-	}
-
 }
