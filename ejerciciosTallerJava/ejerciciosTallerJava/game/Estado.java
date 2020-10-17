@@ -1,5 +1,7 @@
 package game;
 
+import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
+
 public abstract class Estado {
 	
 	// guardia -baron- princesa (eliminado) - mucama(protegido)
@@ -32,4 +34,10 @@ public abstract class Estado {
 	public boolean equals(Object obj) {
 		return obj.getClass().getName().equals(this.getClass().getName());
 	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getName();
+	}
+	
 }

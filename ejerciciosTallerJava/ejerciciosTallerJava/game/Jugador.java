@@ -3,19 +3,17 @@ package game;
 import java.util.ArrayList;
 
 import letterLove.Condesa;
-
+import letterLove.Observable;
 import letterLove.Rey;
 import letterLove.Principe;
 
 import letterLove.Carta;
 
-public class Jugador {
+public class Jugador extends Observable {
 
 	private String nombre;
 	private int id;
 	private int afectosConseguidos;
-	private Carta carta1;
-	private Carta cartaTemporal;
 	private ArrayList<Carta> descarte = new ArrayList<Carta>();
 	private ArrayList<Carta> mano = new ArrayList<Carta>();
 	private Estado estado = new Normal();
@@ -23,25 +21,21 @@ public class Jugador {
 	public Jugador(String nombre, int id) {
 		this.nombre = nombre;
 		this.id = id;
-		this.afectosConseguidos=0;
+		this.afectosConseguidos = 0;
 	}
 
-	
-	
-	public void ganarRonda() {
-		afectosConseguidos++;
+	public int getAfectosConseguidos() {
+		return afectosConseguidos;
 	}
 
 
-	public void mostrarJugador() {
-		System.out.println("Nombre: " + nombre + "\nID: " + id);
+	//el return es solamente para probar el test
+	public void ganarRonda(int afectos) {
+		if(++afectosConseguidos == afectos)
+			notificarEndGame();
 	}
 
-//		public void cambiarCartaDescarte() {
-//			Carta aux = this.carta1;
-//			this.carta1 = this.cartaTemporal;
-//			this.cartaTemporal = aux;
-//		}
+
 
 	public int elegirCartaParaJugar() {// izquierda 0, derecha 1
 		// evento doble click en carta
@@ -50,13 +44,6 @@ public class Jugador {
 
 	public void descartar(Carta cartaJugada) {
 		descarte.add(cartaJugada);
-
-		// return mano.remove(i); //retorno una carta y la asigno a una carta
-		// y despues la pongo en el descarte del tablero y
-		// del jugador
-
-		// cartaTemporal.mostrarCarta();
-		// cartaTemporal.activarEfecto();
 	}
 
 	public void tomarCarta(Carta nuevaCarta) {
@@ -69,29 +56,9 @@ public class Jugador {
 			mano.add(nuevaCarta);
 		}
 		estado = estado.seRoboCarta();
-
-//		if (mano.contains(new Condesa()) && (mano.contains(new Rey()) || mano.contains(new Principe()))) {
-//			if (nuevaCarta.equals(new Condesa())) {
-//				descartar(nuevaCarta);
-//			}	
-//			else
-//				descartar(mano.get(0));
-//		} else
-//		mano.add(nuevaCarta);
-//		estado = estado.seRoboCarta();
 	}
 
-//		public Carta descartar() {
-//			
-//			Carta aux = cartaTemporal;
-//			
-//			descarte.push(cartaTemporal);
-//			
-//			cartaTemporal = null;
-//			
-//			return aux; 
-//			
-//		}
+
 
 	public Carta getMano() {// para cuando tiene uno solo
 		return mano.get(0);
@@ -114,19 +81,6 @@ public class Jugador {
 		return suma;
 	}
 
-//		public void tomarCartaDelMazo(Mazo mazo) {
-//			
-//			if(this.carta1 == null) {
-//				this.carta1 = mazo.darCarta(this);
-//				this.carta1.mostrarCarta();
-//			}
-//				
-//			else {
-//				this.cartaTemporal = mazo.darCarta();
-//				this.cartaTemporal.mostrarCarta();
-//			}
-//				
-//		}
 
 	public void seJugoMucama() {
 		estado = estado.seJugoMucama();
@@ -138,15 +92,24 @@ public class Jugador {
 
 	public void seJugoPrincesa() {
 		estado = estado.seJugoPrincesa();
+		notificarEstadoEliminado();
+
+
+	}
+
+	public void seReiniciaRonda() {
+		estado = estado.seReiniciaRonda();
 
 	}
 
 	public void seJugoBaron() {
 		estado = estado.seJugoBaron();
+		notificarFinMazo();
 	}
 
 	public void seJugoGuardia() {
 		estado = estado.seJugoGuardia();
+		notificarFinMazo();
 	}
 
 	public Jugador seleccionarJugador(Partida partida) {
@@ -192,8 +155,19 @@ public class Jugador {
 
 	@Override
 	public String toString() {
-		return "Jugador [nombre=" + nombre + ", id=" + id + ", carta1=" + carta1 + ", cartaTemporal=" + cartaTemporal
-				+ ", descarte=" + descarte + ", mano=" + mano + ", estado=" + estado + "]";
+		return "Jugador [nombre=" + nombre + ", id=" + id + ", estado=" + estado + "]";
+	}
+
+	public void vaciarMano() {
+		mano.clear();
+	}
+
+	public int getTamañoMano() {
+		return mano.size();
 	}
 	
+	
+
+	
+
 }

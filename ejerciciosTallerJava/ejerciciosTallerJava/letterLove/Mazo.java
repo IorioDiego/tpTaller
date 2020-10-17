@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import game.Jugador;
+import game.Partida;
 
 public class Mazo extends Observable {
 
-	//private int cantCartas = 16;
 	private ArrayList<Carta> mazo = new ArrayList<Carta>();
 
 	public Mazo() {
-		
+
 		mazo.add(new Guardia());
 		mazo.add(new Guardia());
 		mazo.add(new Guardia());
@@ -38,38 +38,27 @@ public class Mazo extends Observable {
 	}
 
 	public Carta eliminarPrimeraCarta() {
-		return mazo.remove(0);	
+		return mazo.remove(0);
 	}
-
-//	public boolean mazoVacio() {
-//		return cantCartas == 0;
-//	}
 
 	public void mezclar() {
 		Collections.shuffle(mazo);
 		Collections.shuffle(mazo);
 	}
 
-	public void darCarta(Jugador jugador) 
-	{	
-		try
-		{	
-			//cantCartas--;
-			jugador.tomarCarta(mazo.remove(0));
-			
-		}catch(Exception ex) {
-			this.notificar();
-		}
-		
-	}
-	
+	public void darCarta(Jugador jugador) {
+		try {
 
-//	public void mostrarMazo() {
-//		
-//		for (Carta x : mazo) {
-//			x.mostrarCarta();
-//		}	
-//		
-//	}
+			jugador.tomarCarta(mazo.remove(0));
+
+		} catch (Exception ex) {
+			this.notificarFinMazo();
+		}
+
+	}
+
+	public int getCantCartas() {
+		return mazo.size();
+	}
 
 }

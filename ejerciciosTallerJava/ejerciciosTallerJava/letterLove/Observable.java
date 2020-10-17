@@ -12,9 +12,21 @@ public class Observable {
 		this.observadores.add(observador);
 	}
 	
-	protected void notificar() {
+	public void notificarFinMazo() {
 		for (Observer observer : observadores) {
-			observer.notificarse();
+			observer.notificarseFinMazo();
+		}
+	}
+	
+	public void notificarEstadoEliminado() {
+		for (Observer observer : observadores) {
+			observer.notificarseEstadoEliminado();
+		}
+	}
+	
+	public void notificarEndGame() {
+		for (Observer observer : observadores) {
+			observer.notificarseEndGame();
 		}
 	}
 }

@@ -13,12 +13,13 @@ import letterLove.ultimaCartaException;
 import letterLove.Carta;
 import letterLove.Mazo;
 
-public class Partida extends Observer {
+public class Partida extends Observer  {
 	private int afecto;
 	private int cantJugadores;
 	private ArrayList<Jugador> jugadores;
 	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
 	private Mazo mazo;
+	private int jugadoresActivos;
 
 	public Partida() {
 
@@ -28,6 +29,7 @@ public class Partida extends Observer {
 		this.afecto = afecto;
 		this.cantJugadores = cantJugadores;
 		this.jugadores = jugadores;
+		this.jugadoresActivos= cantJugadores;
 
 		///////////////////////
 		listaCartas.add(new Sacerdote());
@@ -40,14 +42,23 @@ public class Partida extends Observer {
 
 	}
 
+	public int getAfecto() {
+		return afecto;
+	}
+
+	public void setAfecto(int afecto) {
+		this.afecto = afecto;
+	}
+
 	@Override
-	public void notificarse() {
+	public void notificarseFinMazo() {
 		int fuerza = 0, ganador=0,empate=0;
 		
 		//int [] jugEmpatados = new int[jugadores.size()];
 		//jugEmpatados[0]=0;
 		int primeroValido=0;
 		ArrayList<Integer> jEmpatados= new ArrayList();
+		
 		
 		
 		
@@ -68,7 +79,7 @@ public class Partida extends Observer {
 					ganador=i;
 					jEmpatados.clear();
 				
-				}if(jugadores.get(i).getMano().getFuerza() == fuerza)
+				}else if(jugadores.get(i).getMano().getFuerza() == fuerza)
 				{	
 					//jugEmpatados[i]=i;
 					jEmpatados.add(i);
@@ -79,7 +90,7 @@ public class Partida extends Observer {
 		}
 		
 		if( empate == 1) {
-			ganador=0;
+			ganador= jEmpatados.get(0);
 			fuerza = jugadores.get(jEmpatados.get(0)).sumarDescarte();
 			for (int i = 1; i < jEmpatados.size(); i++) {
 				if(jugadores.get(jEmpatados.get(i)).sumarDescarte()> fuerza) {
@@ -90,10 +101,26 @@ public class Partida extends Observer {
 			
 		}
 		
-		jugadores.get(ganador).ganarRonda();
+		jugadores.get(ganador).ganarRonda(afecto);
+		iniciarRonda();
 			
 	}
 	
+
+	public void iniciarRonda() {
+		for (Jugador jugador : jugadores) {
+			jugador.seReiniciaRonda();
+			jugador.vaciarMano();
+		}
+		mazo= new Mazo();
+		mazo.mezclar();
+		mazo.eliminarPrimeraCarta();
+
+		for (Jugador jugador : jugadores) {
+			mazo.darCarta(jugador);
+		}
+		
+	}
 
 	public Mazo getMazo() {
 		return mazo;
@@ -104,14 +131,9 @@ public class Partida extends Observer {
 	}
 
 	public void iniciarPartida() {
-		Mazo mazo = new Mazo();
-		mazo.mezclar();
-		mazo.eliminarPrimeraCarta();
-
-		for (Jugador jugador : jugadores) {
-			mazo.darCarta(jugador);
-		}
-		/// POR CADA RONDA TIENE QUE PASAR ESTO--->TAL VEZ PUEDE IR EN TABLERO
+		observarJugadores();
+		iniciarRonda();
+		mazo.register(this);
 	}
 
 	public ArrayList<Jugador> getJugadores() {
@@ -128,4 +150,36 @@ public class Partida extends Observer {
 		return listaCartas.get(index);
 	}
 
+	@Override
+	public void notificarseEstadoEliminado() {
+		cantJugadores--;
+		if(cantJugadores == 1) {
+			int i=0;
+			while (jugadores.get(i).getEstado().equals(new Eliminado())) {
+				i++;
+			jugadores.get(i).ganarRonda(afecto);
+			}
+			
+		}
+	}
+	
+	public void notificarseEndGame() {
+		for (int i = 0; i < jugadores.size(); i++) {		
+			if(jugadores.get(i).getAfectosConseguidos() == afecto )
+				finalizarPartida(i);
+		}
+
+	}
+	
+	public boolean finalizarPartida(int i) {
+		System.out.println("El jugador "+ jugadores.get(i)+"gano la partida");
+		return true;
+	}
+	
+	public void observarJugadores() {
+		for (Jugador jugador : jugadores) {
+			jugador.register(this);
+			
+		}
+	}
 }
