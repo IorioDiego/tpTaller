@@ -11,3 +11,10 @@
 /Observer.class
 /ObserverMazo.class
 /ObserverJugador.class
+/Carta.class
+/Descarte.class
+/Mazo.class
+/Observable.class
+/Tablero$1.class
+/Tablero.class
+/Tablero$DrawPanel.class

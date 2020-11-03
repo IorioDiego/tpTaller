@@ -17,7 +17,7 @@ import cartas.Sacerdote;
 import estados.Normal;
 import game.Jugador;
 import game.Partida;
-import loveLetter.*;
+
 
 public class TestRondas {
 

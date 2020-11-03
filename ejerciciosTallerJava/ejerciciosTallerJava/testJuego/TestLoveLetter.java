@@ -1,7 +1,7 @@
 package testJuego;
 
 import game.*;
-import loveLetter.*;
+
 
 import static org.junit.Assert.assertEquals;
 

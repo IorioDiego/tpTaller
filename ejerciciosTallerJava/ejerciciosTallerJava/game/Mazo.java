@@ -55,14 +55,11 @@ public class Mazo extends Observable {
 
 	public void darCarta(Jugador jugador) 
 	{	
-		try
-		{	
-			jugador.tomarCarta(mazo.remove(0));
-
-		} catch (Exception ex) {
-			this.notificarFinMazo();
-		}
-
+			if(getCantCartas() != 0 )
+			{
+				jugador.tomarCarta(mazo.remove(0));
+			}else
+				this.notificarFinMazo();
 	}
 
 	public int getCantCartas() {
