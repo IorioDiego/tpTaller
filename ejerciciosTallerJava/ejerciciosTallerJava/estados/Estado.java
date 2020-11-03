@@ -1,4 +1,4 @@
-package game;
+package estados;
 
 public abstract class Estado {
 	

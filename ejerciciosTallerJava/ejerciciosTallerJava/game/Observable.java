@@ -1,8 +1,6 @@
-package letterLove;
+package game;
 
 import java.util.LinkedList;
-
-import game.Observer;
 
 public class Observable {
 	private LinkedList<Observer> observadores = new LinkedList<Observer>();

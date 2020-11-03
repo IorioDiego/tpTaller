@@ -2,15 +2,14 @@ package game;
 
 import java.util.ArrayList;
 
-import letterLove.Baron;
-import letterLove.Condesa;
-import letterLove.Mucama;
-import letterLove.Princesa;
-import letterLove.Rey;
-import letterLove.Principe;
-import letterLove.Sacerdote;
-import letterLove.Carta;
-import letterLove.Mazo;
+import cartas.Baron;
+import cartas.Condesa;
+import cartas.Mucama;
+import cartas.Princesa;
+import cartas.Principe;
+import cartas.Rey;
+import cartas.Sacerdote;
+import estados.Eliminado;
 
 public class Partida extends Observer  {
 	private int afecto;

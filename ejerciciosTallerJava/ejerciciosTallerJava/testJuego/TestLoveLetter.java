@@ -1,7 +1,7 @@
 package testJuego;
 
-import letterLove.*;
 import game.*;
+import loveLetter.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,6 +10,18 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import cartas.Baron;
+import cartas.Condesa;
+import cartas.Guardia;
+import cartas.Mucama;
+import cartas.Princesa;
+import cartas.Principe;
+import cartas.Rey;
+import cartas.Sacerdote;
+import estados.Eliminado;
+import estados.Normal;
+import estados.Protegido;
 
 
 public class TestLoveLetter {
@@ -23,7 +35,7 @@ public class TestLoveLetter {
 		jugadores.add(new Jugador("Dieguien", 3));
 		jugadores.add(new Jugador("Lucardo", 2));
 		jugadores.add(new Jugador("Tomarson", 1));
-		jugadores.add(new Jugador("Leandro", 4));
+		jugadores.add(new Jugador("Leandrovich", 4));
 		partida = new Partida(3, 4, jugadores);
 		partida.iniciarPartida();
 	}

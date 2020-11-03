@@ -1,4 +1,4 @@
-package game;
+package estados;
 
 public class Eliminado extends Estado{
 	

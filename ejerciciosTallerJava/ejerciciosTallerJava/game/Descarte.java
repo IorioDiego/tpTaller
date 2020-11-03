@@ -1,4 +1,4 @@
-package letterLove;
+package game;
 
 import java.util.ArrayList;
 

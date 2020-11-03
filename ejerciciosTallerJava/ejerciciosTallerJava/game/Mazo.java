@@ -1,9 +1,16 @@
-package letterLove;
+package game;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import game.Jugador;
+import cartas.Baron;
+import cartas.Condesa;
+import cartas.Guardia;
+import cartas.Mucama;
+import cartas.Princesa;
+import cartas.Principe;
+import cartas.Rey;
+import cartas.Sacerdote;
 
 public class Mazo extends Observable {
 

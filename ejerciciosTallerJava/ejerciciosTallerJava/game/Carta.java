@@ -1,7 +1,4 @@
-package letterLove;
-
-import game.Jugador;
-import game.Partida;
+package game;
 
 public abstract class Carta {
 

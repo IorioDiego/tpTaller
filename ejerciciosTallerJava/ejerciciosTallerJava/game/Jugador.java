@@ -2,12 +2,11 @@ package game;
 
 import java.util.ArrayList;
 
-import letterLove.Condesa;
-import letterLove.Observable;
-import letterLove.Rey;
-import letterLove.Principe;
-
-import letterLove.Carta;
+import cartas.Condesa;
+import cartas.Principe;
+import cartas.Rey;
+import estados.Estado;
+import estados.Normal;
 
 public class Jugador extends Observable {
 

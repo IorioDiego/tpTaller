@@ -1,5 +1,6 @@
-package letterLove;
+package cartas;
 
+import game.Carta;
 import game.Jugador;
 import game.Partida;
 
