@@ -1,11 +1,25 @@
-package game;
+package cartas;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import game.Jugador;
+import game.Partida;
 
 public abstract class Carta {
 
 	private int fuerza;
 	private String nombre;
 	private String descEfecto;
-
+	
+	////////////////////////////////////////////
+	private JLabel imagen;
+	private JLabel trasera;
+	
+	///////////////////////////////////
 	public Carta(int fuerza, String nombre, String descEfecto) {
 		this.fuerza = fuerza;
 		this.nombre = nombre;
@@ -18,6 +32,8 @@ public abstract class Carta {
 
 	public abstract void activarEfecto(Jugador jugador, Partida partida);
 
+
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
