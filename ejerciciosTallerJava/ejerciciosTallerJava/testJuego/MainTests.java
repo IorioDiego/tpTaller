@@ -3,9 +3,9 @@ package testJuego;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 
+import InterfaceGrafica.Tablero;
 import game.Jugador;
 import game.Partida;
-import game.Tablero;
 
 public class MainTests {
 
@@ -20,9 +20,9 @@ public class MainTests {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Tablero frame = new Tablero(jugadores);
+					Tablero frame = new Tablero();
 					frame.setVisible(true);
-					frame.init();
+					frame.init(jugadores);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

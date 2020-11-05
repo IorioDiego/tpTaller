@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cartas.Baron;
+import cartas.Carta;
 import cartas.Condesa;
 import cartas.Guardia;
 import cartas.Mucama;

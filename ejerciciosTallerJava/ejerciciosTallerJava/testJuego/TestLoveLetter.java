@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cartas.Baron;
+import cartas.Carta;
 import cartas.Condesa;
 import cartas.Guardia;
 import cartas.Mucama;

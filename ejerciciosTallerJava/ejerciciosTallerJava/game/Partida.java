@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 
 import cartas.Baron;
+import cartas.Carta;
 import cartas.Condesa;
 import cartas.Mucama;
 import cartas.Princesa;

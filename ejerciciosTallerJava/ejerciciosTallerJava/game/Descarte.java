@@ -2,6 +2,8 @@ package game;
 
 import java.util.ArrayList;
 
+import cartas.Carta;
+
 public class Descarte {
 	
 	private ArrayList<Carta> cartasJugadas = new ArrayList<Carta>();

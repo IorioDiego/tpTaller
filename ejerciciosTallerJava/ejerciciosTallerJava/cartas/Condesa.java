@@ -1,6 +1,12 @@
 package cartas;
 
-import game.Carta;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
 import game.Jugador;
 import game.Partida;
 
@@ -26,4 +32,6 @@ public class Condesa extends Carta{
 		//TODO
 		
 	}
+
+
 }

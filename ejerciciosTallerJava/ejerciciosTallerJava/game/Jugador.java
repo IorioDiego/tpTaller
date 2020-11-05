@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 
+import cartas.Carta;
 import cartas.Condesa;
 import cartas.Principe;
 import cartas.Rey;
