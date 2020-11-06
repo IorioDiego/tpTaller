@@ -113,9 +113,6 @@ public class Tablero extends JFrame {
 
 	private class DrawPanel extends JPanel {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -262,6 +259,8 @@ public class Tablero extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
+		
 	}
 
 }

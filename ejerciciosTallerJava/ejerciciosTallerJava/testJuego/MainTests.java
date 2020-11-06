@@ -3,6 +3,7 @@ package testJuego;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 
+import InterfaceGrafica.ComenzarRonda;
 import InterfaceGrafica.Tablero;
 import game.Jugador;
 import game.Partida;
@@ -14,16 +15,9 @@ public class MainTests {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ArrayList<Jugador> jugadores = new ArrayList<>();
-					jugadores.add(new Jugador("Dieguien", 3));
-					jugadores.add(new Jugador("Lucardo", 2));
-					jugadores.add(new Jugador("Tomarson", 1));
-					jugadores.add(new Jugador("Leandrovich", 4));
-					Partida partida = new Partida(3, 4, jugadores);
-					partida.iniciarPartida();
-					Tablero frame = new Tablero();
+					ComenzarRonda frame = new ComenzarRonda();
 					frame.setVisible(true);
-					frame.init(jugadores);
+					frame.init();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
