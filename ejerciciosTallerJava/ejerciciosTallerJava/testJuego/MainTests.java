@@ -10,16 +10,17 @@ import game.Partida;
 public class MainTests {
 
 	public static void main(String[] args) {
-		ArrayList<Jugador> jugadores;
-		jugadores = new ArrayList<>();
-		jugadores.add(new Jugador("Dieguen", 3));
-		jugadores.add(new Jugador("Lucardo", 2));
-		Partida partida = new Partida(3, 2, jugadores);
-		partida.iniciarPartida();
-		
+	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					ArrayList<Jugador> jugadores = new ArrayList<>();
+					jugadores.add(new Jugador("Dieguien", 3));
+					jugadores.add(new Jugador("Lucardo", 2));
+					jugadores.add(new Jugador("Tomarson", 1));
+					jugadores.add(new Jugador("Leandrovich", 4));
+					Partida partida = new Partida(3, 4, jugadores);
+					partida.iniciarPartida();
 					Tablero frame = new Tablero();
 					frame.setVisible(true);
 					frame.init(jugadores);

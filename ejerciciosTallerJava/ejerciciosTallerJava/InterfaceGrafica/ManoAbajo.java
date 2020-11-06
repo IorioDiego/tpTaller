@@ -8,7 +8,6 @@ public class ManoAbajo {
 	
 	private JPanel panelMano;
 	
-	
 	public JPanel panelAbajo(){
 		panelMano = new JPanel();
 		panelMano.setBackground(new Color(111, 200, 37));
