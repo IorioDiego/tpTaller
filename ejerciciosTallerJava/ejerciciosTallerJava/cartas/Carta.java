@@ -19,6 +19,8 @@ public abstract class Carta {
 	private JLabel imagen;
 	private JLabel trasera;
 	
+	
+	
 	///////////////////////////////////
 	public Carta(int fuerza, String nombre, String descEfecto) {
 		this.fuerza = fuerza;

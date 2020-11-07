@@ -43,6 +43,7 @@ public class ComenzarRonda extends JFrame {
 		contentPane.add(drawPanel);
 
 		pack();
+		setTitle("LoveLetter");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -98,6 +99,7 @@ public class ComenzarRonda extends JFrame {
 							Tablero frame = new Tablero();
 							frame.setVisible(true);
 							frame.init(jugadores);
+							 frame.setExtendedState(JFrame.NORMAL);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
