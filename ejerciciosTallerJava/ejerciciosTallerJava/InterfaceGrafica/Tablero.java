@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Label;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -25,6 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 
+import org.omg.CORBA.portable.ValueBase;
+
 import cartas.Carta;
 import cartas.Guardia;
 import game.Jugador;
@@ -34,6 +37,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
+
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -53,8 +58,6 @@ public class Tablero extends JFrame {
 	private Partida partida;
 
 	private BufferedImage background;
-	private boolean tocoCartaDer = false;
-	private boolean tocoCartaIzq = false;
 	private int CantJugadores;
 	private int anchoCarta = 100;
 	private int largoCarta = 120;
@@ -67,6 +70,7 @@ public class Tablero extends JFrame {
 	private BufferedImage mucama;
 	private BufferedImage sacerdote;
 	private BufferedImage baron;
+	private BufferedImage cartaAmor;
 
 	private boolean tomoCarta = false;
 
@@ -80,6 +84,7 @@ public class Tablero extends JFrame {
 		try {
 			background = ImageIO.read(new File("rombos.jpg"));
 			dorso = ImageIO.read(new File("dorso.jpg"));
+			cartaAmor = ImageIO.read(new File("IconoCarta.png"));
 			guardia = ImageIO.read(new File("cartasImg/guardia.jpg"));
 			princesa = ImageIO.read(new File("cartasImg/princesa.jpg"));
 			principe = ImageIO.read(new File("cartasImg/principe.jpg"));
@@ -88,6 +93,7 @@ public class Tablero extends JFrame {
 			baron = ImageIO.read(new File("cartasImg/baron.jpg"));
 			condesa = ImageIO.read(new File("cartasImg/condesa.jpg"));
 			sacerdote = ImageIO.read(new File("cartasImg/sacerdote.jpg"));
+			
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -115,16 +121,22 @@ public class Tablero extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent m) {
 				if ((m.getX() >= 340 && m.getX() <= 420 && m.getY() >= 550 && m.getY() <= 670 && jugadorActivo.getTamañoMano() > 1 )) {
+					distDescarte+=30;
+					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(0), 270 + distDescarte , 140);
+					dibujos.add(cartaTiradas);
 					jugadorActivo.jugarCarta(partida,0);
-					tocoCartaIzq = true;
+					turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 					refresh();
 				}else if ((m.getX() >= 200 && m.getX() <= 510) && (m.getY() >= 210 && m.getY() <= 470 && jugadorActivo.getTamañoMano() == 1 )) {
 					partida.getMazo().darCarta(jugadorActivo);
 					tomoCarta = true;
 					refresh();
 				}else if ((m.getX() >= 450 && m.getX() <= 610 && m.getY() >= 550 && m.getY() <= 670) && jugadorActivo.getTamañoMano() == 2) {
+					distDescarte+=30;
+					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(1), 270 + distDescarte , 140);
+					dibujos.add(cartaTiradas);
 					jugadorActivo.jugarCarta(partida,1);
-					tocoCartaDer = true;
+					turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 					refresh();
 				}
 			}
@@ -151,7 +163,16 @@ public class Tablero extends JFrame {
 			}
 
 			dibujarCartas(g2, "Dorso", 350, 0);
-			dibujarCartas(g2, jugadorActivo.getMano(0).getNombre(), 290, 330);
+			dibujarCartas(g2, jugadorActivo.getMano(0).getNombre(), 290, 330);		
+			
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	        g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE ,15));
+	        g2.setPaint(Color.WHITE);
+	        g2.drawImage(cartaAmor, 730, 400, 50, 35, this);
+	        g2.drawString(jugadorActivo.getNombre(), 510, 430);
+	        g2.drawString("Afectos: " + String.valueOf(jugadorActivo.getAfectosConseguidos()),640, 430);
+			
+			
 			if (CantJugadores == 3) {
 				dibujarCartas(g2, "Dorso", 0, 145);
 			}
@@ -162,19 +183,6 @@ public class Tablero extends JFrame {
 
 			}
 
-			if (tocoCartaIzq) {
-				distDescarte+=30;
-				DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(0), 270 + distDescarte , 140);
-				dibujos.add(cartaTiradas);
-				tocoCartaIzq = false;
-			}
-			if (tocoCartaDer) {
-				distDescarte+=30;
-				DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(1), 270 + distDescarte , 140);
-				dibujos.add(cartaTiradas);
-				tocoCartaDer = false;
-			}
-			
 			if (tomoCarta) {
 				dibujarCartas(g2, jugadorActivo.getMano(0).getNombre(), 290, 330);			
 				dibujarCartas(g2, jugadorActivo.getMano(1).getNombre(), 400, 330);

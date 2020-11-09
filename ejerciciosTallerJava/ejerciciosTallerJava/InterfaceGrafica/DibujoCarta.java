@@ -4,8 +4,6 @@ import java.awt.Graphics2D;
 
 import cartas.Carta;
 
-
-
 public class DibujoCarta  {
 	
 	private int ejeX;

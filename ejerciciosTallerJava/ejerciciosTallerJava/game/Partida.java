@@ -12,7 +12,7 @@ import cartas.Rey;
 import cartas.Sacerdote;
 import estados.Eliminado;
 
-public class Partida extends Observer  {
+public class Partida extends Observer {
 	private int afecto;
 	private int cantJugadores;
 	private ArrayList<Jugador> jugadores;
@@ -28,7 +28,7 @@ public class Partida extends Observer  {
 		this.afecto = afecto;
 		this.cantJugadores = cantJugadores;
 		this.jugadores = jugadores;
-		this.jugadoresActivos= cantJugadores;
+		this.jugadoresActivos = cantJugadores;
 
 		///////////////////////
 		listaCartas.add(new Sacerdote());
@@ -40,104 +40,113 @@ public class Partida extends Observer  {
 		listaCartas.add(new Princesa());
 
 	}
-	
+
 	public void iniciarPartida() {
 		observarJugadores();
 		iniciarRonda();
 		mazo.register(this);
 	}
-	
+
 	public void iniciarRonda() {
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
 			jugador.vaciarMano();
 		}
-		mazo= new Mazo();
+		mazo = new Mazo();
 		mazo.mezclar();
 		mazo.eliminarPrimeraCarta();
 
 		for (Jugador jugador : jugadores) {
 			mazo.darCarta(jugador);
 		}
-		
+
 	}
-	
-	
+
 	public void observarJugadores() {
 		for (Jugador jugador : jugadores) {
 			jugador.register(this);
-			
+
 		}
 	}
-	
+
 	@Override
 	public void notificarseEstadoEliminado() {
 		cantJugadores--;
-		if(cantJugadores == 1) {
-			int i=0;
+		if (cantJugadores == 1) {
+			int i = 0;
 			while (jugadores.get(i).getEstado().equals(new Eliminado())) {
 				i++;
-			jugadores.get(i).ganarRonda(afecto);
+				jugadores.get(i).ganarRonda(afecto);
 			}
-			
+
 		}
 	}
-	
+
 	public void notificarseEndGame() {
-		for (int i = 0; i < jugadores.size(); i++) {		
-			if(jugadores.get(i).getAfectosConseguidos() == afecto )
+		for (int i = 0; i < jugadores.size(); i++) {
+			if (jugadores.get(i).getAfectosConseguidos() == afecto)
 				finalizarPartida(i);
 		}
 
 	}
-	
-	
+
 	@Override
 	public void notificarseFinMazo() {
-		int fuerza = 0, ganador=0,empate=0;	
-		int primeroValido=0;
-		ArrayList<Integer> jEmpatados= new ArrayList<Integer>();
+		int fuerza = 0, ganador = 0, empate = 0;
+		int primeroValido = 0;
+		ArrayList<Integer> jEmpatados = new ArrayList<Integer>();
 		while (jugadores.get(primeroValido).getEstado().equals(new Eliminado())) {
 			primeroValido++;
 		}
 		jEmpatados.add(primeroValido);
 		fuerza = jugadores.get(primeroValido).getMano(0).getFuerza();
-		
-		for (int i = primeroValido+1 ; i < jugadores.size(); i++) {
+
+		for (int i = primeroValido + 1; i < jugadores.size(); i++) {
 			if (!jugadores.get(i).getEstado().equals(new Eliminado())) {
-		
+
 				if (jugadores.get(i).getMano(0).getFuerza() > fuerza) {
-				
+
 					fuerza = jugadores.get(i).getMano(0).getFuerza();
-					empate=0;
-					ganador=i;
+					empate = 0;
+					ganador = i;
 					jEmpatados.clear();
-				
-				}else if(jugadores.get(i).getMano(0).getFuerza() == fuerza)
-				{	
-					//jugEmpatados[i]=i;
+
+				} else if (jugadores.get(i).getMano(0).getFuerza() == fuerza) {
+					// jugEmpatados[i]=i;
 					jEmpatados.add(i);
-					empate=1;
+					empate = 1;
 				}
-				
+
 			}
 		}
-		
-		if( empate == 1) {
-			ganador= jEmpatados.get(0);
+
+		if (empate == 1) {
+			ganador = jEmpatados.get(0);
 			fuerza = jugadores.get(jEmpatados.get(0)).sumarDescarte();
 			for (int i = 1; i < jEmpatados.size(); i++) {
-				if(jugadores.get(jEmpatados.get(i)).sumarDescarte()> fuerza) {
-					fuerza=jugadores.get(jEmpatados.get(i)).getMano(0).getFuerza();
-					ganador=i;
-				}	
-			}		
-		}		
+				if (jugadores.get(jEmpatados.get(i)).sumarDescarte() > fuerza) {
+					fuerza = jugadores.get(jEmpatados.get(i)).getMano(0).getFuerza();
+					ganador = i;
+				}
+			}
+		}
 		jugadores.get(ganador).ganarRonda(afecto);
-		iniciarRonda();		
+		iniciarRonda();
 	}
-	
-	
+
+	public Jugador proximoTurnoJugador(Jugador jugadorActivo) {
+		for (Jugador jugador : jugadores) {
+			if (!jugador.getEstado().equals(new Eliminado())
+					&& !jugador.getNombre().equals(jugadorActivo.getNombre()) && !jugador.isPasoTurno()) {
+				return jugador;
+			}
+		}
+		for (Jugador jugador : jugadores) {
+			jugador.setPasoTurno(false);
+		}
+		return proximoTurnoJugador(jugadorActivo);
+	}
+
 	public int getAfecto() {
 		return afecto;
 	}
@@ -145,8 +154,6 @@ public class Partida extends Observer  {
 	public void setAfecto(int afecto) {
 		this.afecto = afecto;
 	}
-
-	
 
 	public Mazo getMazo() {
 		return mazo;
@@ -156,7 +163,6 @@ public class Partida extends Observer  {
 		this.mazo = mazo;
 	}
 
-	
 	public ArrayList<Jugador> getJugadores() {
 		return jugadores;
 	}
@@ -171,12 +177,11 @@ public class Partida extends Observer  {
 		return listaCartas.get(index);
 	}
 
-	
 	public boolean finalizarPartida(int i) {
-		System.out.println("El jugador "+ jugadores.get(i)+"gano la partida");
+		System.out.println("El jugador " + jugadores.get(i) + "gano la partida");
 		return true;
 	}
-	
+
 	public int getJugadoresActivos() {
 		return jugadoresActivos;
 	}

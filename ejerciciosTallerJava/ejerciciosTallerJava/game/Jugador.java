@@ -1,5 +1,6 @@
 package game;
 
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 
 import cartas.Carta;
@@ -17,6 +18,7 @@ public class Jugador extends Observable {
 	private ArrayList<Carta> descarte = new ArrayList<Carta>();
 	private ArrayList<Carta> mano = new ArrayList<Carta>();
 	private Estado estado = new Normal();
+	private boolean pasoTurno = false;
 
 	public Jugador(String nombre, int id) {
 		this.nombre = nombre;
@@ -35,6 +37,15 @@ public class Jugador extends Observable {
 	public void seReiniciaRonda() {
 		estado = estado.seReiniciaRonda();
 
+	}
+	
+
+	public boolean isPasoTurno() {
+		return pasoTurno;
+	}
+
+	public void setPasoTurno(boolean pasoTurno) {
+		this.pasoTurno = pasoTurno;
 	}
 
 	public void seJugoBaron() {
@@ -75,6 +86,7 @@ public class Jugador extends Observable {
 		Carta cartaElegida = sacarCartaDeMano(indiceAux);
 		cartaElegida.activarEfecto(this, partida);
 		descartar(cartaElegida);
+		pasoTurno=true;
 	}
 
 	public int compararMano(Jugador oponente) {// si devuleve negativo perdi, si es 0 empatamos
@@ -165,6 +177,11 @@ public class Jugador extends Observable {
 		return descarte.get(descarte.size()-1);
 	}
 	
+	public String getNombre()
+	{
+		return nombre;
+	}
+	
 	public void mostrarDescarte() {
 
 		System.out.println("\nEl jugador: " + id + "\nNombre: " + nombre + "\ntiene en su descarte: \n");
@@ -178,4 +195,6 @@ public class Jugador extends Observable {
 		return afectosConseguidos;
 	}
 
+	
+	
 }
