@@ -90,6 +90,8 @@ public class ComenzarRonda extends JFrame {
 				jugadores.add(new Jugador("Lucardo", 2));
 				jugadores.add(new Jugador("Tomarson", 1));
 				jugadores.add(new Jugador("Leandrovich", 4));
+				Partida partida = new Partida(3, 4, jugadores);
+				partida.iniciarPartida();
 
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
@@ -98,8 +100,8 @@ public class ComenzarRonda extends JFrame {
 							partida.iniciarPartida();
 							Tablero frame = new Tablero();
 							frame.setVisible(true);
-							frame.init(jugadores);
-							 frame.setExtendedState(JFrame.NORMAL);
+							frame.init(jugadores,partida);
+							frame.setExtendedState(JFrame.NORMAL);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

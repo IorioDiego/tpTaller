@@ -49,12 +49,12 @@ public class TestLoveLetter {
 		jugador.tomarCarta(new Guardia());      /// --> para evitar que si toca condesa no me descarte al Rey
 		jugador.tomarCarta(new Rey());
 		
-		Carta cartaJugador = jugador.getMano();
-		Carta cartaOponente = oponente.getMano();
-		jugador.jugarCarta(partida);
+		Carta cartaJugador = jugador.getMano(0);
+		Carta cartaOponente = oponente.getMano(0);
+		jugador.jugarCarta(partida,1);
 
-		assertEquals(cartaJugador, oponente.getMano());
-		assertEquals(cartaOponente, jugador.getMano());
+		assertEquals(cartaJugador, oponente.getMano(0));
+		assertEquals(cartaOponente, jugador.getMano(0));
 
 	}
 
@@ -63,7 +63,7 @@ public class TestLoveLetter {
 		Jugador jugador = jugadores.get(0);
 
 		jugador.tomarCarta(new Mucama());
-		jugador.jugarCarta(partida);
+		jugador.jugarCarta(partida,1);
 
 		assertEquals(new Protegido(), jugador.getEstado());
 	}
@@ -77,7 +77,7 @@ public class TestLoveLetter {
 		jugador.tomarCarta(new Mucama());
 		oponente.tomarCarta(new Condesa());
 		jugador.tomarCarta(new Baron());
-		jugador.jugarCarta(partida);
+		jugador.jugarCarta(partida,1);
 
 		assertEquals(new Eliminado(), jugador.getEstado());
 	}
@@ -91,7 +91,7 @@ public class TestLoveLetter {
 		jugador.tomarCarta(new Condesa());
 		oponente.tomarCarta(new Mucama());
 		jugador.tomarCarta(new Baron());
-		jugador.jugarCarta(partida);
+		jugador.jugarCarta(partida,1);
 		assertEquals(new Eliminado(), oponente.getEstado());
 	}
 
@@ -104,7 +104,7 @@ public class TestLoveLetter {
 		jugador.tomarCarta(new Guardia());
 		oponente.tomarCarta(new Guardia());
 		jugador.tomarCarta(new Baron());
-		jugador.jugarCarta(partida);
+		jugador.jugarCarta(partida,1);
 
 		assertEquals(new Normal(), oponente.getEstado());
 		assertEquals(new Normal(), jugador.getEstado());
@@ -119,7 +119,7 @@ public class TestLoveLetter {
 		oponente.sacarCartaDeMano(0);
 		oponente.tomarCarta(new Principe());
 		jugador.tomarCarta(new Guardia());
-		jugador.jugarCarta(partida);
+		jugador.jugarCarta(partida,1);
 		assertEquals(new Normal(), oponente.getEstado());
 	}
 	
@@ -130,7 +130,7 @@ public class TestLoveLetter {
 		oponente.sacarCartaDeMano(0);
 		oponente.tomarCarta(new Sacerdote());
 		jugador.tomarCarta(new Guardia());
-		jugador.jugarCarta(partida);
+		jugador.jugarCarta(partida,1);
 		assertEquals(new Eliminado(), oponente.getEstado());
 	}
 	
@@ -140,7 +140,7 @@ public class TestLoveLetter {
 		jugador.sacarCartaDeMano(0);
 		jugador.tomarCarta(new Rey());
 		jugador.tomarCarta(new Condesa());
-		assertEquals(new Rey(), jugador.getMano());
+		assertEquals(new Rey(), jugador.getMano(0));
 	}
 	
 	@Test
@@ -149,7 +149,7 @@ public class TestLoveLetter {
 		jugador.sacarCartaDeMano(0);
 		jugador.tomarCarta(new Condesa());
 		jugador.tomarCarta(new Rey());
-		assertEquals(new Rey(), jugador.getMano());
+		assertEquals(new Rey(), jugador.getMano(0));
 	}
 	
 	@Test
@@ -158,7 +158,7 @@ public class TestLoveLetter {
 		jugador.sacarCartaDeMano(0);
 		jugador.tomarCarta(new Condesa());
 		jugador.tomarCarta(new Guardia());
-		assertEquals(new Condesa(), jugador.getMano());
+		assertEquals(new Condesa(), jugador.getMano(0));
 	}
 	
 	@Test
@@ -167,14 +167,14 @@ public class TestLoveLetter {
 		jugador.sacarCartaDeMano(0);
 		jugador.tomarCarta(new Guardia());
 		jugador.tomarCarta(new Condesa());
-		assertEquals(new Guardia(), jugador.getMano());
+		assertEquals(new Guardia(), jugador.getMano(0));
 	}
 	
 	@Test
 	public void DescartoPrincesa() {
 		Jugador jugador = jugadores.get(0);
 		jugador.tomarCarta(new Princesa());
-		jugador.jugarCarta(partida);
+		jugador.jugarCarta(partida,1);
 		assertEquals(new Eliminado(), jugador.getEstado());
 	}
 	
@@ -187,7 +187,7 @@ public class TestLoveLetter {
 		jugador.tomarCarta(new Guardia());      /// --> para evitar que si toca condesa no me descarte al principe
 		oponente.tomarCarta(new Princesa());
 		jugador.tomarCarta(new Principe());
-		jugador.jugarCarta(partida);
+		jugador.jugarCarta(partida,1);
 		assertEquals(new Eliminado(), oponente.getEstado());
 	}
 	
@@ -200,7 +200,7 @@ public class TestLoveLetter {
 		jugador.tomarCarta(new Guardia());      /// --> para evitar que si toca condesa no me descarte al principe
 		oponente.tomarCarta(new Rey());
 		jugador.tomarCarta(new Principe());
-		jugador.jugarCarta(partida);
+		jugador.jugarCarta(partida,1);
 		assertEquals(new Rey(), oponente.getDescarte(0));
 	}
 }

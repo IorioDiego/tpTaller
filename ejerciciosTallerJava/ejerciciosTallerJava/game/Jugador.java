@@ -70,8 +70,8 @@ public class Jugador extends Observable {
 	}
 
 
-	public void jugarCarta(Partida partida) {// recive indice del evento
-		int indiceAux = this.elegirCartaParaJugar();
+	public void jugarCarta(Partida partida,int index) {// recive indice del evento
+		int indiceAux = this.elegirCartaParaJugar(index);
 		Carta cartaElegida = sacarCartaDeMano(indiceAux);
 		cartaElegida.activarEfecto(this, partida);
 		descartar(cartaElegida);
@@ -90,6 +90,11 @@ public class Jugador extends Observable {
 		oponente.mano.clear();
 		oponente.mano.addAll(cambioDemano);
 
+	}
+	
+	public ArrayList<Carta> getManoCompleta()
+	{
+		return mano;
 	}
 	
 	public boolean tengoLaCarta(Carta carta) {
@@ -124,9 +129,8 @@ public class Jugador extends Observable {
 	}
 
 	
-	public int elegirCartaParaJugar() {// izquierda 0, derecha 1
-		// evento doble click en carta
-		return 1;
+	public int elegirCartaParaJugar(int i) {// izquierda 0, derecha 1
+		return i;
 	}
 
 	public void descartar(Carta cartaJugada) {
@@ -147,10 +151,20 @@ public class Jugador extends Observable {
 		return suma;
 	}
 	
-	public Carta getMano() {// para cuando tiene uno solo
+	public Carta getMano(int i) {// para cuando tiene uno solo
 		return mano.get(0);
 	}
-
+	
+	public Carta getCarta(int i)
+	{
+		return mano.get(i);
+	}
+	
+	public Carta ultimaCartaDescarte()
+	{
+		return descarte.get(descarte.size()-1);
+	}
+	
 	public void mostrarDescarte() {
 
 		System.out.println("\nEl jugador: " + id + "\nNombre: " + nombre + "\ntiene en su descarte: \n");

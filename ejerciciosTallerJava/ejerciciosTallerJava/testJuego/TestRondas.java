@@ -98,7 +98,7 @@ public class TestRondas {
 
 		jugadores.get(0).tomarCarta(new Princesa());
 		jugadores.get(0).tomarCarta(new Princesa());
-		jugadores.get(0).jugarCarta(partida);
+		jugadores.get(0).jugarCarta(partida,1);
 
 		jugadores.get(1).tomarCarta(new Baron());
 		jugadores.get(2).tomarCarta(new Rey());
@@ -126,11 +126,11 @@ public class TestRondas {
 
 		jugadores.get(0).tomarCarta(new Princesa());
 		jugadores.get(0).tomarCarta(new Princesa());
-		jugadores.get(0).jugarCarta(partida);
+		jugadores.get(0).jugarCarta(partida,1);
 
 		jugadores.get(2).tomarCarta(new Princesa());
 		jugadores.get(2).tomarCarta(new Princesa());
-		jugadores.get(2).jugarCarta(partida);
+		jugadores.get(2).jugarCarta(partida,1);
 
 		jugadores.get(1).descartar(new Condesa());
 		jugadores.get(3).descartar(new Guardia());
@@ -161,11 +161,11 @@ public class TestRondas {
 
 		jugadores.get(0).tomarCarta(new Princesa());
 		jugadores.get(0).tomarCarta(new Princesa());
-		jugadores.get(0).jugarCarta(partida);
+		jugadores.get(0).jugarCarta(partida,1);
 
 		jugadores.get(2).tomarCarta(new Princesa());
 		jugadores.get(2).tomarCarta(new Princesa());
-		jugadores.get(2).jugarCarta(partida);
+		jugadores.get(2).jugarCarta(partida,1);
 
 		jugadores.get(1).descartar(new Condesa());
 		jugadores.get(3).descartar(new Guardia());
@@ -194,13 +194,13 @@ public class TestRondas {
 	public void ganadorMazoNoVacio() {
 
 		jugadores.get(0).tomarCarta(new Princesa());
-		jugadores.get(0).jugarCarta(partida);
+		jugadores.get(0).jugarCarta(partida,1);
 
 		jugadores.get(1).tomarCarta(new Princesa());
-		jugadores.get(1).jugarCarta(partida);
+		jugadores.get(1).jugarCarta(partida,1);
 
 		jugadores.get(2).tomarCarta(new Princesa());
-		jugadores.get(2).jugarCarta(partida);
+		jugadores.get(2).jugarCarta(partida,1);
 
 		assertEquals(1, jugadores.get(3).getAfectosConseguidos());
 	}

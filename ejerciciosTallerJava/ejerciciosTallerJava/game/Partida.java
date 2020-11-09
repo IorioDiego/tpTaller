@@ -101,19 +101,19 @@ public class Partida extends Observer  {
 			primeroValido++;
 		}
 		jEmpatados.add(primeroValido);
-		fuerza = jugadores.get(primeroValido).getMano().getFuerza();
+		fuerza = jugadores.get(primeroValido).getMano(0).getFuerza();
 		
 		for (int i = primeroValido+1 ; i < jugadores.size(); i++) {
 			if (!jugadores.get(i).getEstado().equals(new Eliminado())) {
 		
-				if (jugadores.get(i).getMano().getFuerza() > fuerza) {
+				if (jugadores.get(i).getMano(0).getFuerza() > fuerza) {
 				
-					fuerza = jugadores.get(i).getMano().getFuerza();
+					fuerza = jugadores.get(i).getMano(0).getFuerza();
 					empate=0;
 					ganador=i;
 					jEmpatados.clear();
 				
-				}else if(jugadores.get(i).getMano().getFuerza() == fuerza)
+				}else if(jugadores.get(i).getMano(0).getFuerza() == fuerza)
 				{	
 					//jugEmpatados[i]=i;
 					jEmpatados.add(i);
@@ -128,7 +128,7 @@ public class Partida extends Observer  {
 			fuerza = jugadores.get(jEmpatados.get(0)).sumarDescarte();
 			for (int i = 1; i < jEmpatados.size(); i++) {
 				if(jugadores.get(jEmpatados.get(i)).sumarDescarte()> fuerza) {
-					fuerza=jugadores.get(jEmpatados.get(i)).getMano().getFuerza();
+					fuerza=jugadores.get(jEmpatados.get(i)).getMano(0).getFuerza();
 					ganador=i;
 				}	
 			}		
