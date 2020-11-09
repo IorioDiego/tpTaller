@@ -53,7 +53,6 @@ public class Tablero extends JFrame {
 	private Partida partida;
 
 	private BufferedImage background;
-	private Carta carta = new Guardia();
 	private boolean tocoCartaDer = false;
 	private boolean tocoCartaIzq = false;
 	private int CantJugadores;

@@ -152,7 +152,7 @@ public class Jugador extends Observable {
 	}
 	
 	public Carta getMano(int i) {// para cuando tiene uno solo
-		return mano.get(0);
+		return mano.get(i);
 	}
 	
 	public Carta getCarta(int i)

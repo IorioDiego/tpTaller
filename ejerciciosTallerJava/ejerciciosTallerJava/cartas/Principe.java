@@ -27,7 +27,7 @@ public class Principe extends Carta {
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida) {
 		Jugador oponente = jugador.seleccionarJugador(partida);
-		if (oponente.getMano().equals(new Princesa())) {
+		if (oponente.getMano(0).equals(new Princesa())) {
 			oponente.seJugoPrincesa();
 		} else
 		{
