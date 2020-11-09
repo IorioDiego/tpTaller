@@ -1,5 +1,8 @@
 package cartas;
 
+import javax.swing.JDialog;
+
+import InterfaceGrafica.Tablero;
 import game.Jugador;
 import game.Partida;
 
@@ -20,8 +23,9 @@ public class Rey extends Carta{
 	}
 
 	@Override
-	public void activarEfecto(Jugador jugador, Partida partida) {
-		jugador.intercabiarMano(jugador.seleccionarJugador(partida));	
-		
+	public void activarEfecto(Jugador jugador, Partida partida, JDialog lista,JDialog listaCartas) {
+		lista.setVisible(true);
+		//jugador.intercabiarMano(jugador.seleccionarJugador(partida));	
+		jugador.intercabiarMano(partida.getJugadores().get(Tablero.getJugadorElegido()));
 	}
 }

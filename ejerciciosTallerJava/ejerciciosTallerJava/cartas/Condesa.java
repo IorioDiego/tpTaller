@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import javax.swing.JDialog;
 
 import game.Jugador;
 import game.Partida;
@@ -28,7 +29,7 @@ public class Condesa extends Carta{
 	}
 
 	@Override
-	public void activarEfecto(Jugador jugador, Partida partida) {
+	public void activarEfecto(Jugador jugador, Partida partida,JDialog lista,JDialog listaCartas) {
 		//TODO
 		
 	}

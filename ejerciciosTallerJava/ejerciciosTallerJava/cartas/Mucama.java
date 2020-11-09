@@ -1,5 +1,7 @@
 package cartas;
 
+import javax.swing.JDialog;
+
 import game.Jugador;
 import game.Partida;
 
@@ -22,7 +24,7 @@ public class Mucama extends Carta{
 	}
 
 	@Override
-	public void activarEfecto(Jugador jugador, Partida partida) {
+	public void activarEfecto(Jugador jugador, Partida partida,JDialog lista,JDialog listaCartas) {
 		jugador.seJugoMucama();
 	}
 }

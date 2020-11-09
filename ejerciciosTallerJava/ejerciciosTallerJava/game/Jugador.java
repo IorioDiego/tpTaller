@@ -2,9 +2,11 @@ package game;
 
 import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
+import javax.swing.JDialog;
 
 import cartas.Carta;
 import cartas.Condesa;
+
 import cartas.Principe;
 import cartas.Rey;
 import estados.Estado;
@@ -81,10 +83,10 @@ public class Jugador extends Observable {
 	}
 
 
-	public void jugarCarta(Partida partida,int index) {// recive indice del evento
+	public void jugarCarta(Partida partida,int index,JDialog lista,JDialog listaCartas) {// recive indice del evento
 		int indiceAux = this.elegirCartaParaJugar(index);
 		Carta cartaElegida = sacarCartaDeMano(indiceAux);
-		cartaElegida.activarEfecto(this, partida);
+		cartaElegida.activarEfecto(this, partida, lista,listaCartas);
 		descartar(cartaElegida);
 		pasoTurno=true;
 	}

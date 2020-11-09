@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import game.Jugador;
@@ -32,7 +33,7 @@ public abstract class Carta {
 
 	public abstract int getFuerzaCarta();
 
-	public abstract void activarEfecto(Jugador jugador, Partida partida);
+	public abstract void activarEfecto(Jugador jugador, Partida partida,JDialog lista,JDialog listaCartas);
 
 
 	

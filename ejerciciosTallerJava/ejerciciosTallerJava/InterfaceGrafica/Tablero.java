@@ -9,6 +9,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Label;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -28,8 +32,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.omg.CORBA.portable.ValueBase;
 
-import cartas.Carta;
-import cartas.Guardia;
+import cartas.*;
 import game.Jugador;
 import game.Partida;
 
@@ -75,7 +78,44 @@ public class Tablero extends JFrame {
 	private boolean tomoCarta = false;
 
 
+	private JDialog lista;	
+	private JButton j1;
+	private JButton j2;
+	private JButton j3;
+	private JButton j4;
 
+	
+	private JDialog listaCartas;
+	private JButton c2;
+	private JButton c3;
+	private JButton c4;
+	private JButton c5;
+	private JButton c6;
+	private JButton c7;
+	private JButton c8;
+	
+	
+	private static int jugadorElegido;
+	private static int cartaElegida;
+
+	public static int getCartaElegida() {
+		return cartaElegida;
+	}
+
+	public  void setCartaElegida(int cartaElegida) {
+		Tablero.cartaElegida = cartaElegida;
+	}
+
+	public static int getJugadorElegido() {
+		return jugadorElegido;
+	}
+
+	public void setJugadorElegido(int jugadorElegido) {
+		Tablero.jugadorElegido = jugadorElegido;
+	}
+
+	
+	
 	public void turnoJugador(Jugador jugador) {
 		jugadorActivo = jugador;
 	}
@@ -106,6 +146,167 @@ public class Tablero extends JFrame {
 		getContentPane().add(drawPanel);
 		turnoJugador(jugadores.get(0));
 
+		
+		
+		
+		
+		lista = new JDialog(this,"Lista Jugadores",true);
+		lista.getContentPane().setLayout(new BoxLayout(lista.getContentPane(), BoxLayout.X_AXIS));
+		lista.setResizable(true);
+		lista.setSize(50,50);
+	
+		
+		j1= new JButton(jugadores.get(0).getNombre());
+		lista.getContentPane().add(j1);	
+		j2= new JButton(jugadores.get(1).getNombre());
+		lista.getContentPane().add(j2);
+		j2.setSize(500, 500);;
+	
+		
+		if (CantJugadores >= 3) {
+		
+			j3= new JButton(jugadores.get(2).getNombre());
+			lista.getContentPane().add(j3);
+			j3.setBounds(0, 20, 20, 20);
+			if(CantJugadores == 4) {
+				j4= new JButton(jugadores.get(3).getNombre());
+				j4.setBounds(0, 20, 20, 20);
+				lista.getContentPane().add(j4);
+				
+			}
+	
+		}
+		
+		lista.setLocationRelativeTo(null);
+		lista.setVisible(false);
+		lista.pack();
+		
+		j1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			setJugadorElegido(0);
+			lista.setVisible(false);
+		
+		}
+		});
+		
+		j2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			setJugadorElegido(1);
+			lista.setVisible(false);
+
+		}
+		});
+		
+		
+		j3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			setJugadorElegido(2);
+			lista.setVisible(false);
+
+		}
+		});
+		
+		j4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			setJugadorElegido(3);
+			lista.setVisible(false);
+			
+		}
+		});
+		
+		
+		
+		
+		listaCartas = new JDialog(this,"Lista Cartas",true);
+		listaCartas.getContentPane().setLayout(new BoxLayout(listaCartas.getContentPane(), BoxLayout.X_AXIS));
+		listaCartas.setResizable(true);
+		listaCartas.setSize(643,65);
+	
+		
+		
+	
+
+		c2= new JButton(new Sacerdote().getNombre());
+		listaCartas.getContentPane().add(c2);	
+		
+		c3= new JButton(new Baron().getNombre());
+		listaCartas.getContentPane().add(c3);	
+		
+		c4= new JButton(new Mucama().getNombre());
+		listaCartas.getContentPane().add(c4);	
+		
+		c5= new JButton(new Principe().getNombre());
+		listaCartas.getContentPane().add(c5);	
+		
+		c6= new JButton(new Rey().getNombre());
+		listaCartas.getContentPane().add(c6);	
+		
+		c7= new JButton(new Condesa().getNombre());
+		listaCartas.getContentPane().add(c7);	
+		
+		c8= new JButton(new Princesa().getNombre());
+		listaCartas.getContentPane().add(c8);	
+		
+		listaCartas.setLocationRelativeTo(null);
+		listaCartas.setVisible(false);
+		listaCartas.pack();
+		
+	
+		
+		c2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCartaElegida(0);
+				listaCartas.setVisible(false);
+		}
+		});
+		
+		
+		c3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCartaElegida(1);
+				listaCartas.setVisible(false);
+		}
+		});
+		
+		c4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCartaElegida(2);
+				listaCartas.setVisible(false);
+		}
+		});
+		
+		c5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCartaElegida(3);
+				listaCartas.setVisible(false);
+		}
+		});
+		
+		c6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCartaElegida(4);
+				listaCartas.setVisible(false);
+		}
+		});
+		
+		
+		c7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCartaElegida(5);
+				listaCartas.setVisible(false);
+		}
+		});
+		
+		c8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCartaElegida(6);
+				listaCartas.setVisible(false);
+		}
+		});
+	
+		
+		
+		
 		pack();
 		setTitle("LoveLetter");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -115,7 +316,7 @@ public class Tablero extends JFrame {
 		requestFocusInWindow();
 		// getContentPane().setBounds(626, 417, 800, 513);
 		setResizable(false); // no puedes maximizar/minimizar la ventana
-		setBounds(0, 0, 905, 727);
+		setBounds(500, 156, 905, 727);
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -124,7 +325,7 @@ public class Tablero extends JFrame {
 					distDescarte+=30;
 					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(0), 270 + distDescarte , 140);
 					dibujos.add(cartaTiradas);
-					jugadorActivo.jugarCarta(partida,0);
+					jugadorActivo.jugarCarta(partida,0,lista,listaCartas);
 					turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 					refresh();
 				}else if ((m.getX() >= 200 && m.getX() <= 510) && (m.getY() >= 210 && m.getY() <= 470 && jugadorActivo.getTamañoMano() == 1 )) {
@@ -135,7 +336,7 @@ public class Tablero extends JFrame {
 					distDescarte+=30;
 					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(1), 270 + distDescarte , 140);
 					dibujos.add(cartaTiradas);
-					jugadorActivo.jugarCarta(partida,1);
+					jugadorActivo.jugarCarta(partida,1,lista,listaCartas);
 					turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 					refresh();
 				}
