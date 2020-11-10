@@ -9,8 +9,10 @@ import cartas.Condesa;
 
 import cartas.Principe;
 import cartas.Rey;
+import estados.Eliminado;
 import estados.Estado;
 import estados.Normal;
+import estados.Protegido;
 
 public class Jugador extends Observable {
 
@@ -38,6 +40,7 @@ public class Jugador extends Observable {
 
 	public void seReiniciaRonda() {
 		estado = estado.seReiniciaRonda();
+		descarte.clear();
 
 	}
 	
@@ -197,6 +200,9 @@ public class Jugador extends Observable {
 		return afectosConseguidos;
 	}
 
+	public boolean isBlockedOrDelete() {
+		return getEstado().equals(new Eliminado()) || getEstado().equals(new Protegido());
+	}
 	
 	
 }

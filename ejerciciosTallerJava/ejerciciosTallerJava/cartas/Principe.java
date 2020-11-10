@@ -37,7 +37,7 @@ public class Principe extends Carta {
 		} else
 		{
 			oponente.descartar(oponente.sacarCartaDeMano(0));
-			partida.getMazo().darCarta(jugador);
+			partida.getMazo().darCarta(oponente);
 		}
 	}
 

@@ -11,6 +11,7 @@ import cartas.Principe;
 import cartas.Rey;
 import cartas.Sacerdote;
 import estados.Eliminado;
+import estados.Protegido;
 
 public class Partida extends Observer {
 	private int afecto;
@@ -19,6 +20,15 @@ public class Partida extends Observer {
 	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
 	private Mazo mazo;
 	private int jugadoresActivos;
+	private boolean reinicio;
+
+	public boolean getReinicio() {
+		return reinicio;
+	}
+
+	public void setReinicio(boolean reinicio) {
+		this.reinicio = reinicio;
+	}
 
 	public Partida() {
 
@@ -29,7 +39,7 @@ public class Partida extends Observer {
 		this.cantJugadores = cantJugadores;
 		this.jugadores = jugadores;
 		this.jugadoresActivos = cantJugadores;
-
+		this.reinicio = false;
 		///////////////////////
 		listaCartas.add(new Sacerdote());
 		listaCartas.add(new Baron());
@@ -40,8 +50,11 @@ public class Partida extends Observer {
 		listaCartas.add(new Princesa());
 
 	}
-
+	
+	
+	
 	public void iniciarPartida() {
+
 		observarJugadores();
 		iniciarRonda();
 		mazo.register(this);
@@ -51,7 +64,9 @@ public class Partida extends Observer {
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
 			jugador.vaciarMano();
+			
 		}
+		reinicio=true;
 		mazo = new Mazo();
 		mazo.mezclar();
 		mazo.eliminarPrimeraCarta();
@@ -77,8 +92,9 @@ public class Partida extends Observer {
 			while (jugadores.get(i).getEstado().equals(new Eliminado())) {
 				i++;
 				jugadores.get(i).ganarRonda(afecto);
+			
 			}
-
+			iniciarRonda();
 		}
 	}
 
