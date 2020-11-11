@@ -143,7 +143,7 @@ public class Jugador extends Observable {
 		mano.clear();
 	}
 
-	public int getTamañoMano() {
+	public int getTamanioMano() {
 		return mano.size();
 	}
 

@@ -21,6 +21,7 @@ public class Partida extends Observer {
 	private Mazo mazo;
 	private int jugadoresActivos;
 	private boolean reinicio;
+	private boolean finalizoPartida;
 
 	public boolean getReinicio() {
 		return reinicio;
@@ -40,6 +41,7 @@ public class Partida extends Observer {
 		this.jugadores = jugadores;
 		this.jugadoresActivos = cantJugadores;
 		this.reinicio = false;
+		this.finalizoPartida = false;
 		///////////////////////
 		listaCartas.add(new Sacerdote());
 		listaCartas.add(new Baron());
@@ -76,6 +78,15 @@ public class Partida extends Observer {
 			mazo.darCarta(jugador);
 		}
 
+	}
+	
+
+	public boolean isFinalizoPartida() {
+		return finalizoPartida;
+	}
+
+	public void setFinalizoPartida(boolean finalizoPartida) {
+		this.finalizoPartida = finalizoPartida;
 	}
 
 	public void observarJugadores() {
@@ -190,9 +201,10 @@ public class Partida extends Observer {
 		return listaCartas.get(index);
 	}
 
-	public boolean finalizarPartida(int i) {
-		System.out.println("El jugador " + jugadores.get(i) + "gano la partida");
-		return true;
+	public int finalizarPartida(int i) {
+		finalizoPartida=true;
+		//System.out.println("El jugador " + jugadores.get(i) + "gano la partida");
+		return i;
 	}
 
 	public int getJugadoresActivos() {
