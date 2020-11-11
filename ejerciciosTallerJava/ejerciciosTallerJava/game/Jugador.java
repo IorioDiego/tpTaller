@@ -41,7 +41,7 @@ public class Jugador extends Observable {
 	public void seReiniciaRonda() {
 		estado = estado.seReiniciaRonda();
 		descarte.clear();
-
+		vaciarMano();
 	}
 	
 
@@ -87,8 +87,10 @@ public class Jugador extends Observable {
 
 
 	public void jugarCarta(Partida partida,int index,JDialog lista,JDialog listaCartas) {// recive indice del evento
-		int indiceAux = this.elegirCartaParaJugar(index);
-		Carta cartaElegida = sacarCartaDeMano(indiceAux);
+//		int indiceAux = this.elegirCartaParaJugar(index); // revisar esto, elegirCarta.. devuelve el index q recive x param
+//		Carta cartaElegida = sacarCartaDeMano(indiceAux); // 
+		
+		Carta cartaElegida = sacarCartaDeMano(index);
 		cartaElegida.activarEfecto(this, partida, lista,listaCartas);
 		descartar(cartaElegida);
 		pasoTurno=true;

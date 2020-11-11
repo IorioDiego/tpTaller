@@ -16,14 +16,12 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Canvas;
 
 public class ComenzarRonda extends JFrame {
 
@@ -89,8 +87,8 @@ public class ComenzarRonda extends JFrame {
 				jugadores.add(new Jugador("Dieguien", 3));
 				jugadores.add(new Jugador("Lucardo", 2));
 				//jugadores.add(new Jugador("Tomarson", 1));
-			//	jugadores.add(new Jugador("Leandrovich", 4));
-				Partida partida = new Partida(3, 4, jugadores);
+			//	jugadores.add(new Jugador("Leandrinho", 4));
+				Partida partida = new Partida(3, jugadores.size(), jugadores);
 				partida.iniciarPartida();
 
 				EventQueue.invokeLater(new Runnable() {

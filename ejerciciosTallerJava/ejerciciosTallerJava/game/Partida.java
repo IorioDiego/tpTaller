@@ -51,8 +51,6 @@ public class Partida extends Observer {
 
 	}
 	
-	
-	
 	public void iniciarPartida() {
 
 		observarJugadores();
@@ -63,13 +61,16 @@ public class Partida extends Observer {
 	public void iniciarRonda() {
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
-			jugador.vaciarMano();
-			
+//			jugador.vaciarMano(); ahora se hace en seReiniciaRonda			
 		}
+		
 		reinicio=true;
+		
 		mazo = new Mazo();
 		mazo.mezclar();
 		mazo.eliminarPrimeraCarta();
+		
+		cantJugadores = jugadoresActivos;
 
 		for (Jugador jugador : jugadores) {
 			mazo.darCarta(jugador);
@@ -88,11 +89,9 @@ public class Partida extends Observer {
 	public void notificarseEstadoEliminado() {
 		cantJugadores--;
 		if (cantJugadores == 1) {
-			int i = 0;
-			while (jugadores.get(i).getEstado().equals(new Eliminado())) {
-				i++;
-				jugadores.get(i).ganarRonda(afecto);
-			
+			for(int i = 0; i < jugadoresActivos; i++) {
+				if(!jugadores.get(i).getEstado().equals(new Eliminado()))
+					jugadores.get(i).ganarRonda(afecto);
 			}
 			iniciarRonda();
 		}
@@ -103,7 +102,6 @@ public class Partida extends Observer {
 			if (jugadores.get(i).getAfectosConseguidos() == afecto)
 				finalizarPartida(i);
 		}
-
 	}
 
 	@Override
@@ -135,7 +133,6 @@ public class Partida extends Observer {
 
 			}
 		}
-
 		if (empate == 1) {
 			ganador = jEmpatados.get(0);
 			fuerza = jugadores.get(jEmpatados.get(0)).sumarDescarte();
