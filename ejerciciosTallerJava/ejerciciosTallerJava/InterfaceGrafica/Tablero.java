@@ -60,6 +60,9 @@ public class Tablero extends JFrame {
 	private Jugador jugadorActivo;
 	private int distDescarte = 0;
 	private Partida partida;
+	private boolean dibManoOp = false;
+	private Sound sonidoFondo;
+	private Sound sonidoTirarCarta;
 
 	private BufferedImage background;
 	private int CantJugadores;
@@ -182,10 +185,15 @@ public class Tablero extends JFrame {
 			baron = ImageIO.read(new File("cartasImg/baron.jpg"));
 			condesa = ImageIO.read(new File("cartasImg/condesa.jpg"));
 			sacerdote = ImageIO.read(new File("cartasImg/sacerdote.jpg"));
+			sonidoFondo = new Sound("Musica.wav");
+			sonidoTirarCarta = new Sound("tirarCarta.wav");
+			fondoVerCarta = ImageIO.read(new File("fondoVerCartaOp.jpeg"));
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		sonidoFondo.play();
+		sonidoFondo.setVolume(0.1f);
 		this.jugadores = jugadores;
 		CantJugadores = jugadores.size();
 		this.partida = partida;
@@ -355,7 +363,7 @@ public class Tablero extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent m) {
 				if ((m.getX() >= 340 && m.getX() <= 420 && m.getY() >= 550 && m.getY() <= 670
-						&& jugadorActivo.getTamañoMano() > 1)) {
+						&& jugadorActivo.getTamaï¿½oMano() > 1)) {
 					distDescarte += 30;
 					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(0), 270 + distDescarte, 140);
 					dibujos.add(cartaTiradas);
@@ -363,12 +371,12 @@ public class Tablero extends JFrame {
 					turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 					refresh();
 				} else if ((m.getX() >= 200 && m.getX() <= 510)
-						&& (m.getY() >= 210 && m.getY() <= 470 && jugadorActivo.getTamañoMano() == 1)) {
+						&& (m.getY() >= 210 && m.getY() <= 470 && jugadorActivo.getTamaï¿½oMano() == 1)) {
 					partida.getMazo().darCarta(jugadorActivo);
 					tomoCarta = true;
 					refresh();
 				} else if ((m.getX() >= 450 && m.getX() <= 610 && m.getY() >= 550 && m.getY() <= 670)
-						&& jugadorActivo.getTamañoMano() == 2) {
+						&& jugadorActivo.getTamaï¿½oMano() == 2) {
 					distDescarte += 30;
 					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(1), 270 + distDescarte, 140);
 					dibujos.add(cartaTiradas);
