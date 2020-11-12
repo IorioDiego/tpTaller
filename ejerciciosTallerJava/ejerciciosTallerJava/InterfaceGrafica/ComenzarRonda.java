@@ -95,7 +95,7 @@ public class ComenzarRonda extends JFrame {
 					public void run() {
 						try {
 						
-							Tablero frame = new Tablero();
+							Tablero frame = new Tablero(partida);
 							frame.setVisible(true);
 							frame.init(jugadores,partida);
 							frame.setExtendedState(JFrame.NORMAL);

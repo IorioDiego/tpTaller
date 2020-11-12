@@ -20,7 +20,7 @@ public class Partida extends Observer {
 	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
 	private Mazo mazo;
 	private int jugadoresActivos;
-	private boolean reinicio;
+	private boolean reinicio=false;
 	private boolean finalizoPartida;
 
 	public boolean getReinicio() {
@@ -66,7 +66,7 @@ public class Partida extends Observer {
 //			jugador.vaciarMano(); ahora se hace en seReiniciaRonda			
 		}
 		
-		reinicio=true;
+		reinicio=false;
 		
 		mazo = new Mazo();
 		mazo.mezclar();
@@ -80,6 +80,36 @@ public class Partida extends Observer {
 
 	}
 	
+	
+	public void reiniciarJuego() {
+		for (Jugador jugador : jugadores) {
+			jugador.seReiniciaRonda();
+//			jugador.vaciarMano(); ahora se hace en seReiniciaRonda			
+		}
+		
+		reinicio=true;
+		
+		mazo = new Mazo();
+		mazo.mezclar();
+		mazo.eliminarPrimeraCarta();
+		
+		cantJugadores = jugadoresActivos;
+		finalizoPartida=false;
+		for (Jugador jugador : jugadores) {
+			mazo.darCarta(jugador);
+			jugador.setAfectosConseguidos(0);
+		}
+
+	}
+	
+	public Jugador getGanador() {
+		Jugador ganador = new Jugador();
+		for (Jugador jugador : jugadores) {
+			if(!jugador.getEstado().equals(new Eliminado()))
+				ganador=jugador;	
+		}
+		return ganador;
+	}	
 
 	public boolean isFinalizoPartida() {
 		return finalizoPartida;

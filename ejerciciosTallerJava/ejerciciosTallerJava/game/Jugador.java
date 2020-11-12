@@ -24,10 +24,16 @@ public class Jugador extends Observable {
 	private Estado estado = new Normal();
 	private boolean pasoTurno = false;
 
+	public Jugador() {};
+	
 	public Jugador(String nombre, int id) {
 		this.nombre = nombre;
 		this.id = id;
 		this.afectosConseguidos = 0;
+	}
+
+	public void setAfectosConseguidos(int afectosConseguidos) {
+		this.afectosConseguidos = afectosConseguidos;
 	}
 
 	public Estado getEstado() {
@@ -152,8 +158,9 @@ public class Jugador extends Observable {
 		return i;
 	}
 
-	public void descartar(Carta cartaJugada) {
+	public Carta descartar(Carta cartaJugada) {
 		descarte.add(cartaJugada);
+		return cartaJugada;////////////
 	}
 	
 	public Jugador seleccionarJugador(Partida partida) {
@@ -206,5 +213,9 @@ public class Jugador extends Observable {
 		return getEstado().equals(new Eliminado()) || getEstado().equals(new Protegido());
 	}
 	
-	
+	public Carta getUltimaDescartada() {
+		if( descarte.size() >1 && descarte.get(descarte.size()-1).equals(new Principe()))
+			return descarte.get(descarte.size()-2);
+		return descarte.get(descarte.size()-1);
+	}
 }

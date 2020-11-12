@@ -1,7 +1,5 @@
 package cartas;
 
-
-
 import javax.swing.JDialog;
 
 import InterfaceGrafica.Tablero;
@@ -28,17 +26,27 @@ public class Principe extends Carta {
 	}
 
 	@Override
-	public void activarEfecto(Jugador jugador, Partida partida,JDialog lista,JDialog listaCartas) {
+	public void activarEfecto(Jugador jugador, Partida partida, JDialog lista, JDialog listaCartas) {
 		lista.setVisible(true);
-		//Jugador oponente = jugador.seleccionarJugador(partida);
-		Jugador oponente =partida.elegirJugador(Tablero.getJugadorElegido());
-		if (oponente.getMano(0).equals(new Princesa())) {
+		// Jugador oponente = jugador.seleccionarJugador(partida);
+		Jugador oponente = partida.elegirJugador(Tablero.getJugadorElegido());
+//		if (oponente.getMano(0).equals(new Princesa())) {
+//			oponente.seJugoPrincesa();
+//		} else
+//		{
+//			oponente.descartar(oponente.sacarCartaDeMano(0));
+//			partida.getMazo().darCarta(oponente);
+//		}
+
+		Carta jugada = oponente.descartar(oponente.sacarCartaDeMano(0));
+		
+		if (jugada.equals(new Princesa())) {
 			oponente.seJugoPrincesa();
-		} else
-		{
-			oponente.descartar(oponente.sacarCartaDeMano(0));
+			oponente.descartar(jugada);
+		}else
 			partida.getMazo().darCarta(oponente);
-		}
+		
+
 	}
 
 }
