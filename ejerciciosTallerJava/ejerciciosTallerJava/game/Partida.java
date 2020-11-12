@@ -20,8 +20,19 @@ public class Partida extends Observer {
 	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
 	private Mazo mazo;
 	private int jugadoresActivos;
-	private boolean reinicio=false;
+	private boolean reinicio = false;
 	private boolean finalizoPartida;
+	private Jugador ganadoRonda=new Jugador();
+	private int nroRonda;
+
+	
+	public int getNroRonda() {
+		return nroRonda;
+	}
+
+	public void setNroRonda(int nroRonda) {
+		this.nroRonda = nroRonda;
+	}
 
 	public boolean getReinicio() {
 		return reinicio;
@@ -42,6 +53,7 @@ public class Partida extends Observer {
 		this.jugadoresActivos = cantJugadores;
 		this.reinicio = false;
 		this.finalizoPartida = false;
+		this.nroRonda=0;
 		///////////////////////
 		listaCartas.add(new Sacerdote());
 		listaCartas.add(new Baron());
@@ -52,26 +64,37 @@ public class Partida extends Observer {
 		listaCartas.add(new Princesa());
 
 	}
-	
+
+	public Jugador getGanadoRonda() {
+		return ganadoRonda;
+	}
+
+	public void setGanadoRonda(Jugador ganadoRonda) {
+		this.ganadoRonda = ganadoRonda;
+	}
+
 	public void iniciarPartida() {
 
 		observarJugadores();
 		iniciarRonda();
-		mazo.register(this);
+		// mazo.register(this);
 	}
 
 	public void iniciarRonda() {
+		nroRonda++;
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
 //			jugador.vaciarMano(); ahora se hace en seReiniciaRonda			
 		}
-		
-		reinicio=false;
-		
+	
+		if(nroRonda > 1)
+			reinicio = true;
+
 		mazo = new Mazo();
+		mazo.register(this);
 		mazo.mezclar();
 		mazo.eliminarPrimeraCarta();
-		
+
 		cantJugadores = jugadoresActivos;
 
 		for (Jugador jugador : jugadores) {
@@ -79,37 +102,41 @@ public class Partida extends Observer {
 		}
 
 	}
-	
-	
+
 	public void reiniciarJuego() {
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
-//			jugador.vaciarMano(); ahora se hace en seReiniciaRonda			
+
 		}
-		
-		reinicio=true;
-		
+
+		// finalizoPartida=true;
+
 		mazo = new Mazo();
 		mazo.mezclar();
 		mazo.eliminarPrimeraCarta();
-		
+
 		cantJugadores = jugadoresActivos;
-		finalizoPartida=false;
+		finalizoPartida = false;
 		for (Jugador jugador : jugadores) {
 			mazo.darCarta(jugador);
 			jugador.setAfectosConseguidos(0);
 		}
 
 	}
-	
-	public Jugador getGanador() {
-		Jugador ganador = new Jugador();
-		for (Jugador jugador : jugadores) {
-			if(!jugador.getEstado().equals(new Eliminado()))
-				ganador=jugador;	
-		}
-		return ganador;
-	}	
+
+//	public Jugador getGanador() {
+//		Jugador ganador = new Jugador();
+//		if (cantJugadores > 1) {
+//			
+//
+//		} else {
+//			for (Jugador jugador : jugadores) {
+//				if (!jugador.getEstado().equals(new Eliminado()))
+//					ganador = jugador;
+//			}
+//		}
+//		return ganador;
+//	}
 
 	public boolean isFinalizoPartida() {
 		return finalizoPartida;
@@ -130,9 +157,9 @@ public class Partida extends Observer {
 	public void notificarseEstadoEliminado() {
 		cantJugadores--;
 		if (cantJugadores == 1) {
-			for(int i = 0; i < jugadoresActivos; i++) {
-				if(!jugadores.get(i).getEstado().equals(new Eliminado()))
-					jugadores.get(i).ganarRonda(afecto);
+			for (int i = 0; i < jugadoresActivos; i++) {
+				if (!jugadores.get(i).getEstado().equals(new Eliminado()))
+					jugadores.get(i).ganarRonda(afecto,this);
 			}
 			iniciarRonda();
 		}
@@ -184,14 +211,15 @@ public class Partida extends Observer {
 				}
 			}
 		}
-		jugadores.get(ganador).ganarRonda(afecto);
+		jugadores.get(ganador).ganarRonda(afecto,this);
+		ganadoRonda=jugadores.get(ganador);
 		iniciarRonda();
 	}
 
 	public Jugador proximoTurnoJugador(Jugador jugadorActivo) {
 		for (Jugador jugador : jugadores) {
-			if (!jugador.getEstado().equals(new Eliminado())
-					&& !jugador.getNombre().equals(jugadorActivo.getNombre()) && !jugador.isPasoTurno()) {
+			if (!jugador.getEstado().equals(new Eliminado()) && !jugador.getNombre().equals(jugadorActivo.getNombre())
+					&& !jugador.isPasoTurno()) {
 				return jugador;
 			}
 		}
@@ -232,8 +260,8 @@ public class Partida extends Observer {
 	}
 
 	public int finalizarPartida(int i) {
-		finalizoPartida=true;
-		//System.out.println("El jugador " + jugadores.get(i) + "gano la partida");
+		finalizoPartida = true;
+		// System.out.println("El jugador " + jugadores.get(i) + "gano la partida");
 		return i;
 	}
 

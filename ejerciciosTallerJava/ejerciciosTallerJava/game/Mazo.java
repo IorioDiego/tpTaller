@@ -54,13 +54,14 @@ public class Mazo extends Observable {
 		Collections.shuffle(mazo);
 	}
 
-	public void darCarta(Jugador jugador) 
-	{	
+	public Carta darCarta(Jugador jugador) 
+	{	Carta robada=null;
 			if(getCantCartas() != 0 )
 			{
-				jugador.tomarCarta(mazo.remove(0));
+				robada=jugador.tomarCarta(mazo.remove(0));
 			}else
 				this.notificarFinMazo();
+		return robada;
 	}
 
 	public int getCantCartas() {

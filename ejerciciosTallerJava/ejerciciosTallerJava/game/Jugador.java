@@ -6,7 +6,7 @@ import javax.swing.JDialog;
 
 import cartas.Carta;
 import cartas.Condesa;
-
+import cartas.Guardia;
 import cartas.Principe;
 import cartas.Rey;
 import estados.Eliminado;
@@ -74,21 +74,26 @@ public class Jugador extends Observable {
 		notificarEstadoEliminado();
 	}
 	
-	public void ganarRonda(int afectos) {
+	public void ganarRonda(int afectos,Partida partida) {
+		partida.setGanadoRonda(this);
 		if (++afectosConseguidos == afectos)
 			notificarEndGame();
+		
 	}
 	
-	public void tomarCarta(Carta nuevaCarta) {
-
+	public Carta tomarCarta(Carta nuevaCarta) {
+		Carta tomada= nuevaCarta;
 		if (nuevaCarta.equals(new Condesa()) && (mano.contains(new Rey()) || mano.contains(new Principe())))
 			descartar(nuevaCarta);
+			
 		else {
 			if (mano.contains(new Condesa()) && (nuevaCarta.equals(new Rey()) || nuevaCarta.equals(new Principe())))
-				descartar(sacarCartaDeMano(0));
+				tomada=descartar(sacarCartaDeMano(0));
 			mano.add(nuevaCarta);
+		
 		}
 		estado = estado.seRoboCarta();
+		return tomada;
 	}
 
 
@@ -216,6 +221,8 @@ public class Jugador extends Observable {
 	public Carta getUltimaDescartada() {
 		if( descarte.size() >1 && descarte.get(descarte.size()-1).equals(new Principe()))
 			return descarte.get(descarte.size()-2);
-		return descarte.get(descarte.size()-1);
+		else if(!descarte.isEmpty())
+			return descarte.get(descarte.size()-1);
+		return null;
 	}
 }

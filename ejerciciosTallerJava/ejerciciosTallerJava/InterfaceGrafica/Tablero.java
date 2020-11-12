@@ -388,7 +388,16 @@ public class Tablero extends JFrame {
 				} else if ((m.getX() >= 200 && m.getX() <= 510)
 						&& (m.getY() >= 210 && m.getY() <= 470 && jugadorActivo.getTamanioMano() == 1)) {
 					sonidoTirarCarta.play();
-					partida.getMazo().darCarta(jugadorActivo);
+					
+					
+					if(new Condesa().equals(partida.getMazo().darCarta(jugadorActivo)) &&
+							new Condesa().equals(jugadorActivo.getUltimaDescartada())){
+						distDescarte += 30;
+						DibujoCarta cartaTiradas = new DibujoCarta(new Condesa(), 270 + distDescarte, 140);
+						dibujos.add(cartaTiradas);
+						turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
+					}
+					
 					tomoCarta = true;
 					refresh();
 				} else if ((m.getX() >= 450 && m.getX() <= 610 && m.getY() >= 550 && m.getY() <= 670)
@@ -436,7 +445,11 @@ public class Tablero extends JFrame {
 				g2.setColor(Color.WHITE);
 				g2.drawRect(180 + i * 2, 145 + i * 3, 100, 120);
 			}
-
+			
+			g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 15));
+			g2.setPaint(Color.WHITE);
+			g2.drawString("Ronda: "+partida.getNroRonda(), 720, 15);
+			
 			dibujarCartas(g2, "Dorso", 350, 0);
 			dibujarCartas(g2, jugadorActivo.getMano(0).getNombre(), 290, 330);
 			if (jugadorActivo.getTamanioMano() > 1)
@@ -477,9 +490,9 @@ public class Tablero extends JFrame {
 				partida.setReinicio(false);
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 30));
 				g2.setPaint(Color.WHITE);
-			//	g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
+				g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
 				g2.drawString("Fin de ronda", 300, 170);
-				g2.drawString(partida.getGanador().getNombre(), 270, 240);
+				g2.drawString(partida.getGanadoRonda().getNombre(), 270, 240);
 				g2.drawImage(cartaAmor, 430, 210, 50, 35, this);
 				g2.drawString("+1", 480, 240);
 				distDescarte = 0;

@@ -88,7 +88,7 @@ public class ComenzarRonda extends JFrame {
 				jugadores.add(new Jugador("Lucardo", 2));
 				//jugadores.add(new Jugador("Tomarson", 1));
 			//	jugadores.add(new Jugador("Leandrinho", 4));
-				Partida partida = new Partida(1, jugadores.size(), jugadores);
+				Partida partida = new Partida(25, jugadores.size(), jugadores);
 				partida.iniciarPartida();
 
 				EventQueue.invokeLater(new Runnable() {
