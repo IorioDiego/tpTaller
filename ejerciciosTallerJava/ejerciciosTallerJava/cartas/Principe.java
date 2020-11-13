@@ -46,6 +46,11 @@ public class Principe extends Carta {
 		}else
 			partida.getMazo().darCarta(oponente);
 		
+		if(oponente.getManoCompleta().isEmpty() && !oponente.isBlockedOrDelete()) {
+			oponente.tomarCarta(partida.getCartaEliminda());
+		}
+		
+		
 
 	}
 

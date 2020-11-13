@@ -59,6 +59,7 @@ public class Tablero extends JFrame {
 	private BufferedImage dorso;
 	private DrawPanel drawPanel;
 	private Jugador jugadorActivo;
+	private Jugador jugadorBaron;
 	private int distDescarte = 0;
 	private Partida partida;
 	private boolean dibManoOp = false;
@@ -70,6 +71,8 @@ public class Tablero extends JFrame {
 	private int anchoCarta = 100;
 	private int largoCarta = 120;
 
+	
+	
 	private BufferedImage guardia;
 	private BufferedImage princesa;
 	private BufferedImage principe;
@@ -83,8 +86,10 @@ public class Tablero extends JFrame {
 
 	private boolean tomoCarta = false;
 	private boolean finalizar = false;
-
-
+	private boolean compararManos=false;
+	//private boolean huboEliminacion=false;
+	
+	
 	private JDialog lista;
 	private JButton j1;
 	private JButton j2;
@@ -211,6 +216,7 @@ public class Tablero extends JFrame {
 		lista.setResizable(true);
 		lista.setSize(50, 50);
 
+		
 		j1 = new JButton(jugadores.get(0).getNombre());
 		lista.getContentPane().add(j1);
 		j2 = new JButton(jugadores.get(1).getNombre());
@@ -369,20 +375,27 @@ public class Tablero extends JFrame {
 				if ((m.getX() >= 340 && m.getX() <= 420 && m.getY() >= 550 && m.getY() <= 670
 						&& jugadorActivo.getTamanioMano() > 1)) {
 					distDescarte += 30;
-					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(0), 270 + distDescarte, 140);
+					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(0), 250 + distDescarte, 140);
 					dibujos.add(cartaTiradas);
 					if (jugadorActivo.getMano(0).equals(new Sacerdote()))
 						dibManoOp = true;
+					
+					if (jugadorActivo.getMano(0).equals(new Baron())) {
+						jugadorBaron=jugadorActivo;
+						compararManos = true;
+					}
+						
 					jugadorActivo.jugarCarta(partida, 0, lista, listaCartas);
 					sonidoTirarCarta.play();
 
 					if (cartaTiradas.getCartaDib().equals(new Principe())) {
 						distDescarte += 30;
 						DibujoCarta cartaOp = new DibujoCarta(jugadores.get(getJugadorElegido()).getUltimaDescartada(),
-								270 + distDescarte, 140);
+								250 + distDescarte, 140);
 						dibujos.add(cartaOp);
 					}
-
+										
+						
 					turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 					refresh();
 				} else if ((m.getX() >= 200 && m.getX() <= 510)
@@ -393,8 +406,9 @@ public class Tablero extends JFrame {
 					if(new Condesa().equals(partida.getMazo().darCarta(jugadorActivo)) &&
 							new Condesa().equals(jugadorActivo.getUltimaDescartada())){
 						distDescarte += 30;
-						DibujoCarta cartaTiradas = new DibujoCarta(new Condesa(), 270 + distDescarte, 140);
+						DibujoCarta cartaTiradas = new DibujoCarta(new Condesa(), 250 + distDescarte, 140);
 						dibujos.add(cartaTiradas);
+						
 						turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 					}
 					
@@ -403,20 +417,29 @@ public class Tablero extends JFrame {
 				} else if ((m.getX() >= 450 && m.getX() <= 610 && m.getY() >= 550 && m.getY() <= 670)
 						&& jugadorActivo.getTamanioMano() == 2) {
 					distDescarte += 30;
-					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(1), 270 + distDescarte, 140);
+					DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(1), 250 + distDescarte, 140);
 					dibujos.add(cartaTiradas);
 					if (jugadorActivo.getMano(1).equals(new Sacerdote()))
 						dibManoOp = true;
+						
+					
+					if (jugadorActivo.getMano(1).equals(new Baron())) {
+						jugadorBaron=jugadorActivo;
+						compararManos = true;
+					}
+						
+					
 					jugadorActivo.jugarCarta(partida, 1, lista, listaCartas);
 					sonidoTirarCarta.play();
-
+					
 					if (cartaTiradas.getCartaDib().equals(new Principe())) {
 						distDescarte += 30;
 						DibujoCarta cartaOp = new DibujoCarta(jugadores.get(getJugadorElegido()).getUltimaDescartada(),
-								270 + distDescarte, 140);
+								250 + distDescarte, 140);
 						dibujos.add(cartaOp);
 					}
-
+					
+									
 					turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 					refresh();
 				}
@@ -441,9 +464,9 @@ public class Tablero extends JFrame {
 			g2.scale(currentDimension.getWidth() / 800, currentDimension.getHeight() / 450);
 			g2.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 			for (int i = 0; i < 5; i++) {
-				g2.drawImage(dorso, 180 + i * 2, 145 + i * 3, 100, 120, this);
+				g2.drawImage(dorso, 160 + i * 2, 145 + i * 3, 100, 120, this);
 				g2.setColor(Color.WHITE);
-				g2.drawRect(180 + i * 2, 145 + i * 3, 100, 120);
+				g2.drawRect(160 + i * 2, 145 + i * 3, 100, 120);
 			}
 			
 			g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 15));
@@ -462,19 +485,32 @@ public class Tablero extends JFrame {
 			g2.drawString(jugadorActivo.getNombre(), 510, 430);
 			g2.drawString("Afectos: " + String.valueOf(jugadorActivo.getAfectosConseguidos()), 640, 430);
 
-			if (CantJugadores == 3) {
+			if (partida.getCantJugadores() == 3) {
 				dibujarCartas(g2, "Dorso", 0, 145);
 			}
 
-			if (CantJugadores == 4) {
+			if (partida.getCantJugadores() == 4) {
 				dibujarCartas(g2, "Dorso", 0, 145);
 				dibujarCartas(g2, "Dorso", 690, 145);
 
 			}
+			
+			if(partida.isHuboEliminacion()) {
+				distDescarte += 30;
+			DibujoCarta cartaJugadorElim = new DibujoCarta( jugadores.get(Tablero.getJugadorElegido()).getMano(0),
+					250 + distDescarte, 140);
+			dibujos.add(cartaJugadorElim);
+			partida.setHuboEliminacion(false);
+			
+			}
+			
 
 			for (DibujoCarta dib : dibujos) {
 				dibujarCartas(g2, dib.getCartaDib().getNombre(), dib.getEjeX(), dib.getEjeY());
 			}
+			
+			
+			
 
 			if (dibManoOp) {
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 40));
@@ -482,8 +518,31 @@ public class Tablero extends JFrame {
 				g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
 				g2.drawString(jugadores.get(Tablero.getJugadorElegido()).getNombre(), 300, 170);
 				dibujarCartas(g2, jugadores.get(Tablero.getJugadorElegido()).getMano(0).getNombre(), 350, 200);
+				
 				dibManoOp = false;
 			}
+			
+			if (compararManos) {
+				
+				g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
+				
+				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 20));
+				g2.setPaint(Color.WHITE);
+				g2.drawString(jugadorBaron.getNombre(), 265, 155);
+				dibujarCartas(g2, jugadorBaron.getMano(0).getNombre(), 265, 160);
+				
+				
+				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 20));
+				g2.setPaint(Color.WHITE);
+				g2.drawString(jugadores.get(Tablero.getJugadorElegido()).getNombre(), 448, 155);
+				dibujarCartas(g2, jugadores.get(Tablero.getJugadorElegido()).getMano(0).getNombre(), 447, 160);
+				
+				
+				compararManos = false;
+			}
+			
+			
+			
 
 			if (partida.getReinicio()) {
 				dibujos.clear();
