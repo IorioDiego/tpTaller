@@ -86,8 +86,8 @@ public class ComenzarRonda extends JFrame {
 				ArrayList<Jugador> jugadores = new ArrayList<>();
 				jugadores.add(new Jugador("Dieguien", 3));
 				jugadores.add(new Jugador("Lucardo", 2));
-				//jugadores.add(new Jugador("Tomarson", 1));
-			//	jugadores.add(new Jugador("Leandrinho", 4));
+				jugadores.add(new Jugador("Tomarson", 1));
+				jugadores.add(new Jugador("Leandrinho", 4));
 				Partida partida = new Partida(25, jugadores.size(), jugadores);
 				partida.iniciarPartida();
 
