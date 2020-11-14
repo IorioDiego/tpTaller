@@ -56,7 +56,8 @@ public abstract class Carta {
 	
 	@Override
 	public String toString() {
-		return "Valor: " + fuerza + "\nNombre: " + nombre + "\nDescripcion Efecto: " + descEfecto;
+		//return "Valor: " + fuerza + "\nNombre: " + nombre + "\nDescripcion Efecto: " + descEfecto;
+		return descEfecto;
 	}
 	
 	public int getFuerza() {

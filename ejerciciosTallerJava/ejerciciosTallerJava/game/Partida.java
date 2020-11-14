@@ -113,7 +113,7 @@ public class Partida extends Observer {
 		mazo = new Mazo();
 		mazo.register(this);
 		mazo.mezclar();
-		mazo.eliminarPrimeraCarta();
+		cartaEliminda=mazo.eliminarPrimeraCarta();
 
 		cantJugadores = jugadoresActivos;
 
