@@ -25,7 +25,6 @@ public class Sacerdote extends Carta{
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida, JDialog lista,JDialog listaCartas) {
 		lista.setVisible(true);
-		//jugador.seleccionarJugador(partida).mostrarMano();
 		partida.getJugadores().get(Tablero.getJugadorElegido()).mostrarMano();
 	}
 }

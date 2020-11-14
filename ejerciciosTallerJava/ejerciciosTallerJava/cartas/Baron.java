@@ -25,7 +25,7 @@ public class Baron extends Carta {
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida,JDialog lista,JDialog listaCartas) {
 		lista.setVisible(true);
-		//Jugador oponente = jugador.seleccionarJugador(partida);
+	
 		Jugador oponente = partida.getJugadores().get(Tablero.getJugadorElegido());
 		int resultado = jugador.compararMano( oponente );
 		if( resultado >0  ) {

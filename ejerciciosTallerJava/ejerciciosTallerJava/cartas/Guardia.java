@@ -26,10 +26,6 @@ public class Guardia extends Carta {
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida, JDialog lista, JDialog listaCartas) {
 		lista.setVisible(true);
-//		Jugador oponente = jugador.seleccionarJugador(partida);
-//		int i=0; ///---->>siempre elige sacerdote
-//		if(oponente.tengoLaCarta(partida.seleccionarCarta(i)))
-//			oponente.seJugoGuardia();
 
 		listaCartas.setVisible(true);
 		Jugador oponente = partida.elegirJugador(Tablero.getJugadorElegido());

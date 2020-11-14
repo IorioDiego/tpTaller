@@ -25,7 +25,6 @@ public class Rey extends Carta{
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida, JDialog lista,JDialog listaCartas) {
 		lista.setVisible(true);
-		//jugador.intercabiarMano(jugador.seleccionarJugador(partida));	
 		jugador.intercabiarMano(partida.getJugadores().get(Tablero.getJugadorElegido()));
 	}
 }

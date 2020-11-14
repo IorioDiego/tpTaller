@@ -25,24 +25,6 @@ public class MainTests {
 		});
 		
 
-//
-//		jugadores.get(0).ganarRonda(partida.getAfecto());
-//		jugadores.get(0).ganarRonda(partida.getAfecto());
-//		jugadores.get(0).ganarRonda(partida.getAfecto());
-//		jugadores.get(0).ganarRonda(partida.getAfecto());
-
-//		System.out.println(jugadores.get(0));
-//		partida.getMazo().darCarta(jugadores.get(0));
-//		jugadores.get(0).mostrarMano();
-//		jugadores.get(0).jugarCarta(partida);
-
-		/// SE JUGO CARTA CONTRA EL JUGADOR 1
-//		System.out.println();
-//		System.out.println(jugadores.get(1));
-//		System.out.println(jugadores.get(1).getMano());
-//		System.out.println();
-//		System.out.println(jugadores.get(0));
-
 	}
 
 }

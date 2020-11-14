@@ -32,7 +32,7 @@ public class ComenzarRonda extends JFrame {
 
 	public void init() {
 		try {
-			backGround = ImageIO.read(new File("header.jpg"));
+			backGround = ImageIO.read(new File("loveImg/header.jpg"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

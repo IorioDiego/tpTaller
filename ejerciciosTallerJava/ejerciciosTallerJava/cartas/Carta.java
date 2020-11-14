@@ -56,7 +56,7 @@ public abstract class Carta {
 	
 	@Override
 	public String toString() {
-		//return "Valor: " + fuerza + "\nNombre: " + nombre + "\nDescripcion Efecto: " + descEfecto;
+
 		return descEfecto;
 	}
 	
@@ -68,12 +68,5 @@ public abstract class Carta {
 	public String getNombre() {
 		return nombre;
 	}
-	
-	
-//	@Override
-//	public String toString() {
-//		return "Valor: " + fuerza + "\nNombre: " + nombre ;
-//	}
-
-	
+		
 }

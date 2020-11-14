@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 
-import org.omg.CORBA.portable.ValueBase;
+
 
 import cartas.*;
 import game.Jugador;
@@ -86,7 +86,7 @@ public class Tablero extends JFrame {
 	private boolean finalizar = false;
 	private boolean compararManos = false;
 	private boolean cambiarJugador=false;
-	// private boolean huboEliminacion=false;
+
 
 	private JDialog lista;
 	private JButton j1;
@@ -183,9 +183,9 @@ public class Tablero extends JFrame {
 	
 	public void init(ArrayList<Jugador> jugadores, Partida partida) {
 		try {
-			background = ImageIO.read(new File("rombos.jpg"));
-			dorso = ImageIO.read(new File("dorso.jpg"));
-			cartaAmor = ImageIO.read(new File("IconoCarta.png"));
+			background = ImageIO.read(new File("loveImg/rombos.jpg"));
+			dorso = ImageIO.read(new File("loveImg/dorso.jpg"));
+			cartaAmor = ImageIO.read(new File("loveImg/IconoCarta.png"));
 			guardia = ImageIO.read(new File("cartasImg/guardia.jpg"));
 			princesa = ImageIO.read(new File("cartasImg/princesa.jpg"));
 			principe = ImageIO.read(new File("cartasImg/principe.jpg"));
@@ -194,15 +194,13 @@ public class Tablero extends JFrame {
 			baron = ImageIO.read(new File("cartasImg/baron.jpg"));
 			condesa = ImageIO.read(new File("cartasImg/condesa.jpg"));
 			sacerdote = ImageIO.read(new File("cartasImg/sacerdote.jpg"));
-			// sonidoFondo = new Sound("Musica.wav");
-			sonidoTirarCarta = new Sound("tirarCarta.wav");
-			fondoVerCarta = ImageIO.read(new File("fondoVerCartaOp.jpeg"));
+			sonidoTirarCarta = new Sound("sounds/tirarCarta.wav");
+			fondoVerCarta = ImageIO.read(new File("loveImg/fondoVerCartaOp.jpeg"));
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-//		sonidoFondo.play();
-//		sonidoFondo.setVolume(0.1f);
+
 		this.jugadores = jugadores;
 		CantJugadores = jugadores.size();
 		this.partida = partida;
@@ -367,7 +365,7 @@ public class Tablero extends JFrame {
 		setVisible(true);
 		setFocusable(true);
 		requestFocusInWindow();
-		// getContentPane().setBounds(626, 417, 800, 513);
+	
 		setResizable(false); // no puedes maximizar/minimizar la ventana
 		setBounds(500, 156, 905, 727);
 
@@ -520,7 +518,7 @@ public class Tablero extends JFrame {
 
 			if (dibManoOp) {
 				int renglon = 0;
-				// g2.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 15));
 				g2.setPaint(Color.WHITE);
 				g2.drawImage(fondoVerCarta, 5, 120, 800, 300, this);
@@ -549,7 +547,7 @@ public class Tablero extends JFrame {
 			
 			
 			if (compararManos) {
-				// g2.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+
 				g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
 
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 20));
@@ -573,7 +571,7 @@ public class Tablero extends JFrame {
 				partida.setReinicio(false);
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 30));
 				g2.setPaint(Color.WHITE);
-				// g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
+				 g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
 				g2.drawString("Fin de ronda", 300, 170);
 				g2.drawString(partida.getGanadoRonda().getNombre(), 270, 240);
 				g2.drawImage(cartaAmor, 430, 210, 50, 35, this);
@@ -649,7 +647,7 @@ public class Tablero extends JFrame {
 
 	@Override
 	public void update(Graphics g) {
-		// TODO Auto-generated method stub
+	
 		paint(g);
 	}
 
