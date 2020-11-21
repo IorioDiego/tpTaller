@@ -471,7 +471,7 @@ public class Tablero extends JFrame {
 
 		setResizable(false); // no puedes maximizar/minimizar la ventana
 		// setBounds(500, 156, 905, 727);***1
-		setBounds(200, 56, 1200, 700);
+		setBounds(200, 56, 1366, 768);
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -578,7 +578,7 @@ public class Tablero extends JFrame {
 			Dimension currentDimension = getContentPane().getSize();
 			// g2.scale(currentDimension.getWidth() / 800, currentDimension.getHeight() /
 			// 450);***2
-			g2.scale(currentDimension.getWidth() / 1193, currentDimension.getHeight() / 700);
+			g2.scale(currentDimension.getWidth() / 1358, currentDimension.getHeight() / 768);
 			g2.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 			for (int i = 0; i < 5; i++) {
 				// g2.drawImage(dorso, 160 + i * 2, 145 + i * 3, 100, 120, this);***3
@@ -800,7 +800,7 @@ public class Tablero extends JFrame {
 		@Override
 		public Dimension getPreferredSize() {
 			// return new Dimension(900, 700);**8
-			return new Dimension(1200, 700);
+			return new Dimension(1366, 768);
 
 		}
 	}
@@ -823,7 +823,7 @@ public class Tablero extends JFrame {
 		contentPane = new JPanel();
 		this.partida = partida;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setBounds(200, 117, 1200, 700);
+		getContentPane().setBounds(200, 117, 1366, 768);
 		// getContentPane().setBounds(626, 417, 800, 513);**7
 		setContentPane(contentPane);
 	
