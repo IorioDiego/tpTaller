@@ -18,7 +18,9 @@ public class Mazo extends Observable {
 	private ArrayList<Carta> mazo = new ArrayList<Carta>();
 
 	public Mazo() {
-
+		
+	
+		
 		mazo.add(new Guardia());
 		mazo.add(new Guardia());
 		mazo.add(new Guardia());
@@ -41,26 +43,23 @@ public class Mazo extends Observable {
 
 		mazo.add(new Condesa());
 
-		mazo.add(new Princesa());
+		 mazo.add(new Princesa());
 	}
 
 	public Carta eliminarPrimeraCarta() {
-		return mazo.remove(0);
+		 return mazo.remove(0);
 	}
-
 
 	public void mezclar() {
-		Collections.shuffle(mazo);
-		Collections.shuffle(mazo);
+		//Collections.shuffle(mazo);
 	}
 
-	public Carta darCarta(Jugador jugador) 
-	{	Carta robada=null;
-			if(getCantCartas() != 0 )
-			{
-				robada=jugador.tomarCarta(mazo.remove(0));
-			}else
-				this.notificarFinMazo();
+	public Carta darCarta(Jugador jugador) {
+		Carta robada = null;
+		if (getCantCartas() != 0) {
+			robada = jugador.tomarCarta(mazo.remove(0));
+		} else
+			this.notificarFinMazo();
 		return robada;
 	}
 

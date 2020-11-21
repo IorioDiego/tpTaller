@@ -22,12 +22,11 @@ public class Partida extends Observer {
 	private int jugadoresActivos;
 	private boolean reinicio = false;
 	private boolean finalizoPartida;
-	private Jugador ganadoRonda=new Jugador();
+	private Jugador ganadoRonda = new Jugador();
 	private int nroRonda;
 	private Carta cartaEliminda;
-	private boolean huboEliminacion=false;
+	private boolean huboEliminacion = false;
 
-	
 	public Carta getCartaEliminda() {
 		return cartaEliminda;
 	}
@@ -63,7 +62,7 @@ public class Partida extends Observer {
 		this.jugadoresActivos = cantJugadores;
 		this.reinicio = false;
 		this.finalizoPartida = false;
-		this.nroRonda=0;
+		this.nroRonda = 0;
 		///////////////////////
 		listaCartas.add(new Sacerdote());
 		listaCartas.add(new Baron());
@@ -102,18 +101,18 @@ public class Partida extends Observer {
 		nroRonda++;
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
-	
+
 		}
-	
-		if(nroRonda > 1)
+
+		if (nroRonda > 1)
 			reinicio = true;
-		
-		huboEliminacion=false;
-		
+
+		huboEliminacion = false;
+
 		mazo = new Mazo();
 		mazo.register(this);
 		mazo.mezclar();
-		cartaEliminda=mazo.eliminarPrimeraCarta();
+		cartaEliminda = mazo.eliminarPrimeraCarta();
 
 		cantJugadores = jugadoresActivos;
 
@@ -129,11 +128,9 @@ public class Partida extends Observer {
 
 		}
 
-	
-
 		mazo = new Mazo();
 		mazo.mezclar();
-		cartaEliminda= mazo.eliminarPrimeraCarta();
+		cartaEliminda = mazo.eliminarPrimeraCarta();
 
 		cantJugadores = jugadoresActivos;
 		finalizoPartida = false;
@@ -143,8 +140,6 @@ public class Partida extends Observer {
 		}
 
 	}
-
-
 
 	public boolean isFinalizoPartida() {
 		return finalizoPartida;
@@ -167,7 +162,7 @@ public class Partida extends Observer {
 		if (cantJugadores == 1) {
 			for (int i = 0; i < jugadoresActivos; i++) {
 				if (!jugadores.get(i).getEstado().equals(new Eliminado()))
-					jugadores.get(i).ganarRonda(afecto,this);
+					jugadores.get(i).ganarRonda(afecto, this);
 			}
 			iniciarRonda();
 		}
@@ -182,14 +177,26 @@ public class Partida extends Observer {
 
 	@Override
 	public void notificarseFinMazo() {
+	
 		int fuerza = 0, ganador = 0, empate = 0;
 		int primeroValido = 0;
 		ArrayList<Integer> jEmpatados = new ArrayList<Integer>();
+	
+		for (Jugador j : jugadores) {
+			if(! j.getEstado().equals(new Eliminado())) {
+				if(j.getManoCompleta().isEmpty()) {
+					j.tomarCarta(cartaEliminda);
+				}
+				
+			}
+				
+		}
+		
 		while (jugadores.get(primeroValido).getEstado().equals(new Eliminado())) {
 			primeroValido++;
 		}
 		jEmpatados.add(primeroValido);
-		ganador=primeroValido;
+		ganador = primeroValido;
 		fuerza = jugadores.get(primeroValido).getMano(0).getFuerza();
 
 		for (int i = primeroValido + 1; i < jugadores.size(); i++) {
@@ -203,7 +210,7 @@ public class Partida extends Observer {
 					jEmpatados.clear();
 
 				} else if (jugadores.get(i).getMano(0).getFuerza() == fuerza) {
-				
+
 					jEmpatados.add(i);
 					empate = 1;
 				}
@@ -215,16 +222,16 @@ public class Partida extends Observer {
 			fuerza = jugadores.get(jEmpatados.get(0)).sumarDescarte();
 			for (int i = 1; i < jEmpatados.size(); i++) {
 				if (jugadores.get(jEmpatados.get(i)).sumarDescarte() > fuerza) {
-					
-					fuerza=jugadores.get(jEmpatados.get(i)).sumarDescarte();
+
+					fuerza = jugadores.get(jEmpatados.get(i)).sumarDescarte();
 					ganador = i;
 				}
 			}
 			ganador = jEmpatados.get(ganador);
 		}
-		
-		jugadores.get(ganador).ganarRonda(afecto,this);
-		ganadoRonda=jugadores.get(ganador);
+
+		jugadores.get(ganador).ganarRonda(afecto, this);
+		ganadoRonda = jugadores.get(ganador);
 		iniciarRonda();
 	}
 
@@ -274,13 +281,13 @@ public class Partida extends Observer {
 	}
 
 	public Carta seleccionarCarta(int index) {
-	
+
 		return listaCartas.get(index);
 	}
 
 	public int finalizarPartida(int i) {
 		finalizoPartida = true;
-	
+
 		return i;
 	}
 
