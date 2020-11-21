@@ -4,8 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -24,6 +27,8 @@ import javax.swing.event.ListSelectionListener;
 import game.Jugador;
 import game.Partida;
 
+
+
 public class Salas extends JFrame {
 
 	private JPanel contentPane;
@@ -33,6 +38,8 @@ public class Salas extends JFrame {
 	private int index;
 	private JButton crear;
 	private JButton Ingresar;
+	Font fuente = new Font("Calibri", Font.PLAIN,16);
+	 
 	/**
 	 * 
 	 */
@@ -47,18 +54,24 @@ public class Salas extends JFrame {
 		JPanel lista = new JPanel();
 		
 		botones.setLayout(new GridLayout(1,2));
-		//lista.setLayout(new GridLayout(1,1));
-		lista.setLayout(new BorderLayout());
+		lista.setLayout(new GridLayout(1,1));
+		//lista.setLayout(new BorderLayout());
 		// contentPane.
 		nickname.setLayout(new GridLayout(3, 1));
-		textField = new JTextField("Nikname:",25);
+		textField = new JTextField("Ingrese nikname:",25);
+		textField.setFont(fuente);
+		
+		textField.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                textField.setText("");
+            }
+        });
+		
 		list = new JList<String>(nombres);
 		
-		list.setMaximumSize(new Dimension(50, 50));  // this line does not do the job
-        list.setMinimumSize (new Dimension (50,50));
+		list.setFixedCellWidth(5);
         
-       // DefaultListModel modelo = (DefaultListModel) list.getModel();
-		//modelo.remove(index);
 		list.addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
@@ -78,15 +91,18 @@ public class Salas extends JFrame {
 		
 		crear = new JButton("Crear Sala");
 		Ingresar = new JButton("Ingresar Sala");
-
-		input.setLayout(new FlowLayout(FlowLayout.CENTER, 25, 15));
-		botones.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
-		//nickname.add(textField, BorderLayout.CENTER);
+		
+		//lista.setLayout(new FlowLayout(FlowLayout.CENTER,15,15));
+		input.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 15));
+		botones.setLayout(new FlowLayout(FlowLayout.CENTER, 45, 15));
+		
 		input.add(textField);
-		nickname.add(input);
-		nickname.add(list);
+		lista.add(list);
 		botones.add(crear);
 		botones.add(Ingresar);
+		
+		nickname.add(input);
+		nickname.add(lista);
 		nickname.add(botones);
 		
 		// textField.setColumns(10);
@@ -100,7 +116,6 @@ public class Salas extends JFrame {
 		setVisible(true);
 		setFocusable(true);
 		requestFocusInWindow();
-
 	}
 
 	public Salas() {
