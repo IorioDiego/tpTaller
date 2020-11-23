@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Scrollbar;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -20,14 +21,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import game.Jugador;
 import game.Partida;
-
-
 
 public class Salas extends JFrame {
 
@@ -38,8 +38,8 @@ public class Salas extends JFrame {
 	private int index;
 	private JButton crear;
 	private JButton Ingresar;
-	Font fuente = new Font("Calibri", Font.PLAIN,16);
-	 
+	Font fuente = new Font("Calibri", Font.PLAIN, 16);
+
 	/**
 	 * 
 	 */
@@ -47,75 +47,85 @@ public class Salas extends JFrame {
 
 	public void init() {
 
-		String[] nombres = { "jony", "lucas", "tomy" };
-		JPanel botones = new JPanel();
-		
-		JPanel input = new JPanel();
-		JPanel lista = new JPanel();
-		
-		botones.setLayout(new GridLayout(1,2));
-		lista.setLayout(new GridLayout(1,1));
-		//lista.setLayout(new BorderLayout());
-		// contentPane.
-		nickname.setLayout(new GridLayout(3, 1));
-		textField = new JTextField("Ingrese nikname:",25);
-		textField.setFont(fuente);
-		
-		textField.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e){
-                textField.setText("");
-            }
-        });
-		
-		list = new JList<String>(nombres);
-		
-		list.setFixedCellWidth(5);
-        
-		list.addListSelectionListener(new ListSelectionListener() {
-			
-			@Override
-			public void valueChanged(ListSelectionEvent arg0) {
-				
-				int index = list.getSelectedIndex();
-				
-				System.out.println(index);
-			}
-		});
-		
+		this.setBounds(100, 100, 450, 300);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.getContentPane().setLayout(null);
 
-		//list.setVisibleRowCount(20);
-		// nickname.getPreferredSize(800,800);
-		// nickname.setBorder(new TitledBorder("Jugadores"));
-		// nickname.setBackground(Color.decode("#f7db97"));
-		
-		crear = new JButton("Crear Sala");
-		Ingresar = new JButton("Ingresar Sala");
-		
-		//lista.setLayout(new FlowLayout(FlowLayout.CENTER,15,15));
-		input.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 15));
-		botones.setLayout(new FlowLayout(FlowLayout.CENTER, 45, 15));
-		
-		input.add(textField);
-		lista.add(list);
-		botones.add(crear);
-		botones.add(Ingresar);
-		
-		nickname.add(input);
-		nickname.add(lista);
-		nickname.add(botones);
-		
-		// textField.setColumns(10);
-		getContentPane().add(nickname);
-		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		textField = new JTextField("Ingrese Nickname");
+		textField.setBounds(10, 6, 416, 21);
+		textField.setHorizontalAlignment(SwingConstants.CENTER);
+		this.getContentPane().add(textField);
+		textField.setColumns(10);
 
-		pack();
-		setTitle("LoveLetter");
+		setTitle("Seleccion de sala");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		setFocusable(true);
-		requestFocusInWindow();
+
+		textField.setFont(fuente);
+
+		textField.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				textField.setText("");
+			}
+		});
+		
+		GridLayout layout = new GridLayout(1,2);
+	    layout.setHgap(55);
+		
+		JPanel botones =new JPanel();
+		botones.setLayout(layout);
+
+		JButton btnCrear = new JButton("Crear Sala");
+		JButton btnIngresar = new JButton("Ingresar a Sala");
+		botones.add(btnCrear);
+		botones.add(btnIngresar);
+		botones.setBounds(55, 232, 326, 21);
+		getContentPane().add(botones);
+		
+		DefaultListModel dlm = new DefaultListModel();
+        ArrayList<String> salas = new ArrayList<String>();
+        
+        for (int i = 0; i < 100; i++) {
+        	salas.add("Sala " + (i+1));
+        }
+        
+        for (String item : salas) {
+            dlm.addElement(item);
+          }
+
+        JList list = new JList(dlm);
+        JScrollPane scroll = new JScrollPane(list);
+        
+        //list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setMinimumSize(new Dimension(150,100));
+        setPreferredSize (new Dimension (329, 124));
+        setLayout (null);
+        add (list);
+        add (scroll);
+        scroll.getViewport().add(list);
+        scroll.setBounds(10, 37, 416, 185);
+        list.setBounds(10, 37, 416, 185);
+        //final DefaultListModel dlm = new DefaultListModel();
+        
+        
+		list.addListSelectionListener(new ListSelectionListener() {
+
+			 @Override
+             public void valueChanged(ListSelectionEvent e) {
+               if (e.getFirstIndex() != -1 && !e.getValueIsAdjusting()) {
+                 int firstIndex = e.getFirstIndex();
+                 list.removeListSelectionListener(this);
+                 list.clearSelection();
+                 dlm.remove(firstIndex);
+                 salas.remove(firstIndex);
+                 list.addListSelectionListener(this);
+               }
+             }
+           }
+           );
+
 	}
 
 	public Salas() {
