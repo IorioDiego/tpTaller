@@ -51,10 +51,12 @@ public class HiloAtencionCliente extends Thread implements Serializable {
 		this.cliente = socket;
 		this.inicioConexion = new Date();
 		try {
-			this.entrada = new DataInputStream(cliente.getInputStream());
-			this.salida = new DataOutputStream(cliente.getOutputStream());
-			this.entradaObj= new ObjectInputStream(cliente.getInputStream());
+//			this.entrada = new DataInputStream(cliente.getInputStream());
+//			this.salida = new DataOutputStream(cliente.getOutputStream());
 			this.salidaObj= new ObjectOutputStream(cliente.getOutputStream());
+			this.salidaObj.flush();
+			this.entradaObj= new ObjectInputStream(cliente.getInputStream());
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -85,47 +87,48 @@ public class HiloAtencionCliente extends Thread implements Serializable {
 		try {
 			String msj, resultComando;
 			boolean existeSala = true;
-			salida.writeUTF("Ingrese su nombre de usuario: ");
-			String nick = entrada.readUTF();
+//			salida.writeUTF("Ingrese su nombre de usuario: ");
+//			String nick = entrada.readUTF();
+			String nick  = "diego";
 			Paquete paquete = new Paquete(inicioConexion, cliente, nick, entrada, salida);
-			do {
-				do {
-//					salida.writeUTF("Lobby" + "\n");
-//					for (Map.Entry<String, ArrayList<Paquete>> entry : Servidor.getSalas().entrySet()) {
-//						salida.writeUTF(
-//								"Nombre Sala: " + entry.getKey() + " Usuarios conetados:" + entry.getValue().size());
-//						
-//					}
-					
+//			do {
+//				do {
+////					salida.writeUTF("Lobby" + "\n");
+////					for (Map.Entry<String, ArrayList<Paquete>> entry : Servidor.getSalas().entrySet()) {
+////						salida.writeUTF(
+////								"Nombre Sala: " + entry.getKey() + " Usuarios conetados:" + entry.getValue().size());
+////						
+////					}
+//					
 					salidaObj.writeObject(Servidor.getSalas());
-					salida.writeUTF(opcionesSala);
-					if (paquete.cantidadSalas() >= 1)
-						salida.writeUTF("4)-Salir de sala");
-					msj = entrada.readUTF();
-				} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
-
-				if (!resultComando.equals("Salir")) {
-					do {
-						String sala;
-						if (paquete.cantidadSalas() > 1) {
-							do {
-								salida.writeUTF("\n" + "--ElegirSalaChat");
-								for (String salas : paquete.getSala())
-									salida.writeUTF("SALAS" + "\n" + salas);
-								sala = entrada.readUTF();
-								if (!(existeSala = Servidor.existeSala(sala)))
-									salida.writeUTF("Error,Sala invalida");
-							} while (!existeSala);
-							salida.writeUTF("!Listo para chatear");
-						} else
-							sala = paquete.getSala().get(0);
-						paquete.setSalaActiva(sala);
-
-						salida.writeUTF(opcionesComandos);
-						msj = entrada.readUTF();
-					} while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby"));
-				}
-			} while (!resultComando.equals("Salir"));
+//					salida.writeUTF(opcionesSala);
+//					if (paquete.cantidadSalas() >= 1)
+//						salida.writeUTF("4)-Salir de sala");
+//					msj = entrada.readUTF();
+//				} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
+//
+//				if (!resultComando.equals("Salir")) {
+//					do {
+//						String sala;
+//						if (paquete.cantidadSalas() > 1) {
+//							do {
+//								salida.writeUTF("\n" + "--ElegirSalaChat");
+//								for (String salas : paquete.getSala())
+//									salida.writeUTF("SALAS" + "\n" + salas);
+//								sala = entrada.readUTF();
+//								if (!(existeSala = Servidor.existeSala(sala)))
+//									salida.writeUTF("Error,Sala invalida");
+//							} while (!existeSala);
+//							salida.writeUTF("!Listo para chatear");
+//						} else
+//							sala = paquete.getSala().get(0);
+//						paquete.setSalaActiva(sala);
+//
+//						salida.writeUTF(opcionesComandos);
+//						msj = entrada.readUTF();
+//					} while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby"));
+//				}
+//			} while (!resultComando.equals("Salir"));
 
 		} catch (IOException ex) {
 			ex.getStackTrace();

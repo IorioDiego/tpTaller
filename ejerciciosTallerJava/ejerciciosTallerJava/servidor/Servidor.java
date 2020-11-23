@@ -18,8 +18,8 @@ public class Servidor {
 	public Servidor(int puerto) throws IOException {
 		ServerSocket servidor = new ServerSocket(puerto);
 		System.out.println("Server inicializando...");
-		agregarClienteSala(new Paquete(), "jonyPuto");
-		agregarClienteSala(new Paquete(), "lucasPuto");
+		crearSala(new Paquete(), "jonyPuto");
+		crearSala(new Paquete(), "lucasPuto");
 		for (int i = 1; i <= 200; i++) {
 			Socket cliente = servidor.accept();
 

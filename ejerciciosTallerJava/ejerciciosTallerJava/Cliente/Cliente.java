@@ -23,8 +23,8 @@ public class Cliente {
 	private BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in));
 	private DataInputStream dis;
 	private DataOutputStream dos;
-	private ObjectInputStream disObj;
-	private ObjectOutputStream dosObj;
+	private ObjectInputStream disObj=null;
+	private ObjectOutputStream dosObj=null;
 	private Socket socket;
 	private  Map<String, ArrayList<Paquete>> salas ;
 	
@@ -38,16 +38,23 @@ public class Cliente {
 	public void conectarse()
 	{
 		try {
-			Salas sala = new Salas();
-			sala.init();
+//			Salas sala = new Salas();
+//			sala.init();
 			socket = new Socket(ip, puerto);
-			dis = new DataInputStream(socket.getInputStream());
-			dos = new DataOutputStream(socket.getOutputStream());
+		//	dis = new DataInputStream(socket.getInputStream());
+		//	dos = new DataOutputStream(socket.getOutputStream());
+			dosObj= new ObjectOutputStream(socket.getOutputStream());
+			dosObj.flush();
 			disObj = new ObjectInputStream(socket.getInputStream());
-			dosObj= new ObjectOutputStream(socket.getOutputStream()); 
+
+		
 			salas = (Map<String, ArrayList<Paquete>>) disObj.readObject();
 			
-
+			for (Map.Entry<String, ArrayList<Paquete>> entry : salas.entrySet()) {
+			System.out.println(
+					"Nombre Sala: " + entry.getKey() + " Usuarios conetados:" + entry.getValue().size());
+			
+		}
 //			HiloEscuchar hiloEscucha = new HiloEscuchar(dis,sala);
 //			hiloEscucha.start();
 //			while (hiloEscucha.isAlive()) {
