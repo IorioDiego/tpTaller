@@ -82,10 +82,7 @@ public class InterfazCrearSala extends JFrame {
 			}
 		});
 		
-		
 	
-		
-
 		JComboBox cantPrendasAmor = new JComboBox();
 		cantPrendasAmor.setBackground(Color.LIGHT_GRAY);
 		cantPrendasAmor.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}));
@@ -134,9 +131,7 @@ public class InterfazCrearSala extends JFrame {
 					.addComponent(btnNewButton)
 					.addGap(29))
 		);
-		contentPane.setLayout(gl_contentPane);
-		
-		
+		contentPane.setLayout(gl_contentPane);	
 	}
 
 }

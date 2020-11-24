@@ -62,7 +62,8 @@ public class Cliente implements Serializable {
 				sala.agregarSalas(sal);
 			}
 			activarInterfaz();
-			dosObj.writeObject(obtenerSala(tocoBoton));
+			enviarSala();
+			
 			//dos.writeUTF(obtenerSala(tocoBoton));
 			
 			
@@ -88,6 +89,36 @@ public class Cliente implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void enviarSala()
+	{
+		new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					dosObj.writeObject(obtenerSala(tocoBoton));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+	}
+	
+	public void crearSala()
+	{
+		new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					dosObj.writeObject(obtenerSala(tocoBoton));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
 	}
 	
 	public void activarInterfaz()
