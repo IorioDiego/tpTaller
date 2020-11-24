@@ -1,8 +1,9 @@
 package servidor;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-public class AppServidor {
+public class AppServidor implements Serializable {
 	
 	public static void main(String[] args) {
 

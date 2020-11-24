@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,12 +27,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import servidor.Paquete;
+import servidor.SalaSerealizable;
 
 
 
 public class Salas extends JFrame {
 
-	private  Map<String,Paquete> salasCreadas= new HashMap<>();
+	private  ArrayList<SalaSerealizable> salas ;
 	private JPanel contentPane;
 	private JPanel nickname = new JPanel();
 	private JTextField textField;
@@ -94,18 +96,24 @@ JPanel gui = new JPanel();
         botones.setPreferredSize(new Dimension(300, 25));
         botones.setMaximumSize(new Dimension(300, 25));
         
+//        DefaultListModel dlm = new DefaultListModel();
+//        ArrayList<String> salas = new ArrayList<String>();
+//        
+//        for (int i = 0; i < 100; i++) {
+//            salas.add("Sala " + (i+1));
+//        }
+//        
+//        for (String item : salas) {
+//            dlm.addElement(item);
+//          }
+//
+// 
         DefaultListModel dlm = new DefaultListModel();
-        ArrayList<String> salas = new ArrayList<String>();
+       
         
-        for (int i = 0; i < 100; i++) {
-            salas.add("Sala " + (i+1));
-        }
-        
-        for (String item : salas) {
+        for (SalaSerealizable item : salas) {
             dlm.addElement(item);
           }
-
- 
 
         JList list = new JList(dlm);
         JScrollPane scroll = new JScrollPane(list);
@@ -159,17 +167,22 @@ JPanel gui = new JPanel();
 		getContentPane().setBounds(200, 117, 1366, 768);
 		// getContentPane().setBounds(626, 417, 800, 513);**7
 		setContentPane(contentPane);
+		salas = new ArrayList<>();
 
 	}
 
-	public Map<String, Paquete> getSalasCreadas() {
-		return salasCreadas;
+	public ArrayList<SalaSerealizable> getSalas() {
+		return salas;
 	}
 
-	public void setSalasCreadas(Map<String, Paquete> salasCreadas) {
-		this.salasCreadas = salasCreadas;
+	public void setSalas(ArrayList<SalaSerealizable> salas) {
+		this.salas = salas;
 	}
 
+	public void agregarSalas(SalaSerealizable s) {
+		this.salas.add(s);
+		
+	}
 	
 	
 	

@@ -2,13 +2,18 @@ package servidor;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class Paquete {
+public class Paquete implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2585930666645442349L;
 	private static SimpleDateFormat formatFecha = new SimpleDateFormat(" [dd/MM/yyyy HH:mm:ss] ");
 	private Socket cliente;
 	private String salaActiva;
