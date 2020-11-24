@@ -485,7 +485,7 @@ public class Tablero extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent m) {
 
-				if ((m.getX() >= 575 && m.getX() <= 675 && m.getY() >= 615 && m.getY() <= 755
+				if ((m.getX() >= 575 && m.getX() <= 675 && (m.getY() >= 615 && m.getY() <= 755)
 						&& jugadorActivo.getTamanioMano() > 1)) {
 					if (m.getButton() == MouseEvent.BUTTON1) {
 						distDescarte += 30;
@@ -592,7 +592,7 @@ public class Tablero extends JFrame {
 
 					tomoCarta = true;
 					refresh();
-				} else if ((m.getX() >= 695 && m.getX() <= 795 && m.getY() >= 615 && m.getY() <= 755)
+				} else if ((m.getX() >= 695 && m.getX() <= 795 && (m.getY() >= 615 && m.getY() <= 755))
 						&& jugadorActivo.getTamanioMano() == 2) {
 //					JDialog j = new JDialog();
 					if (m.getButton() == MouseEvent.BUTTON1) {
