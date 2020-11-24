@@ -20,7 +20,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -660,45 +659,19 @@ public class Tablero extends JFrame {
 						};
 						
 						
-						BufferedImage image = null;
-						try {
-							image = ImageIO.read(new File("loveImg/exit.png"));
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						
-						//ImageIcon exit = new ImageIcon("loveImg/exit.png");
-						//Image image = exit.getImage(); 
-						//Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);  
-						//exit = new ImageIcon(newimg);
+						ImageIcon exit = new ImageIcon("loveImg/exit.png");
+						Image image = exit.getImage(); 
+						Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);  
+						exit = new ImageIcon(newimg);
 						  cartaDescrip.setLayout(new BorderLayout());
 						  int gap = -3;
 						  cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
 
 						  JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 						  southPanel.setOpaque(false);
-						  JButton button = new JButton("X"){
-								
-								/**
-								 * 
-								 */
-								private static final long serialVersionUID = 1L;
-								//Color color1, color2;
-								  
-								@Override
-								public void paintComponent(Graphics g) {
-								    Graphics2D g2 = (Graphics2D) g;
-								    AffineTransform xform = AffineTransform.getScaleInstance(.5, .5);
-								    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-								                        RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-								    g2.drawImage(image, xform, null); // image being @2x or "retina" size
-								}
-							};
-						  button.setPreferredSize(new Dimension(48, 48));
-						  button.setFont(new Font("Arial", 3, 20));
-						  button.setForeground(Color.WHITE);
-						  
+						  JButton button = new JButton(exit);
+						  button.setPreferredSize(new Dimension(50, 50));
+
 						  button.setOpaque(false);
 						  button.setContentAreaFilled(false);
 						  button.setBorderPainted(false);
