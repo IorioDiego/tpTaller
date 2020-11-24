@@ -479,7 +479,7 @@ public class Tablero extends JFrame {
 
 		setResizable(false); // no puedes maximizar/minimizar la ventana
 		// setBounds(500, 156, 905, 727);***1
-		setBounds(200, 56, 1366, 768);
+		setBounds(80, 36, 1366, 768);
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -701,7 +701,7 @@ public class Tablero extends JFrame {
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-
+			
 			Graphics2D g2 = (Graphics2D) g;
 			Dimension currentDimension = getContentPane().getSize();
 			// g2.scale(currentDimension.getWidth() / 800, currentDimension.getHeight() /
@@ -745,9 +745,20 @@ public class Tablero extends JFrame {
 			 * catch(FontFormatException e) { e.printStackTrace(); }
 			 */
 
-			g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 18));
-			g2.setPaint(Color.WHITE);
-			g2.drawString("Ronda: " + partida.getNroRonda(), 1100, 18);
+			Font seagram = null;
+			
+			try{
+				seagram = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Seagram tfb.ttf")).deriveFont(18f);	
+				GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Seagram tfb.ttf")));
+				
+			}
+			catch(IOException | FontFormatException e){
+				
+			}
+			g2.setFont(seagram);
+			g2.setPaint(Color.decode("#653b33"));
+			g2.drawString("Ronda: " + partida.getNroRonda(), 1230, 37);
 
 			/*
 			 * dibujarCartas(g2, "Dorso", 350, 0); dibujarCartas(g2,
@@ -771,11 +782,11 @@ public class Tablero extends JFrame {
 			 */// **6
 
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 18));
-			g2.setPaint(Color.WHITE);
-			g2.drawImage(cartaAmor, 1150, 650, 50, 45, this);
-			g2.drawString(jugadorActivo.getNombre(), 940, 680);
-			g2.drawString("Afectos: " + String.valueOf(jugadorActivo.getAfectosConseguidos()), 1050, 680);
+			g2.setFont(seagram);
+			g2.setPaint(Color.decode("#653b33"));
+			g2.drawImage(cartaAmor, 1283, 698, 60, 39, this);
+			g2.drawString(jugadorActivo.getNombre(), 1035, 741);
+			g2.drawString("Afectos: " + String.valueOf(jugadorActivo.getAfectosConseguidos()), 1155, 741);
 
 			if (partida.getCantJugadores() == 3) {
 				dibujarCartas(g2, "Dorso", 20, 265);
@@ -801,7 +812,7 @@ public class Tablero extends JFrame {
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 15));
 				g2.setPaint(Color.WHITE);
 				g2.drawImage(fondoVerCarta, 330, 150, 555, 380, this);
-
+				
 				// g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 15));
 				// g2.setPaint(Color.WHITE);
 				// g2.drawImage(fondoVerCarta, 5, 120, 800, 300, this);
