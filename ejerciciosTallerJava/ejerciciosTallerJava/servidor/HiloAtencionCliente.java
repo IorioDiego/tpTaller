@@ -51,8 +51,8 @@ public class HiloAtencionCliente extends Thread implements Serializable {
 		this.cliente = socket;
 		this.inicioConexion = new Date();
 		try {
-//			this.entrada = new DataInputStream(cliente.getInputStream());
-//			this.salida = new DataOutputStream(cliente.getOutputStream());
+			this.entrada = new DataInputStream(cliente.getInputStream());
+			this.salida = new DataOutputStream(cliente.getOutputStream());
 			this.salidaObj= new ObjectOutputStream(cliente.getOutputStream());
 			this.salidaObj.flush();
 			this.entradaObj= new ObjectInputStream(cliente.getInputStream());
@@ -105,11 +105,12 @@ public class HiloAtencionCliente extends Thread implements Serializable {
 					a.add(salita);
 					a.add(salita2);
 					salidaObj.writeObject(a);
-//					salidaObj.writeObject(Servidor.getSalas().toString());
-//				salidaObj.writeObject(nick);
-//					salida.writeUTF(opcionesSala);
-//					if (paquete.cantidadSalas() >= 1)
-//						salida.writeUTF("4)-Salir de sala");
+					String salaElegida = entrada.readUTF();
+					System.out.println("la sala elegida fue: " + salaElegida);
+					
+					//salida.writeUTF(opcionesSala);
+					//if (paquete.cantidadSalas() >= 1)
+						//salida.writeUTF("4)-Salir de sala");
 //					msj = entrada.readUTF();
 //				} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
 //

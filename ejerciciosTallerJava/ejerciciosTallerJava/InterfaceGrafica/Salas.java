@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
@@ -29,16 +31,15 @@ import javax.swing.event.ListSelectionListener;
 import servidor.Paquete;
 import servidor.SalaSerealizable;
 
-
-
 public class Salas extends JFrame {
 
-	private  ArrayList<SalaSerealizable> salas ;
+	private ArrayList<SalaSerealizable> salas;
 	private JPanel contentPane;
 	private JPanel nickname = new JPanel();
 	private JTextField textField;
 	private JList<String> list;
-	private int index;
+	private static int firstIndex;
+	private static boolean tocoIngreso=false;
 	private JButton crear;
 	private JButton Ingresar;
 	Font fuente = new Font("Calibri", Font.PLAIN, 16);
@@ -50,52 +51,48 @@ public class Salas extends JFrame {
 
 	public void init() {
 
-JPanel gui = new JPanel();
-        
-        this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        getContentPane().add(Box.createVerticalStrut(5)); 
-        textField = new JTextField("Ingrese Nickname",25);
-        
-        gui.add(textField);
-        
-        gui.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        gui.setPreferredSize(new Dimension(400, 35));
-        gui.setMaximumSize(new Dimension(400, 35));
-        
-        this.getContentPane().add(gui);
-        getContentPane().add(Box.createVerticalStrut(5)); 
-        setTitle("Seleccion de sala");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
+		JPanel gui = new JPanel();
 
- 
+		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		getContentPane().add(Box.createVerticalStrut(5));
+		textField = new JTextField("Ingrese Nickname", 25);
 
-        textField.setFont(fuente);
-        textField.setHorizontalAlignment(JTextField.CENTER);
-        textField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                textField.setText("");
-            }
-        });
-        
-        GridLayout layout = new GridLayout(1,2);
-        layout.setHgap(55);
-        
-        JPanel botones =new JPanel();
-        botones.setLayout(layout);
+		gui.add(textField);
 
- 
+		gui.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton btnCrear = new JButton("Crear Sala");
-        JButton btnIngresar = new JButton("Ingresar a Sala");
-        botones.add(btnCrear);
-        botones.add(btnIngresar);
-        
-        botones.setPreferredSize(new Dimension(300, 25));
-        botones.setMaximumSize(new Dimension(300, 25));
-        
+		gui.setPreferredSize(new Dimension(400, 35));
+		gui.setMaximumSize(new Dimension(400, 35));
+
+		this.getContentPane().add(gui);
+		getContentPane().add(Box.createVerticalStrut(5));
+		setTitle("Seleccion de sala");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setVisible(true);
+
+		textField.setFont(fuente);
+		textField.setHorizontalAlignment(JTextField.CENTER);
+		textField.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				textField.setText("");
+			}
+		});
+
+		GridLayout layout = new GridLayout(1, 2);
+		layout.setHgap(55);
+
+		JPanel botones = new JPanel();
+		botones.setLayout(layout);
+
+		JButton btnCrear = new JButton("Crear Sala");
+		JButton btnIngresar = new JButton("Ingresar a Sala");
+		botones.add(btnCrear);
+		botones.add(btnIngresar);
+
+		botones.setPreferredSize(new Dimension(300, 25));
+		botones.setMaximumSize(new Dimension(300, 25));
+
 //        DefaultListModel dlm = new DefaultListModel();
 //        ArrayList<String> salas = new ArrayList<String>();
 //        
@@ -107,57 +104,63 @@ JPanel gui = new JPanel();
 //            dlm.addElement(item);
 //          }
 //
-// 
-        DefaultListModel dlm = new DefaultListModel();
-       
-        
-        for (SalaSerealizable item : salas) {
-            dlm.addElement(item);
-          }
+// 	
 
-        JList list = new JList(dlm);
-        JScrollPane scroll = new JScrollPane(list);
-        
-        ((JComponent) getContentPane()).setBorder (BorderFactory.createEmptyBorder (0, 5, 0, 5));
-        
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        add (list);
-        add (scroll);
-        scroll.getViewport().add(list);
-        
-        
-        list.addListSelectionListener(new ListSelectionListener() {
+		DefaultListModel dlm = new DefaultListModel();
 
- 
+		for (SalaSerealizable item : salas) {
+			dlm.addElement(item);
+		}
 
-             @Override
-             public void valueChanged(ListSelectionEvent e) {
-               if (e.getFirstIndex() != -1 && !e.getValueIsAdjusting()) {
-                 int firstIndex = e.getFirstIndex();
-                 list.removeListSelectionListener(this);
-                 list.clearSelection();
-                 dlm.remove(firstIndex);
-                 salas.remove(firstIndex);
-                 list.addListSelectionListener(this);
-               }
-             }
-           }
-           );
-        getContentPane().add(Box.createVerticalStrut(10));  
-        getContentPane().add(botones);
-        getContentPane().add(Box.createVerticalStrut(10)); 
-        setTitle("Seleccion de salas");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setFocusable(true);
-        requestFocusInWindow();
+		JList list = new JList(dlm);
+		JScrollPane scroll = new JScrollPane(list);
 
- 
+		((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
-        setResizable(false); 
-        setBounds(500, 250, 410, 280);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		add(list);
+		add(scroll);
+		scroll.getViewport().add(list);
+		
+		btnIngresar.setEnabled(false);
+		btnIngresar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					tocoIngreso=true;
+			}
+		});
+
+		list.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getFirstIndex() != -1 && !e.getValueIsAdjusting()) {
+					firstIndex = list.getSelectedIndex();
+					btnIngresar.setEnabled(true);
+					
+					///Borrado---
+					//list.removeListSelectionListener(this);
+					//list.clearSelection();
+					//dlm.remove(firstIndex);
+					//salas.remove(firstIndex);
+					//list.addListSelectionListener(this);
+				}
+			}
+		});
+		getContentPane().add(Box.createVerticalStrut(10));
+		getContentPane().add(botones);
+		getContentPane().add(Box.createVerticalStrut(10));
+		setTitle("Seleccion de salas");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setVisible(true);
+		setFocusable(true);
+		requestFocusInWindow();
+
+		setResizable(false);
+		setBounds(500, 250, 410, 280);
 	}
 
 	public Salas() {
@@ -174,18 +177,26 @@ JPanel gui = new JPanel();
 	public ArrayList<SalaSerealizable> getSalas() {
 		return salas;
 	}
-
+	
+	public static boolean tocoIngreso()
+	{
+		return tocoIngreso;
+	}
+	
+	public static int getSala()
+	{
+		return firstIndex;
+	}
+	
 	public void setSalas(ArrayList<SalaSerealizable> salas) {
 		this.salas = salas;
 	}
 
 	public void agregarSalas(SalaSerealizable s) {
 		this.salas.add(s);
-		
+
 	}
-	
-	
-	
+
 //	public static void main(String[] args) {
 //		Salas sala = new Salas();
 //		sala.init();

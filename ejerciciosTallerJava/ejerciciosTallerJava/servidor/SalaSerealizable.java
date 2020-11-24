@@ -14,8 +14,7 @@ public class SalaSerealizable implements Serializable{
 
 	@Override
 	public String toString() {
-		return  String.format("%-*s %-3d",nombreSala,cantJugadores);
-		
+		return  String.format("%-115s%02d",nombreSala,cantJugadores);
 	}
 	
 }
