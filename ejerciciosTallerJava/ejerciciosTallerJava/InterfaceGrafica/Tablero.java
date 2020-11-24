@@ -2,6 +2,7 @@ package InterfaceGrafica;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -10,6 +11,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Label;
+import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +20,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +31,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -48,11 +52,14 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.GradientPaint;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
+
 
 public class Tablero extends JFrame {
 
@@ -115,6 +122,8 @@ public class Tablero extends JFrame {
 
 	private static int jugadorElegido;
 	private static int cartaElegida;
+	
+	private ImageIcon descriprueca = new ImageIcon("loveImg/banner.jpg");
 
 	public void bloquearBoton() {
 
@@ -514,13 +523,59 @@ public class Tablero extends JFrame {
 						JDialog j = new JDialog();
 						j.setUndecorated(true);
 						j.setVisible(true);
-						j.setBounds(870,530,450,120);
-						String msj = jugadorActivo.getMano(0).toString();
-						JTextArea a = new JTextArea(msj);
-						a.setFocusable(false);
-						a.setBackground(Color.decode("#f7db97"));
-						j.add(a);
+						j.setBounds(480,210,600,360);
+						
+						ImageIcon descrip = new ImageIcon(jugadorActivo.getMano(1).toString());
+						
+						JPanel cartaDescrip = new JPanel(new BorderLayout()) {
+							
+							/**
+							 * 
+							 */
+							private static final long serialVersionUID = 1L;
 
+							@Override
+							protected void paintComponent(Graphics g) {
+								super.paintComponent(g);
+								g.drawImage(descrip.getImage(), 0, 0, getWidth(), getHeight(), this);
+							}
+
+							@Override
+							public Dimension getPreferredSize() {
+								Dimension size = super.getPreferredSize();
+								size.width = Math.max(descrip.getIconWidth(), size.width);
+								size.width = Math.max(descrip.getIconHeight(), size.height);
+
+								return size;
+							}
+						};
+						
+						
+						ImageIcon exit = new ImageIcon("loveImg/exit.png");
+						Image image = exit.getImage(); 
+						Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);  
+						exit = new ImageIcon(newimg);
+						  cartaDescrip.setLayout(new BorderLayout());
+						  int gap = -3;
+						  cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
+
+						  JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+						  southPanel.setOpaque(false);
+						  JButton button = new JButton(exit);
+						  button.setPreferredSize(new Dimension(50, 50));
+
+						  button.setOpaque(false);
+						  button.setContentAreaFilled(false);
+						  button.setBorderPainted(false);
+						  southPanel.add(button);
+						  cartaDescrip.add(southPanel, BorderLayout.NORTH);
+						  
+						  button.addActionListener(e -> {
+							j.dispose();
+					      });
+						j.add(cartaDescrip);
+						
+						
 					}
 					refresh();
 				} else if ((m.getX() >= 200 && m.getX() <= 510)
@@ -577,12 +632,83 @@ public class Tablero extends JFrame {
 						JDialog j = new JDialog();
 						j.setUndecorated(true);
 						j.setVisible(true);
-						j.setBounds(750,530,450,120);
-						String msj = jugadorActivo.getMano(1).toString();
-						JTextArea a = new JTextArea(msj);
-						a.setFocusable(false);
-						a.setBackground(Color.decode("#f7db97"));
-						j.add(a);
+						j.setBounds(480,210,600,360);
+						
+						ImageIcon descrip = new ImageIcon(jugadorActivo.getMano(1).toString());
+						
+						JPanel cartaDescrip = new JPanel(new BorderLayout()) {
+							
+							/**
+							 * 
+							 */
+							private static final long serialVersionUID = 1L;
+
+							@Override
+							protected void paintComponent(Graphics g) {
+								super.paintComponent(g);
+								g.drawImage(descrip.getImage(), 0, 0, getWidth(), getHeight(), this);
+							}
+
+							@Override
+							public Dimension getPreferredSize() {
+								Dimension size = super.getPreferredSize();
+								size.width = Math.max(descrip.getIconWidth(), size.width);
+								size.width = Math.max(descrip.getIconHeight(), size.height);
+
+								return size;
+							}
+						};
+						
+						
+						BufferedImage image = null;
+						try {
+							image = ImageIO.read(new File("loveImg/exit.png"));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						//ImageIcon exit = new ImageIcon("loveImg/exit.png");
+						//Image image = exit.getImage(); 
+						//Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);  
+						//exit = new ImageIcon(newimg);
+						  cartaDescrip.setLayout(new BorderLayout());
+						  int gap = -3;
+						  cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
+
+						  JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+						  southPanel.setOpaque(false);
+						  JButton button = new JButton("X"){
+								
+								/**
+								 * 
+								 */
+								private static final long serialVersionUID = 1L;
+								//Color color1, color2;
+								  
+								@Override
+								public void paintComponent(Graphics g) {
+								    Graphics2D g2 = (Graphics2D) g;
+								    AffineTransform xform = AffineTransform.getScaleInstance(.5, .5);
+								    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+								                        RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+								    g2.drawImage(image, xform, null); // image being @2x or "retina" size
+								}
+							};
+						  button.setPreferredSize(new Dimension(48, 48));
+						  button.setFont(new Font("Arial", 3, 20));
+						  button.setForeground(Color.WHITE);
+						  
+						  button.setOpaque(false);
+						  button.setContentAreaFilled(false);
+						  button.setBorderPainted(false);
+						  southPanel.add(button);
+						  cartaDescrip.add(southPanel, BorderLayout.NORTH);
+						  
+						  button.addActionListener(e -> {
+							j.dispose();
+					      });
+						j.add(cartaDescrip);
 						
 					}
 					
