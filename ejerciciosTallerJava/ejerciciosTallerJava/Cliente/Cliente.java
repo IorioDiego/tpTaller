@@ -1,5 +1,7 @@
 package Cliente;
 
+import java.awt.EventQueue;
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+import InterfaceGrafica.ComenzarRonda;
 import InterfaceGrafica.Salas;
 import servidor.Paquete;
 import servidor.SalaSerealizable;
@@ -30,8 +33,10 @@ public class Cliente implements Serializable {
 	private ObjectInputStream disObj = null;
 	private ObjectOutputStream dosObj = null;
 	private Socket socket;
+	private Integer tocoBoton=-1;
 //	private  Map<String, ArrayList<Paquete>> salas ;
 	private ArrayList<SalaSerealizable> salas;
+	private Salas sala = new Salas();
 
 	public Cliente(String ip, int puerto) throws UnknownHostException, IOException {
 		this.puerto = puerto;
@@ -41,7 +46,7 @@ public class Cliente implements Serializable {
 
 	public void conectarse() {
 		try {
-			Salas sala = new Salas();
+			
 			socket = new Socket(ip, puerto);
 			dis = new DataInputStream(socket.getInputStream());
 			dos = new DataOutputStream(socket.getOutputStream());
@@ -55,10 +60,12 @@ public class Cliente implements Serializable {
 			salas = (ArrayList<SalaSerealizable>) disObj.readObject();
 			for (SalaSerealizable sal : salas) {
 				sala.agregarSalas(sal);
-
 			}
-			sala.init();
-			dos.writeUTF(obtenerSala());
+			activarInterfaz();
+			dosObj.writeObject(obtenerSala(tocoBoton));
+			//dos.writeUTF(obtenerSala(tocoBoton));
+			
+			
 			
 
 //			for (Map.Entry<String, ArrayList<Paquete>> entry : salas.entrySet()) {
@@ -82,7 +89,21 @@ public class Cliente implements Serializable {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void activarInterfaz()
+	{	
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					sala.init(tocoBoton);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	public void cerrarConexion() {
 		try {
 			keyRead.close();
@@ -97,18 +118,29 @@ public class Cliente implements Serializable {
 
 	}
 
-	//public static synchronized void addDato(Object dato) {
-	//	
-	//}
-
-		public synchronized String obtenerSala() {
-		
-			while(!Salas.tocoIngreso())
+	
+	public String obtenerSala(Integer tocoBoton)
+	{
+		synchronized (tocoBoton) {
+			if(tocoBoton==-1)
 				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
+					tocoBoton.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
+		}
+		tocoBoton=-1;
 		return String.valueOf(Salas.getSala());
 	}
+	
+//	public synchronized String obtenerSala() {
+//		
+//			while(!Salas.tocoIngreso())
+//				try {
+//					Thread.sleep(5);
+//				} catch (InterruptedException e1) {
+//					e1.printStackTrace();
+//				}
+//		return String.valueOf(Salas.getSala());
+//	}
 }

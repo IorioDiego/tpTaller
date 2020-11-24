@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
@@ -21,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -38,8 +41,8 @@ public class Salas extends JFrame {
 	private JPanel nickname = new JPanel();
 	private JTextField textField;
 	private JList<String> list;
-	private static int firstIndex;
-	private static boolean tocoIngreso=false;
+	private Integer tocoBoton;
+	private static Integer indexSala;
 	private JButton crear;
 	private JButton Ingresar;
 	Font fuente = new Font("Calibri", Font.PLAIN, 16);
@@ -49,10 +52,10 @@ public class Salas extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void init() {
+	public void init(Integer IndexSala) {
 
 		JPanel gui = new JPanel();
-
+		tocoBoton = IndexSala;
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		getContentPane().add(Box.createVerticalStrut(5));
 		textField = new JTextField("Ingrese Nickname", 25);
@@ -79,6 +82,7 @@ public class Salas extends JFrame {
 			}
 		});
 
+		
 		GridLayout layout = new GridLayout(1, 2);
 		layout.setHgap(55);
 
@@ -88,11 +92,12 @@ public class Salas extends JFrame {
 		JButton btnCrear = new JButton("Crear Sala");
 		JButton btnIngresar = new JButton("Ingresar a Sala");
 		botones.add(btnCrear);
+		btnCrear.setEnabled(false);
+		btnIngresar.setEnabled(false);
 		botones.add(btnIngresar);
 
 		botones.setPreferredSize(new Dimension(300, 25));
 		botones.setMaximumSize(new Dimension(300, 25));
-
 //        DefaultListModel dlm = new DefaultListModel();
 //        ArrayList<String> salas = new ArrayList<String>();
 //        
@@ -104,8 +109,8 @@ public class Salas extends JFrame {
 //            dlm.addElement(item);
 //          }
 //
-// 	
-
+// 		
+		  
 		DefaultListModel dlm = new DefaultListModel();
 
 		for (SalaSerealizable item : salas) {
@@ -122,13 +127,17 @@ public class Salas extends JFrame {
 		add(list);
 		add(scroll);
 		scroll.getViewport().add(list);
-		
-		btnIngresar.setEnabled(false);
+		list.setEnabled(false);
+
+		// btnIngresar.setEnabled(false);
 		btnIngresar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					tocoIngreso=true;
+				synchronized (tocoBoton) {
+					tocoBoton.notify();
+				}
+				//
 			}
 		});
 
@@ -137,18 +146,34 @@ public class Salas extends JFrame {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getFirstIndex() != -1 && !e.getValueIsAdjusting()) {
-					firstIndex = list.getSelectedIndex();
+					indexSala = list.getSelectedIndex();
 					btnIngresar.setEnabled(true);
-					
-					///Borrado---
-					//list.removeListSelectionListener(this);
-					//list.clearSelection();
-					//dlm.remove(firstIndex);
-					//salas.remove(firstIndex);
-					//list.addListSelectionListener(this);
+
+					/// Borrado---
+					// list.removeListSelectionListener(this);
+					// list.clearSelection();
+					// dlm.remove(firstIndex);
+					// salas.remove(firstIndex);
+					// list.addListSelectionListener(this);
 				}
 			}
 		});
+		
+		
+		 textField.addKeyListener(new KeyAdapter() {
+	           @Override
+	           public void keyPressed(KeyEvent e) {
+	               if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	                  textField.getText();
+	                  btnCrear.setEnabled(true);
+	          		  list.setEnabled(true);
+	          		  btnIngresar.setEnabled(true);
+	          		  textField.setEnabled(false);
+	               }
+	           }
+	       });
+		
+		
 		getContentPane().add(Box.createVerticalStrut(10));
 		getContentPane().add(botones);
 		getContentPane().add(Box.createVerticalStrut(10));
@@ -173,21 +198,17 @@ public class Salas extends JFrame {
 		salas = new ArrayList<>();
 
 	}
+	
+	
 
 	public ArrayList<SalaSerealizable> getSalas() {
 		return salas;
 	}
-	
-	public static boolean tocoIngreso()
-	{
-		return tocoIngreso;
+
+	public static int getSala() {
+		return indexSala;
 	}
-	
-	public static int getSala()
-	{
-		return firstIndex;
-	}
-	
+
 	public void setSalas(ArrayList<SalaSerealizable> salas) {
 		this.salas = salas;
 	}
@@ -196,9 +217,4 @@ public class Salas extends JFrame {
 		this.salas.add(s);
 
 	}
-
-//	public static void main(String[] args) {
-//		Salas sala = new Salas();
-//		sala.init();
-//	}
 }

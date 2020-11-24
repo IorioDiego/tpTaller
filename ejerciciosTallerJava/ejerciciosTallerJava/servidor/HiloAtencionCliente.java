@@ -105,7 +105,7 @@ public class HiloAtencionCliente extends Thread implements Serializable {
 					a.add(salita);
 					a.add(salita2);
 					salidaObj.writeObject(a);
-					String salaElegida = entrada.readUTF();
+					String salaElegida = (String)entradaObj.readObject();
 					System.out.println("la sala elegida fue: " + salaElegida);
 					
 					//salida.writeUTF(opcionesSala);
@@ -139,6 +139,9 @@ public class HiloAtencionCliente extends Thread implements Serializable {
 
 		} catch (IOException ex) {
 			ex.getStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
