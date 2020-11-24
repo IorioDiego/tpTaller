@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -14,9 +15,10 @@ import java.util.Map;
 
 import InterfaceGrafica.Salas;
 import servidor.Paquete;
+import servidor.SalaSerealizable;
 import servidor.Servidor;
 
-public class Cliente {
+public class Cliente implements Serializable {
 	
 	private String ip;
 	private int puerto;
@@ -26,8 +28,8 @@ public class Cliente {
 	private ObjectInputStream disObj=null;
 	private ObjectOutputStream dosObj=null;
 	private Socket socket;
-	private  Map<String, ArrayList<Paquete>> salas ;
-	
+//	private  Map<String, ArrayList<Paquete>> salas ;
+	private ArrayList<SalaSerealizable> salas;
 	
 	public Cliente(String ip, int puerto) throws UnknownHostException, IOException {
 		this.puerto = puerto;
@@ -38,23 +40,29 @@ public class Cliente {
 	public void conectarse()
 	{
 		try {
-//			Salas sala = new Salas();
-//			sala.init();
+			Salas sala = new Salas();
+		
 			socket = new Socket(ip, puerto);
 		//	dis = new DataInputStream(socket.getInputStream());
 		//	dos = new DataOutputStream(socket.getOutputStream());
 			dosObj= new ObjectOutputStream(socket.getOutputStream());
 			dosObj.flush();
 			disObj = new ObjectInputStream(socket.getInputStream());
-
+//			String s = (String)disObj.readObject();
+//			System.out.println(s);
 		
-			salas = (Map<String, ArrayList<Paquete>>) disObj.readObject();
-			
-			for (Map.Entry<String, ArrayList<Paquete>> entry : salas.entrySet()) {
-			System.out.println(
-					"Nombre Sala: " + entry.getKey() + " Usuarios conetados:" + entry.getValue().size());
-			
-		}
+//			salas = (Map<String, ArrayList<Paquete>>) disObj.readObject();
+			salas = (ArrayList<SalaSerealizable>) disObj.readObject();
+			for (SalaSerealizable sal : salas) {
+				sala.agregarSalas(sal);
+				
+			}
+			sala.init();
+//			for (Map.Entry<String, ArrayList<Paquete>> entry : salas.entrySet()) {
+//			System.out.println(
+//					"Nombre Sala: " + entry.getKey() + " Usuarios conetados:" + entry.getValue().size());
+//			
+//		}
 //			HiloEscuchar hiloEscucha = new HiloEscuchar(dis,sala);
 //			hiloEscucha.start();
 //			while (hiloEscucha.isAlive()) {

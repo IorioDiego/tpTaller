@@ -2,6 +2,7 @@ package servidor;
 
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 
-public class Servidor {
+public class Servidor implements Serializable {
 
 	private static Map<String, ArrayList<Paquete>> salas = new HashMap<String, ArrayList<Paquete>>();
 	private static Map<String, ArrayList<String>> historialChat = new HashMap<String, ArrayList<String>>();

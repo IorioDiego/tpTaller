@@ -2,10 +2,11 @@ package Cliente;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import InterfaceGrafica.Salas;
 
-public class HiloEscuchar extends Thread {
+public class HiloEscuchar extends Thread implements Serializable {
 	
 	DataInputStream entrada;
 //	private ObjectOutputStream;

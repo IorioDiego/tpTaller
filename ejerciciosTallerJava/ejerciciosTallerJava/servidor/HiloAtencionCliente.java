@@ -99,8 +99,14 @@ public class HiloAtencionCliente extends Thread implements Serializable {
 ////								"Nombre Sala: " + entry.getKey() + " Usuarios conetados:" + entry.getValue().size());
 ////						
 ////					}
-//					
-					salidaObj.writeObject(Servidor.getSalas());
+					SalaSerealizable salita = new SalaSerealizable(5, "Jony");
+					SalaSerealizable salita2 = new SalaSerealizable(5, "Lucas");
+					ArrayList <SalaSerealizable>a = new ArrayList<>();
+					a.add(salita);
+					a.add(salita2);
+					salidaObj.writeObject(a);
+//					salidaObj.writeObject(Servidor.getSalas().toString());
+//				salidaObj.writeObject(nick);
 //					salida.writeUTF(opcionesSala);
 //					if (paquete.cantidadSalas() >= 1)
 //						salida.writeUTF("4)-Salir de sala");
