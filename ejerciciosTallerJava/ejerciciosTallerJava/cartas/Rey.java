@@ -9,7 +9,7 @@ import game.Partida;
 public class Rey extends Carta{
 	
 	public Rey() {
-		super(6, "Rey", "Elige otro jugador e intercambian sus manos");
+		super(6, "Rey", "descripciones/reyDescrip.png");
 		
 	}
 	
