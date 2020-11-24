@@ -9,7 +9,7 @@ import game.Partida;
 public class Sacerdote extends Carta{
 	
 	public Sacerdote() {
-		super(2, "Sacerdote", "Elige otro jugador para ver la cartas en su mano");
+		super(2, "Sacerdote", "descripciones/sacerdoteDescrip.png");
 		
 	}
 	

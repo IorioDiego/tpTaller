@@ -10,8 +10,7 @@ import game.Partida;
 public class Princesa extends Carta {
 
 	public Princesa() {
-		super(8, "Princesa", "Si un jugador juega o descarta esta carta por cualquier motivo, \n "
-				+ "ese jugador es eliminado de la ronda");
+		super(8, "Princesa", "descripciones/princesaDescrip.png");
 
 	}
 
