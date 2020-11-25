@@ -24,7 +24,7 @@ import comandos.SalirDeSala;
 import comandos.VerTiempoConexion;
 import comandos.VolverLobby;
 
-public class HiloAtencionCliente extends Thread implements Serializable {
+public class HiloAtencionCliente extends Thread{
 
 	private Socket cliente;
 	private DataInputStream entrada;
@@ -105,13 +105,15 @@ public class HiloAtencionCliente extends Thread implements Serializable {
 					a.add(salita);
 					a.add(salita2);
 					salidaObj.writeObject(a);
-					String salaElegida = (String)entradaObj.readObject();
-					System.out.println("la sala elegida fue: " + salaElegida);
+					//String salaElegida = (String)entradaObj.readObject();
+					//System.out.println("la sala elegida fue: " + salaElegida);
+					SettingsPartida setPart = (SettingsPartida)entradaObj.readObject();
+					System.out.println(setPart);
 					
 					//salida.writeUTF(opcionesSala);
 					//if (paquete.cantidadSalas() >= 1)
 						//salida.writeUTF("4)-Salir de sala");
-//					msj = entrada.readUTF();
+					msj = entrada.readUTF();
 //				} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
 //
 //				if (!resultComando.equals("Salir")) {

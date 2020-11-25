@@ -23,7 +23,7 @@ import servidor.Paquete;
 import servidor.SalaSerealizable;
 import servidor.Servidor;
 
-public class Cliente implements Serializable {
+public class Cliente {
 
 	private String ip;
 	private int puerto;
@@ -62,10 +62,12 @@ public class Cliente implements Serializable {
 				sala.agregarSalas(sal);
 			}
 			activarInterfaz();
-			enviarSala();
-			crearSala();
+			//dosObj.writeObject(obtenerSala(tocoBoton));
+//			enviarSala();
 			
-			//dos.writeUTF(obtenerSala(tocoBoton));
+			//crearSala();
+			
+			
 			
 			
 			
@@ -92,43 +94,13 @@ public class Cliente implements Serializable {
 		}
 	}
 	
-	public void enviarSala()
-	{
-		new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					dosObj.writeObject(obtenerSala(tocoBoton));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		};
-	}
-	
-	public void crearSala()
-	{
-		new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					dosObj.writeObject(obtenerSala(tocoBoton));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		};
-	}
-	
 	public void activarInterfaz()
 	{	
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					sala.init(tocoBoton);
+					sala.init(tocoBoton,disObj,dosObj);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -151,19 +123,19 @@ public class Cliente implements Serializable {
 	}
 
 	
-	public String obtenerSala(Integer tocoBoton)
-	{
-		synchronized (tocoBoton) {
-			if(tocoBoton==-1)
-				try {
-					tocoBoton.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-		}
-		tocoBoton=-1;
-		return String.valueOf(Salas.getSala());
-	}
+//	public String obtenerSala(Integer tocoBoton)
+//	{
+//		synchronized (tocoBoton) {
+//			if(tocoBoton==-1)
+//				try {
+//					tocoBoton.wait();
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//		}
+//		tocoBoton=-1;
+//		return String.valueOf(Salas.getSala());
+//	}
 	
 //	public synchronized String obtenerSala() {
 //		

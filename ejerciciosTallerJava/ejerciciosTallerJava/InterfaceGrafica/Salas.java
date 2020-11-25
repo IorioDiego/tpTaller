@@ -10,6 +10,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,8 +34,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import comandos.CrearSala;
 import servidor.Paquete;
 import servidor.SalaSerealizable;
+import servidor.SettingsPartida;
 
 public class Salas extends JFrame {
 
@@ -45,6 +50,9 @@ public class Salas extends JFrame {
 	private static Integer indexSala;
 	private JButton crear;
 	private JButton Ingresar;
+	private ObjectInputStream disObj = null;
+	private ObjectOutputStream dosObj = null;
+
 	Font fuente = new Font("Calibri", Font.PLAIN, 16);
 
 	/**
@@ -52,14 +60,15 @@ public class Salas extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void init(Integer IndexSala) {
+	public void init(Integer IndexSala,ObjectInputStream disObject,ObjectOutputStream dosObject) {
 
 		JPanel gui = new JPanel();
 		tocoBoton = IndexSala;
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		getContentPane().add(Box.createVerticalStrut(5));
 		textField = new JTextField("Ingrese Nickname", 25);
-
+		disObj = disObject;
+		dosObj = dosObject;
 		gui.add(textField);
 
 		gui.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -133,11 +142,13 @@ public class Salas extends JFrame {
 		btnIngresar.addActionListener(new ActionListener() {
 
 			@Override
+			
 			public void actionPerformed(ActionEvent e) {
-				synchronized (tocoBoton) {
-					tocoBoton.notify();
+				try {
+					dosObject.writeObject(String.valueOf(indexSala));
+				} catch (IOException e1) {
+					e1.printStackTrace();
 				}
-				//
 			}
 		});
 		
@@ -145,8 +156,9 @@ public class Salas extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				
+				InterfazCrearSala2 crearSala = new InterfazCrearSala2();
+				crearSala.init(disObject,dosObject);
+				dispose();
 			}
 		});
 

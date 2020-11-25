@@ -11,16 +11,17 @@ import java.util.Iterator;
 import java.util.Map;
 
 
-public class Servidor implements Serializable {
-
+public class Servidor {
+	
+	private static Map<String, Integer> maxSalas = new HashMap<String,Integer>();
 	private static Map<String, ArrayList<Paquete>> salas = new HashMap<String, ArrayList<Paquete>>();
 	private static Map<String, ArrayList<String>> historialChat = new HashMap<String, ArrayList<String>>();
 
 	public Servidor(int puerto) throws IOException {
 		ServerSocket servidor = new ServerSocket(puerto);
 		System.out.println("Server inicializando...");
-		crearSala(new Paquete(), "jonyPuto");
-		crearSala(new Paquete(), "lucasPuto");
+		crearSala(new Paquete(), "jonyPuto",4);
+		crearSala(new Paquete(), "lucasPuto",4);
 		for (int i = 1; i <= 200; i++) {
 			Socket cliente = servidor.accept();
 
@@ -73,11 +74,12 @@ public class Servidor implements Serializable {
 		return salas.containsKey(sala);
 	}
 	
-	public static void crearSala(Paquete paqueteClient, String salaAcrear) {
+	public static void crearSala(Paquete paqueteClient, String salaAcrear,Integer cantMax) {
 		ArrayList<Paquete> client = new ArrayList<>();
 		client.add(paqueteClient);
 		if (!salas.containsKey(salaAcrear)) {
 			salas.put(salaAcrear, client);
+			maxSalas.put(salaAcrear,cantMax);
 			historialChat.put(salaAcrear, new ArrayList<String>());
 		} else
 			agregarClienteSala(paqueteClient, salaAcrear);
