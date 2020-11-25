@@ -144,7 +144,16 @@ public class Salas extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				enviarMsj(dosObject, "3");
-				enviarMsj(dosObject, salas.get(indexSala).getNombreSala());
+				enviarMsj(dosObject, salas.get(indexSala).getSetPart().getNombreSala());
+				String hayEspacio = (String) leerMsj(disObject);
+				if (hayEspacio.equals("y")) {
+					DentroDeSala sala = new DentroDeSala();
+					dispose();
+					sala.init(disObject, dosObject);
+				}
+				else
+					JOptionPane.showMessageDialog(null, "La sala a la cual quiere ingresar esta llena eliga otra", 
+							"Sala llena", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -170,7 +179,6 @@ public class Salas extends JFrame {
 				enviarMsj(dosObject, "2");
 				crearSala.init(disObject, dosObject);
 				setVisible(false);
-				//dispose();
 			}
 		});
 

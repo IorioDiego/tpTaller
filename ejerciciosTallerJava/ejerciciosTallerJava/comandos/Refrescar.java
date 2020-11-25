@@ -7,6 +7,7 @@ import java.util.Map;
 import servidor.Paquete;
 import servidor.SalaSerealizable;
 import servidor.Servidor;
+import servidor.SettingsPartida;
 
 public class Refrescar implements ComandosServer {
 
@@ -24,7 +25,8 @@ public class Refrescar implements ComandosServer {
 			try {
 				ArrayList<SalaSerealizable> envioSalas = new ArrayList<>();
 				for (Map.Entry<String, ArrayList<Paquete>> entry : Servidor.getSalas().entrySet()) {
-					envioSalas.add(new SalaSerealizable(entry.getValue().size(), entry.getKey()));
+					SettingsPartida setPart=Servidor.getMaxSalas().get(entry.getKey());
+					envioSalas.add(new SalaSerealizable(entry.getValue().size(),setPart));
 				}
 				paquete.getSalida().writeObject(envioSalas);
 

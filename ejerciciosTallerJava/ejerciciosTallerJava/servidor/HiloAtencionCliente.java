@@ -126,7 +126,8 @@ public class HiloAtencionCliente extends Thread {
 	public void enviarSalas() {
 		ArrayList<SalaSerealizable> envioSalas = new ArrayList<>();
 		for (Map.Entry<String, ArrayList<Paquete>> entry : Servidor.getSalas().entrySet()) {
-			envioSalas.add(new SalaSerealizable(entry.getValue().size(), entry.getKey()));
+			SettingsPartida setPart=Servidor.getMaxSalas().get(entry.getKey());
+			envioSalas.add(new SalaSerealizable(entry.getValue().size(),setPart));
 		}
 		try {
 			salidaObj.writeObject(envioSalas);

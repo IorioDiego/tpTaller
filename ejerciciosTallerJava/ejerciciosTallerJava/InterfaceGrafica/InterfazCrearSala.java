@@ -156,7 +156,6 @@ public class InterfazCrearSala extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				enviarMsj(dosObject, "volver");
-				//sala.init(disObject, dosObject);
 				sala.setVisible(true);
 				dispose();
 			}

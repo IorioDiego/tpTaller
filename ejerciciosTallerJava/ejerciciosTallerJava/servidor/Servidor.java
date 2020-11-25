@@ -15,7 +15,7 @@ public class Servidor {
 	
 	private static Map<String, SettingsPartida> maxSalas = new HashMap<String,SettingsPartida>();
 	private static Map<String, ArrayList<Paquete>> salas = new HashMap<String, ArrayList<Paquete>>();
-	private static Map<String, ArrayList<String>> historialChat = new HashMap<String, ArrayList<String>>();
+
 
 	public Servidor(int puerto) throws IOException {
 		ServerSocket servidor = new ServerSocket(puerto);
@@ -41,13 +41,8 @@ public class Servidor {
 		}
 	}
 
-	public static void agregarAHistorial(String sala, String msjSala) {
-		historialChat.get(sala).add(msjSala);
-	}
 
-	public static ArrayList<String> mostrarHistorial(String sala) {
-		return historialChat.get(sala);
-	}
+
 
 	public static boolean agregarClienteSala(Paquete paqueteClient, String salaAingresar) {
 		boolean existiaSala = false;
@@ -77,7 +72,6 @@ public class Servidor {
 		if (!salas.containsKey(salaAcrear)) {
 			salas.put(salaAcrear, client);
 			maxSalas.put(salaAcrear,setPart);
-			historialChat.put(salaAcrear, new ArrayList<String>());
 		} else
 			agregarClienteSala(paqueteClient, salaAcrear);
 	}
@@ -89,4 +83,15 @@ public class Servidor {
 	public static ArrayList<Paquete> darClientesDeSala(String sala) {
 		return salas.get(sala);
 	}
+
+	public static Map<String, SettingsPartida> getMaxSalas() {
+		return maxSalas;
+	}
+
+	public static void setMaxSalas(Map<String, SettingsPartida> maxSalas) {
+		Servidor.maxSalas = maxSalas;
+	}
+	
+	
+	
 }

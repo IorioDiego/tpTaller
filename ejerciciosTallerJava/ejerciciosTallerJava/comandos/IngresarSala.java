@@ -1,4 +1,5 @@
 package comandos;
+
 import servidor.Paquete;
 import servidor.Servidor;
 
@@ -12,12 +13,19 @@ public class IngresarSala implements ComandosServer {
 	}
 
 	public String procesar(Paquete paquete, String msj) {
-		String resp = "n";
+		String resp="n";
 		if (msj.equals("3")) {
 			try {
-				msj = (String)paquete.getEntrada().readObject();
-				if (Servidor.agregarClienteSala(paquete, msj)) 
-					paquete.setSala(msj);
+				String sala = (String)paquete.getEntrada().readObject();
+				if (Servidor.getSalas().get(sala).size() < Servidor.getMaxSalas().get(sala).getCantJugadores()) {
+					paquete.getSalida().writeObject("y");
+					if (Servidor.agregarClienteSala(paquete, sala))
+						paquete.setSala(sala);
+				} else {
+					paquete.getSalida().writeObject("n");
+					resp="y";
+					//msj = (String) paquete.getEntrada().readObject();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

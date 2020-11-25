@@ -4,27 +4,36 @@ import java.io.Serializable;
 
 public class SalaSerealizable implements Serializable{
 
-	int cantJugadores;
-	String nombreSala;
+	private Integer JugadoresConetados;
+	private SettingsPartida setPart;
 	
-	public SalaSerealizable(int CJug, String nombre ) {
-		cantJugadores=CJug;
-		nombreSala=nombre;
+	public SalaSerealizable(Integer jugadoresConetados,SettingsPartida setPart) {
+		this.JugadoresConetados = jugadoresConetados;
+		this.setPart = setPart;
 	}
 
 	@Override
 	public String toString() {
-		return  String.format("%-90sconectados:%02d",nombreSala,cantJugadores);
+		return  String.format("Sala: %-30sPrendas: %-20sJugadores: %02d/%02d",setPart.getNombreSala(),setPart.getPrendasAmor(),JugadoresConetados,setPart.getCantJugadores());
 	}
 
-	public String getNombreSala() {
-		return nombreSala;
+	
+	public Integer getJugadoresConetados() {
+		return JugadoresConetados;
 	}
 
-	public void setNombreSala(String nombreSala) {
-		this.nombreSala = nombreSala;
+	public void setJugadoresConetados(Integer jugadoresConetados) {
+		JugadoresConetados = jugadoresConetados;
 	}
+
 	
-	
+
+	public SettingsPartida getSetPart() {
+		return setPart;
+	}
+
+	public void setSetPart(SettingsPartida setPart) {
+		this.setPart = setPart;
+	}
 	
 }
