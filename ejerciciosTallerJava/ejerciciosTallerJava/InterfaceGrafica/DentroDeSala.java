@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -35,7 +37,7 @@ public class DentroDeSala extends JFrame {
 	private JButton comenzar;
 	
 	
-	public void init() {
+	public void init(ObjectInputStream disObject, ObjectOutputStream dosObject) {
 		
 		String[] valores= {"gato","perro","loro","pollo","vaca"};
 
@@ -115,8 +117,8 @@ public class DentroDeSala extends JFrame {
 		setContentPane(contentPane);
 	}
 	
-	public static void main(String[] args) {
-	DentroDeSala sala = new DentroDeSala();
-	sala.init();
-	}
+//	public static void main(String[] args) {
+//	DentroDeSala sala = new DentroDeSala();
+//	sala.init();
+//	}
 }

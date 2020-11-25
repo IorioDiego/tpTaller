@@ -2,6 +2,8 @@ package servidor;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -19,12 +21,12 @@ public class Paquete implements Serializable {
 	private String salaActiva;
 	private boolean enChatPrivado = false;
 	private Date inicioConexion;
-	private ArrayList<String> salas;
+	private String sala = "..";
 	private String nick;
-	private DataInputStream entrada;
-	private DataOutputStream salida;
+	private ObjectInputStream entrada;
+	private ObjectOutputStream salida;
 	
-	public Paquete(Date inicioConexion,Socket cliente,String nick,DataInputStream entrada,DataOutputStream salida) {
+	public Paquete(Date inicioConexion,Socket cliente,String nick,ObjectInputStream entrada,ObjectOutputStream salida) {
 		this.inicioConexion=inicioConexion;
 		this.cliente = cliente;
 		this.nick = nick;
@@ -40,7 +42,7 @@ public class Paquete implements Serializable {
 	
 	public void dejarSala(String sala)
 	{
-		salas.remove(sala);
+		this.sala = "..";
 	}
 	
 	public void setEnChatPrivado(boolean enChatPrivado) {
@@ -93,32 +95,37 @@ public class Paquete implements Serializable {
 		return cliente;
 	}
 	
-	public int cantidadSalas()
-	{
-		return salas.size(); 
-	}
+//	public int cantidadSalas()
+//	{
+//		return salas.size(); 
+//	}
 	
-	public ArrayList<String> getSala() {
-		return salas;
+//	public ArrayList<String> getSala() {
+//		return salas;
+//	}
+	
+	public String getSala()
+	{
+		return sala;
 	}
 
 	public void setSala(String sala) {
-		salas.add(sala);
+		this.sala=sala;
 	}
 
-	public DataInputStream getEntrada() {
+	public ObjectInputStream getEntrada() {
 		return entrada;
 	}
 
-	public void setEntrada(DataInputStream entrada) {
+	public void setEntrada(ObjectInputStream entrada) {
 		this.entrada = entrada;
 	}
 
-	public DataOutputStream getSalida() {
+	public ObjectOutputStream getSalida() {
 		return salida;
 	}
 
-	public void setSalida(DataOutputStream salida) {
+	public void setSalida(ObjectOutputStream salida) {
 		this.salida = salida;
 	}
 

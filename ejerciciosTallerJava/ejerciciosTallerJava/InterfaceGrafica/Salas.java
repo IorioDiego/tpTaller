@@ -46,12 +46,11 @@ public class Salas extends JFrame {
 	private JPanel nickname = new JPanel();
 	private JTextField textField;
 	private JList<String> list;
-	private Integer tocoBoton;
+	private boolean tocoEnter = false;
 	private static Integer indexSala;
 	private JButton crear;
 	private JButton Ingresar;
-	private ObjectInputStream disObj = null;
-	private ObjectOutputStream dosObj = null;
+	private Salas miSala = this;
 
 	Font fuente = new Font("Calibri", Font.PLAIN, 16);
 
@@ -60,15 +59,12 @@ public class Salas extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void init(Integer IndexSala,ObjectInputStream disObject,ObjectOutputStream dosObject) {
+	public void init(ObjectInputStream disObject, ObjectOutputStream dosObject) {
 
 		JPanel gui = new JPanel();
-		tocoBoton = IndexSala;
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		getContentPane().add(Box.createVerticalStrut(5));
 		textField = new JTextField("Ingrese Nickname", 25);
-		disObj = disObject;
-		dosObj = dosObject;
 		gui.add(textField);
 
 		gui.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -87,11 +83,11 @@ public class Salas extends JFrame {
 		textField.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				textField.setText("");
+				if (!tocoEnter)
+					textField.setText("");
 			}
 		});
 
-		
 		GridLayout layout = new GridLayout(1, 2);
 		layout.setHgap(55);
 
@@ -100,13 +96,17 @@ public class Salas extends JFrame {
 
 		JButton btnCrear = new JButton("Crear Sala");
 		JButton btnIngresar = new JButton("Ingresar a Sala");
+		JButton btnRefresh = new JButton("Refrescar salas");
+
 		botones.add(btnCrear);
 		btnCrear.setEnabled(false);
 		btnIngresar.setEnabled(false);
 		botones.add(btnIngresar);
+		botones.add(btnRefresh);
+		btnRefresh.setEnabled(false);
 
-		botones.setPreferredSize(new Dimension(300, 25));
-		botones.setMaximumSize(new Dimension(300, 25));
+		botones.setPreferredSize(new Dimension(450, 25));
+		botones.setMaximumSize(new Dimension(450, 25));
 //        DefaultListModel dlm = new DefaultListModel();
 //        ArrayList<String> salas = new ArrayList<String>();
 //        
@@ -119,7 +119,7 @@ public class Salas extends JFrame {
 //          }
 //
 // 		
-		  
+
 		DefaultListModel dlm = new DefaultListModel();
 
 		for (SalaSerealizable item : salas) {
@@ -142,23 +142,35 @@ public class Salas extends JFrame {
 		btnIngresar.addActionListener(new ActionListener() {
 
 			@Override
-			
 			public void actionPerformed(ActionEvent e) {
-				try {
-					dosObject.writeObject(String.valueOf(indexSala));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				enviarMsj(dosObject, "3");
+				enviarMsj(dosObject, salas.get(indexSala).getNombreSala());
 			}
 		});
-		
-		btnCrear.addActionListener(new ActionListener() {
-			
+
+		btnRefresh.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				InterfazCrearSala2 crearSala = new InterfazCrearSala2();
-				crearSala.init(disObject,dosObject);
-				dispose();
+				enviarMsj(dosObject, "11");
+				salas = (ArrayList<SalaSerealizable>) leerMsj(disObject);
+				dlm.clear();
+				for (SalaSerealizable item : salas) {
+					dlm.addElement(item);
+				}
+
+			}
+		});
+
+		btnCrear.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				InterfazCrearSala crearSala = new InterfazCrearSala(miSala);
+				enviarMsj(dosObject, "2");
+				crearSala.init(disObject, dosObject);
+				setVisible(false);
+				//dispose();
 			}
 		});
 
@@ -179,22 +191,22 @@ public class Salas extends JFrame {
 				}
 			}
 		});
-		
-		
-		 textField.addKeyListener(new KeyAdapter() {
-	           @Override
-	           public void keyPressed(KeyEvent e) {
-	               if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	                  textField.getText();
-	                  btnCrear.setEnabled(true);
-	          		  list.setEnabled(true);
-	          		  btnIngresar.setEnabled(true);
-	          		  textField.setEnabled(false);
-	               }
-	           }
-	       });
-		
-		
+
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					enviarMsj(dosObject, textField.getText());
+					tocoEnter = true;
+					btnCrear.setEnabled(true);
+					list.setEnabled(true);
+					btnIngresar.setEnabled(true);
+					btnRefresh.setEnabled(true);
+					textField.setEnabled(false);
+				}
+			}
+		});
+
 		getContentPane().add(Box.createVerticalStrut(10));
 		getContentPane().add(botones);
 		getContentPane().add(Box.createVerticalStrut(10));
@@ -219,8 +231,23 @@ public class Salas extends JFrame {
 		salas = new ArrayList<>();
 
 	}
-	
-	
+
+	public void enviarMsj(ObjectOutputStream dosObject, Object msj) {
+		try {
+			dosObject.writeObject(msj);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Object leerMsj(ObjectInputStream disObject) {
+		try {
+			return disObject.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public ArrayList<SalaSerealizable> getSalas() {
 		return salas;

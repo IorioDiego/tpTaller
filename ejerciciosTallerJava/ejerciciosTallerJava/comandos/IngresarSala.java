@@ -15,20 +15,9 @@ public class IngresarSala implements ComandosServer {
 		String resp = "n";
 		if (msj.equals("3")) {
 			try {
-				paquete.getSalida().writeUTF("Ingrese nombre de la sala: ");
-				msj = paquete.getEntrada().readUTF();
-				if (Servidor.agregarClienteSala(paquete, msj)) {
+				msj = (String)paquete.getEntrada().readObject();
+				if (Servidor.agregarClienteSala(paquete, msj)) 
 					paquete.setSala(msj);
-					paquete.getSalida().writeUTF("Usted ha ingresado a la sala: " + msj);
-					if (paquete.cantidadSalas() < 3) {
-						paquete.getSalida().writeUTF("Desea ingresar o crear otra sala(y/n)");
-						resp = paquete.getEntrada().readUTF();
-					}
-				} else {
-					paquete.getSalida().writeUTF("Error,Sala inexistente");
-					resp = "y";
-				}
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

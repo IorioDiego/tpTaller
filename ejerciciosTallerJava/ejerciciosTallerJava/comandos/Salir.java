@@ -22,7 +22,7 @@ public class Salir implements ComandosServer {
 				paquete.getSalida().close();
 				paquete.getEntrada().close();
 				paquete.getCliente().close();
-				if (paquete.cantidadSalas() >= 1)
+				if (!paquete.getSala().equals(".."))
 					Servidor.eliminarClienteDeSalas(paquete);
 			} catch (IOException e) {
 				e.printStackTrace();

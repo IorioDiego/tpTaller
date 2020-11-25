@@ -18,13 +18,12 @@ import comandos.CrearSala;
 import comandos.Default;
 import comandos.EnviarMsjAllSala;
 import comandos.IngresarSala;
-import comandos.ObtenerHistorial;
+import comandos.Refrescar;
 import comandos.Salir;
 import comandos.SalirDeSala;
-import comandos.VerTiempoConexion;
 import comandos.VolverLobby;
 
-public class HiloAtencionCliente extends Thread{
+public class HiloAtencionCliente extends Thread {
 
 	private Socket cliente;
 	private DataInputStream entrada;
@@ -33,29 +32,16 @@ public class HiloAtencionCliente extends Thread{
 	private ComandosServer comanSer;
 	private ObjectOutputStream salidaObj;
 	private ObjectInputStream entradaObj;
-	
-	private final String opcionesSala = "Ingrese Comando: " + "\n" + 
-										"1)-Salir" + "\n" + 
-										"2)-Crear sala" + "\n" +
-										"3)-Ingresar a sala";
-
-	private final String opcionesComandos = "Ingrese Comando: " + "\n" + 
-											"5)--Chat general" + "\n" + 
-											"6)--Chat privado"+ "\n" + 
-											"7)--ver tiempo de conexion" + "\n" + 
-											"8)--volver al lobby" + "\n" + 
-											"9)--obtener historial" + "\n"+ 
-											"1)--Salir";
 
 	public HiloAtencionCliente(Socket socket) {
 		this.cliente = socket;
 		this.inicioConexion = new Date();
 		try {
-			this.entrada = new DataInputStream(cliente.getInputStream());
-			this.salida = new DataOutputStream(cliente.getOutputStream());
-			this.salidaObj= new ObjectOutputStream(cliente.getOutputStream());
+//			this.entrada = new DataInputStream(cliente.getInputStream());
+//			this.salida = new DataOutputStream(cliente.getOutputStream());
+			this.salidaObj = new ObjectOutputStream(cliente.getOutputStream());
 			this.salidaObj.flush();
-			this.entradaObj= new ObjectInputStream(cliente.getInputStream());
+			this.entradaObj = new ObjectInputStream(cliente.getInputStream());
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -66,20 +52,18 @@ public class HiloAtencionCliente extends Thread{
 		ComandosServer chatGeneral = new EnviarMsjAllSala();
 		ComandosServer chatPrivado = new ChatPrivado();
 		ComandosServer chatComDefault = new Default();
-		ComandosServer chatVerTiempoConexion = new VerTiempoConexion();
 		ComandosServer volverAllobby = new VolverLobby();
 		ComandosServer salirDeSala = new SalirDeSala();
-		ComandosServer obtenerHistorial = new ObtenerHistorial();
+		ComandosServer refrescar = new Refrescar();
 
 		comanSer.establecerSiguiente(crearSala);
 		crearSala.establecerSiguiente(ingresoSala);
 		ingresoSala.establecerSiguiente(chatGeneral);
 		chatGeneral.establecerSiguiente(chatPrivado);
-		chatPrivado.establecerSiguiente(chatVerTiempoConexion);
-		chatVerTiempoConexion.establecerSiguiente(volverAllobby);
+		chatPrivado.establecerSiguiente(volverAllobby);
 		volverAllobby.establecerSiguiente(salirDeSala);
-		salirDeSala.establecerSiguiente(obtenerHistorial);
-		obtenerHistorial.establecerSiguiente(chatComDefault);
+		salirDeSala.establecerSiguiente(refrescar);
+		refrescar.establecerSiguiente(chatComDefault);
 	}
 
 	@Override
@@ -87,35 +71,25 @@ public class HiloAtencionCliente extends Thread{
 		try {
 			String msj, resultComando;
 			boolean existeSala = true;
-//			salida.writeUTF("Ingrese su nombre de usuario: ");
-//			String nick = entrada.readUTF();
-			String nick  = "diego";
-			Paquete paquete = new Paquete(inicioConexion, cliente, nick, entrada, salida);
+			enviarSalas();
+			String nickName = (String) entradaObj.readObject();
+			Paquete paquete = new Paquete(inicioConexion, cliente, nickName, entradaObj, salidaObj);
 //			do {
-//				do {
-////					salida.writeUTF("Lobby" + "\n");
-////					for (Map.Entry<String, ArrayList<Paquete>> entry : Servidor.getSalas().entrySet()) {
-////						salida.writeUTF(
-////								"Nombre Sala: " + entry.getKey() + " Usuarios conetados:" + entry.getValue().size());
-////						
-////					}
-					SalaSerealizable salita = new SalaSerealizable(5, "Jony");
-					SalaSerealizable salita2 = new SalaSerealizable(5, "Lucas");
-					ArrayList <SalaSerealizable>a = new ArrayList<>();
-					a.add(salita);
-					a.add(salita2);
-					salidaObj.writeObject(a);
-					//String salaElegida = (String)entradaObj.readObject();
-					//System.out.println("la sala elegida fue: " + salaElegida);
-					SettingsPartida setPart = (SettingsPartida)entradaObj.readObject();
-					System.out.println(setPart);
-					
-					//salida.writeUTF(opcionesSala);
-					//if (paquete.cantidadSalas() >= 1)
-						//salida.writeUTF("4)-Salir de sala");
-					msj = entrada.readUTF();
-//				} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
-//
+			do {
+				// String salaElegida = (String)entradaObj.readObject();
+				// System.out.println("la sala elegida fue: " + salaElegida);
+				// SettingsPartida setPart = (SettingsPartida)entradaObj.readObject();
+				// System.out.println(setPart);
+
+				// salida.writeUTF(opcionesSala);
+				// if (paquete.cantidadSalas() >= 1)
+				// salida.writeUTF("4)-Salir de sala");
+				msj = (String) entradaObj.readObject();
+			} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
+			
+			Thread.sleep(4000);
+///------>			Dentro de sala
+
 //				if (!resultComando.equals("Salir")) {
 //					do {
 //						String sala;
@@ -142,11 +116,23 @@ public class HiloAtencionCliente extends Thread{
 		} catch (IOException ex) {
 			ex.getStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 	}
-	
+
+	public void enviarSalas() {
+		ArrayList<SalaSerealizable> envioSalas = new ArrayList<>();
+		for (Map.Entry<String, ArrayList<Paquete>> entry : Servidor.getSalas().entrySet()) {
+			envioSalas.add(new SalaSerealizable(entry.getValue().size(), entry.getKey()));
+		}
+		try {
+			salidaObj.writeObject(envioSalas);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

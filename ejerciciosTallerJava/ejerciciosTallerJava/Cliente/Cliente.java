@@ -33,7 +33,7 @@ public class Cliente {
 	private ObjectInputStream disObj = null;
 	private ObjectOutputStream dosObj = null;
 	private Socket socket;
-	private Integer tocoBoton=-1;
+	private Integer tocoBoton = -1;
 //	private  Map<String, ArrayList<Paquete>> salas ;
 	private ArrayList<SalaSerealizable> salas;
 	private Salas sala = new Salas();
@@ -46,37 +46,18 @@ public class Cliente {
 
 	public void conectarse() {
 		try {
-			
+
 			socket = new Socket(ip, puerto);
-			dis = new DataInputStream(socket.getInputStream());
-			dos = new DataOutputStream(socket.getOutputStream());
 			dosObj = new ObjectOutputStream(socket.getOutputStream());
 			dosObj.flush();
 			disObj = new ObjectInputStream(socket.getInputStream());
-//			String s = (String)disObj.readObject();
-//			System.out.println(s);
 
-//			salas = (Map<String, ArrayList<Paquete>>) disObj.readObject();
 			salas = (ArrayList<SalaSerealizable>) disObj.readObject();
 			for (SalaSerealizable sal : salas) {
 				sala.agregarSalas(sal);
 			}
 			activarInterfaz();
-			//dosObj.writeObject(obtenerSala(tocoBoton));
-//			enviarSala();
-			
-			//crearSala();
-			
-			
-			
-			
-			
 
-//			for (Map.Entry<String, ArrayList<Paquete>> entry : salas.entrySet()) {
-//			System.out.println(
-//					"Nombre Sala: " + entry.getKey() + " Usuarios conetados:" + entry.getValue().size());
-//			
-//		}
 //			HiloEscuchar hiloEscucha = new HiloEscuchar(dis,sala);
 //			hiloEscucha.start();
 //			while (hiloEscucha.isAlive()) {
@@ -93,21 +74,20 @@ public class Cliente {
 			e.printStackTrace();
 		}
 	}
-	
-	public void activarInterfaz()
-	{	
-		
+
+	public void activarInterfaz() {
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					sala.init(tocoBoton,disObj,dosObj);
+					sala.init(disObj, dosObj);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-	
+
 	public void cerrarConexion() {
 		try {
 			keyRead.close();
@@ -121,30 +101,4 @@ public class Cliente {
 		}
 
 	}
-
-	
-//	public String obtenerSala(Integer tocoBoton)
-//	{
-//		synchronized (tocoBoton) {
-//			if(tocoBoton==-1)
-//				try {
-//					tocoBoton.wait();
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//		}
-//		tocoBoton=-1;
-//		return String.valueOf(Salas.getSala());
-//	}
-	
-//	public synchronized String obtenerSala() {
-//		
-//			while(!Salas.tocoIngreso())
-//				try {
-//					Thread.sleep(5);
-//				} catch (InterruptedException e1) {
-//					e1.printStackTrace();
-//				}
-//		return String.valueOf(Salas.getSala());
-//	}
 }

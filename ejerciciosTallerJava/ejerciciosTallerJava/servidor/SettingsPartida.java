@@ -15,6 +15,11 @@ public class SettingsPartida implements Serializable {
 //		this.prendasAmor = prendasAmor;
 //	}
 	
+	public SettingsPartida(SettingsPartida other) {
+		cantJugadores = other.cantJugadores;
+		nombreSala = other.nombreSala;
+		prendasAmor = other.prendasAmor;
+	}
 	
 	public SettingsPartida() {
 		
