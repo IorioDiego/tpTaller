@@ -30,106 +30,82 @@ public class DentroDeSala extends JFrame {
 	private JPanel contentPane;
 	
 	private JTextField textField;
-	private JLabel jugadores;
+	//private JLabel jugadores;
 
 	private JButton comenzar;
 	
 	
 	public void init() {
-
 		
+		String[] valores= {"gato","perro","loro","pollo","vaca"};
+
+		JPanel panelIzq = new JPanel();
 		JPanel panelDer = new JPanel();
-		JPanel cBoxOrden = new JPanel();
-		JPanel cBoxComienzo = new JPanel();
-		JPanel boton = new JPanel();
+		JPanel panelAbajo = new JPanel();
+		JPanel  cBoxContainer1 =new JPanel();
+		JPanel  cBoxContainer2 =new JPanel();
+		
+		JPanel topContainer = new JPanel();
+		panelIzq.setLayout(new BoxLayout(panelIzq, BoxLayout.Y_AXIS));
+		panelDer.setLayout(new BoxLayout(panelDer, BoxLayout.Y_AXIS));
+		topContainer.setLayout(new BoxLayout(topContainer, BoxLayout.X_AXIS));
+		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		
+		((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		JLabel jugadores = new JLabel("Jugadores:     ");
+		JLabel combolabel1 = new JLabel("combolabel1:   ");
+		JLabel combolabel2 = new JLabel("combolabel2:   ");
+		
+		jugadores.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+		
+		JList lista = new JList(valores);
+		lista.setPreferredSize(new Dimension(300, 300));
+		lista.setMaximumSize(new Dimension(300, 300));
+		
+		panelIzq.add(jugadores);
+		panelIzq.add(lista);
+		
+		panelIzq.setPreferredSize(new Dimension(500, 300));
+		panelIzq.setMaximumSize(new Dimension(500, 300));
+		
+		panelDer.setPreferredSize(new Dimension(500, 300));
+		panelDer.setMaximumSize(new Dimension(500, 300));		
+
+		JComboBox combo1 = new JComboBox(valores);
+		JComboBox combo2 = new JComboBox(valores);
+		
+		panelAbajo.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+		
+		cBoxContainer1.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+		cBoxContainer1.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+		combo1.setPreferredSize(new Dimension(160, 25));
+		combo1.setMaximumSize(new Dimension(160, 25));
+		
+		cBoxContainer2.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
+		cBoxContainer2.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
+		combo2.setPreferredSize(new Dimension(160, 25));
+		combo2.setMaximumSize(new Dimension(160, 25));
+
+		cBoxContainer1.add(combolabel1);
+		cBoxContainer1.add(combo1);
+		cBoxContainer2.add(combolabel2);
+		cBoxContainer2.add(combo2);
+		panelDer.add(cBoxContainer1);
+		panelDer.add(cBoxContainer2);
 		JButton comenzar = new JButton("Comenzar Partida");
+		panelAbajo.add(comenzar);
+		topContainer.add(panelIzq);
+		topContainer.add(panelDer);
+		getContentPane().add(topContainer);
+		getContentPane().add(panelAbajo);
 		
-		boton.setLayout(new GridLayout(1,1));
-		
-		
-		JPanel panelIzq = new JPanel(); 
-		JPanel total = new JPanel();
-		 this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
-		jugadores = new JLabel("jugadores");
-		panelIzq.setLayout(new BoxLayout(panelIzq,BoxLayout.PAGE_AXIS ));
-		panelDer.setLayout(new BoxLayout(panelDer, BoxLayout.Y_AXIS ));
-        panelIzq.add(jugadores);
-        
-        
-        
-//        panelIzq.setAlignmentX(Component.RIGHT_ALIGNMENT);
-    
-      
-     
-        
-        
-        
-        
-        
-        
-        DefaultListModel dlm = new DefaultListModel();
-        
-        JList lista = new JList(dlm);
-        lista.setPreferredSize(new Dimension(300, 250));
-        lista.setMaximumSize(new Dimension(300, 250));
-        dlm.addElement("Jony");
-   
-        panelIzq.add(lista);
-    
-//        panelDer.setBorder (BorderFactory.createEmptyBorder (0, 25, 0, 0));
-
-      
-    	JComboBox orden = new JComboBox();
-    	JComboBox comienzo= new JComboBox();
-    	cBoxOrden.add(orden);
-    	cBoxComienzo.add(comienzo);
-    	
-    	
-    	cBoxOrden.setBorder (BorderFactory.createEmptyBorder (0, 0, 0, 0));
-    	cBoxComienzo.setBorder (BorderFactory.createEmptyBorder (100, 0, 0, 0));
-    	orden.addItem("izquierda");
-    	orden.addItem("derecha");
-  
-    
-          
-    	comienzo.setPreferredSize(new Dimension(120, 20));
-         comienzo.setMaximumSize(new Dimension(120, 20)); 
-         orden.setPreferredSize(new Dimension(120, 20));
-         orden.setMaximumSize(new Dimension(120, 20)); 
-         comienzo.addItem("Jony");
-         comienzo.addItem("Lucas");
-         comienzo.addItem("Diego");
-         
-    	panelDer.add(cBoxComienzo);
-    	panelDer.add(cBoxOrden);
-    	
-    	this.add(panelIzq);
-
-         this.add(panelDer);
-
-         boton.add(comenzar);
-         
-         this.add(boton);
-     
-     
-        	
-//        ((JComponent) getContentPane()).setBorder (BorderFactory.createEmptyBorder (0, 5, 0, 5));
-//        
-//        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        gui.add(list);
-//        
-//        
-//        gui.setPreferredSize(new Dimension(400, 35));
-//        gui.setMaximumSize(new Dimension(400, 35));
-//        this.getContentPane().add(panelIzq);
-        getContentPane().add(Box.createVerticalStrut(5)); 
         setTitle("Configuracion de la Partida");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setFocusable(true);
         requestFocusInWindow();
         setVisible(true);
-        setBounds(500, 250, 400, 500);
+        setBounds(500, 250, 500, 270);
 	}
 	
 	public DentroDeSala(){
