@@ -63,6 +63,7 @@ public class Cliente implements Serializable {
 			}
 			activarInterfaz();
 			enviarSala();
+			crearSala();
 			
 			//dos.writeUTF(obtenerSala(tocoBoton));
 			

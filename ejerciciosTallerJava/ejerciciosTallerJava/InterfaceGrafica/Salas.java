@@ -140,6 +140,15 @@ public class Salas extends JFrame {
 				//
 			}
 		});
+		
+		btnCrear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
 
 		list.addListSelectionListener(new ListSelectionListener() {
 
