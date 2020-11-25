@@ -53,9 +53,11 @@ public class InterfazCrearSala extends JFrame {
 		setBounds(450, 250, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.control);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new EmptyBorder(8, 8, 8, 8));
+		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		setContentPane(contentPane);
 		this.sala=sala;
+		setUndecorated(true);
 	}
 
 	public void init(ObjectInputStream disObject, ObjectOutputStream dosObject) {
@@ -66,6 +68,11 @@ public class InterfazCrearSala extends JFrame {
 		JPanel panel1 = new JPanel();
 		JPanel panel2 = new JPanel();
 		JPanel panel3 = new JPanel();
+		
+		GridLayout layout =new GridLayout();
+		layout.setHgap(40);
+		
+		JPanel gridBotones = new JPanel(layout);
 		// LABELS
 
 		JTextField nombreSala = new JTextField("Ingrese nombre de sala");
@@ -86,7 +93,7 @@ public class InterfazCrearSala extends JFrame {
 		JLabel title2 = new JLabel("Cantidad prendas de Amor:");
 		title2.setBackground(Color.LIGHT_GRAY);
 		title2.setFont(new Font("Tahoma", Font.BOLD, 13));
-		// BOTON
+		// BOTONES
 		JButton botonCrear = new JButton("Crear sala");
 		botonCrear.setBackground(Color.LIGHT_GRAY);
 
@@ -186,6 +193,8 @@ public class InterfazCrearSala extends JFrame {
 		panel1.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 		panel2.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
+		
+		
 		panel0.add(title1);
 		panel1.add(title2);
 		panel1.add(Box.createHorizontalStrut(30));
@@ -193,15 +202,17 @@ public class InterfazCrearSala extends JFrame {
 		panel2.add(title3);
 		panel2.add(Box.createHorizontalStrut(72));
 		panel2.add(cantJugadores);
-		panel3.add(botonCrear);
-		panel3.add(botonVolver);
-
+		gridBotones.add(botonCrear);
+		gridBotones.add(botonVolver);
+		panel3.add(gridBotones);
+		
 		getContentPane().add(panel0);
 		getContentPane().add(panel1);
 		getContentPane().add(panel2);
 		getContentPane().add(panel3);
 		setLocationRelativeTo(null);
 		setVisible(true);
+		
 	}
 
 	public void enviarMsj(ObjectOutputStream dosObject, Object msj) {

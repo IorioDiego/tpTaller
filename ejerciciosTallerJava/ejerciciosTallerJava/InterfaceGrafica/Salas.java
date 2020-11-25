@@ -89,7 +89,7 @@ public class Salas extends JFrame {
 		});
 
 		GridLayout layout = new GridLayout(1, 2);
-		layout.setHgap(55);
+		layout.setHgap(25);
 
 		JPanel botones = new JPanel();
 		botones.setLayout(layout);
@@ -226,7 +226,7 @@ public class Salas extends JFrame {
 		requestFocusInWindow();
 
 		setResizable(false);
-		setBounds(500, 250, 410, 280);
+		setBounds(500, 250, 450, 300);
 	}
 
 	public Salas() {
