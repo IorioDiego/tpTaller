@@ -1,12 +1,12 @@
 package comandos;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import servidor.Paquete;
 import servidor.Servidor;
 
-public class VolverLobby implements ComandosServer {
-
+public class AvisarIngreso implements ComandosServer {
 	private ComandosServer siguiente;
 
 	@Override
@@ -17,24 +17,19 @@ public class VolverLobby implements ComandosServer {
 
 	@Override
 	public String procesar(Paquete paquete, String msj) {
-		if (msj.equals("8")) {
+		if (msj.equals("13")) {
 			try {
 				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 					if (!paqueteCliente.getCliente().equals(paquete.getCliente())
 							&& paqueteCliente.getCliente().isConnected()) {
-						paqueteCliente.getSalida().writeObject("salioJugador");
+						paqueteCliente.getSalida().writeObject("actualizar");
 					}
 				}
-				paquete.getSalida().writeObject("-salir");
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ex) {
+				ex.getStackTrace();
 			}
-			String salirDeSala = paquete.getSala();
-			paquete.dejarSala(salirDeSala);
-			Servidor.eliminarClienteDeSala(paquete, salirDeSala);
-			return "--VolverAlLobby";
+			return "y";
 		} else
 			return siguiente.procesar(paquete, msj);
 	}
-
 }

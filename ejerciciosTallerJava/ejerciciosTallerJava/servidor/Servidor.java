@@ -1,6 +1,5 @@
 package servidor;
 
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
@@ -10,12 +9,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-
 public class Servidor {
-	
-	private static Map<String, SettingsPartida> maxSalas = new HashMap<String,SettingsPartida>();
-	private static Map<String, ArrayList<Paquete>> salas = new HashMap<String, ArrayList<Paquete>>();
 
+	private static Map<String, SettingsPartida> maxSalas = new HashMap<String, SettingsPartida>();
+	private static Map<String, ArrayList<Paquete>> salas = new HashMap<String, ArrayList<Paquete>>();
 
 	public Servidor(int puerto) throws IOException {
 		ServerSocket servidor = new ServerSocket(puerto);
@@ -32,17 +29,14 @@ public class Servidor {
 	}
 
 	static public void eliminarClienteDeSalas(Paquete paqueteClient) {
-		
-			ArrayList<Paquete> listaClientSala = salas.get(paqueteClient.getSala());
-			for (Iterator<Paquete> iterator = listaClientSala.iterator(); iterator.hasNext();) {
-				Paquete paquete = (Paquete) iterator.next();
-				if (paqueteClient.getCliente().equals(paquete.getCliente()))
-					iterator.remove();
+
+		ArrayList<Paquete> listaClientSala = salas.get(paqueteClient.getSala());
+		for (Iterator<Paquete> iterator = listaClientSala.iterator(); iterator.hasNext();) {
+			Paquete paquete = (Paquete) iterator.next();
+			if (paqueteClient.getCliente().equals(paquete.getCliente()))
+				iterator.remove();
 		}
 	}
-
-
-
 
 	public static boolean agregarClienteSala(Paquete paqueteClient, String salaAingresar) {
 		boolean existiaSala = false;
@@ -53,25 +47,28 @@ public class Servidor {
 		return existiaSala;
 	}
 
-	static public void eliminarClienteDeSala(Paquete paqueteClient, String Sala) {
-		for (Iterator<Paquete> iterator = salas.get(Sala).iterator(); iterator.hasNext();) {
+	static public void eliminarClienteDeSala(Paquete paqueteClient, String sala) {
+		for (Iterator<Paquete> iterator = salas.get(sala).iterator(); iterator.hasNext();) {
 			Paquete paquete = (Paquete) iterator.next();
 			if (paqueteClient.getCliente().equals(paquete.getCliente()))
 				iterator.remove();
 		}
+		if (salas.get(sala).size() == 0) {
+			salas.remove(sala);
+			maxSalas.remove(sala);
+		}
 	}
-	
-	public static boolean existeSala(String sala)
-	{	
+
+	public static boolean existeSala(String sala) {
 		return salas.containsKey(sala);
 	}
-	
-	public static void crearSala(Paquete paqueteClient, String salaAcrear,SettingsPartida setPart) {
+
+	public static void crearSala(Paquete paqueteClient, String salaAcrear, SettingsPartida setPart) {
 		ArrayList<Paquete> client = new ArrayList<>();
 		client.add(paqueteClient);
 		if (!salas.containsKey(salaAcrear)) {
 			salas.put(salaAcrear, client);
-			maxSalas.put(salaAcrear,setPart);
+			maxSalas.put(salaAcrear, setPart);
 		} else
 			agregarClienteSala(paqueteClient, salaAcrear);
 	}
@@ -91,7 +88,5 @@ public class Servidor {
 	public static void setMaxSalas(Map<String, SettingsPartida> maxSalas) {
 		Servidor.maxSalas = maxSalas;
 	}
-	
-	
-	
+
 }

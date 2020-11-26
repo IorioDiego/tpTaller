@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+import comandos.AvisarIngreso;
 import comandos.ChatPrivado;
 import comandos.ComandosServer;
 import comandos.CrearSala;
@@ -19,13 +20,14 @@ import comandos.Default;
 import comandos.EnviarMsjAllSala;
 import comandos.IngresarSala;
 import comandos.Refrescar;
+import comandos.RefreshJugadores;
 import comandos.Salir;
-import comandos.SalirDeSala;
 import comandos.VolverLobby;
 
 public class HiloAtencionCliente extends Thread {
 
 	private Socket cliente;
+	private Paquete paquete;
 	private DataInputStream entrada;
 	private Date inicioConexion;
 	private DataOutputStream salida;
@@ -53,17 +55,19 @@ public class HiloAtencionCliente extends Thread {
 		ComandosServer chatPrivado = new ChatPrivado();
 		ComandosServer chatComDefault = new Default();
 		ComandosServer volverAllobby = new VolverLobby();
-		ComandosServer salirDeSala = new SalirDeSala();
 		ComandosServer refrescar = new Refrescar();
+		ComandosServer refrescarPlayer = new RefreshJugadores();
+		ComandosServer avisarIngreso = new AvisarIngreso();
 
 		comanSer.establecerSiguiente(crearSala);
 		crearSala.establecerSiguiente(ingresoSala);
 		ingresoSala.establecerSiguiente(chatGeneral);
 		chatGeneral.establecerSiguiente(chatPrivado);
 		chatPrivado.establecerSiguiente(volverAllobby);
-		volverAllobby.establecerSiguiente(salirDeSala);
-		salirDeSala.establecerSiguiente(refrescar);
-		refrescar.establecerSiguiente(chatComDefault);
+		volverAllobby.establecerSiguiente(refrescar);
+		refrescar.establecerSiguiente(refrescarPlayer);
+		refrescarPlayer.establecerSiguiente(avisarIngreso);
+		avisarIngreso.establecerSiguiente(chatComDefault);
 	}
 
 	@Override
@@ -73,51 +77,33 @@ public class HiloAtencionCliente extends Thread {
 			boolean existeSala = true;
 			enviarSalas();
 			String nickName = (String) entradaObj.readObject();
-			Paquete paquete = new Paquete(inicioConexion, cliente, nickName, entradaObj, salidaObj);
-//			do {
+			paquete = new Paquete(inicioConexion, cliente, nickName, entradaObj, salidaObj);
 			do {
-				// String salaElegida = (String)entradaObj.readObject();
-				// System.out.println("la sala elegida fue: " + salaElegida);
-				// SettingsPartida setPart = (SettingsPartida)entradaObj.readObject();
-				// System.out.println(setPart);
+				do {
+					// String salaElegida = (String)entradaObj.readObject();
+					// System.out.println("la sala elegida fue: " + salaElegida);
+					// SettingsPartida setPart = (SettingsPartida)entradaObj.readObject();
+					// System.out.println(setPart);
 
-				// salida.writeUTF(opcionesSala);
-				// if (paquete.cantidadSalas() >= 1)
-				// salida.writeUTF("4)-Salir de sala");
-				msj = (String) entradaObj.readObject();
-			} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
-			
-			Thread.sleep(4000);
+					// salida.writeUTF(opcionesSala);
+					// if (paquete.cantidadSalas() >= 1)
+					// salida.writeUTF("4)-Salir de sala");
+					msj = (String) entradaObj.readObject();
+				} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
+
 ///------>			Dentro de sala
-
-//				if (!resultComando.equals("Salir")) {
-//					do {
-//						String sala;
-//						if (paquete.cantidadSalas() > 1) {
-//							do {
-//								salida.writeUTF("\n" + "--ElegirSalaChat");
-//								for (String salas : paquete.getSala())
-//									salida.writeUTF("SALAS" + "\n" + salas);
-//								sala = entrada.readUTF();
-//								if (!(existeSala = Servidor.existeSala(sala)))
-//									salida.writeUTF("Error,Sala invalida");
-//							} while (!existeSala);
-//							salida.writeUTF("!Listo para chatear");
-//						} else
-//							sala = paquete.getSala().get(0);
-//						paquete.setSalaActiva(sala);
-//
-//						salida.writeUTF(opcionesComandos);
-//						msj = entrada.readUTF();
-//					} while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby"));
-//				}
-//			} while (!resultComando.equals("Salir"));
+				if (!resultComando.equals("Salir")) {
+					do {
+						String sala;
+						//enviarJugadores();
+						msj = (String)entradaObj.readObject();
+					} while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby"));
+				}
+			} while (!resultComando.equals("Salir"));
 
 		} catch (IOException ex) {
 			ex.getStackTrace();
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
@@ -126,8 +112,8 @@ public class HiloAtencionCliente extends Thread {
 	public void enviarSalas() {
 		ArrayList<SalaSerealizable> envioSalas = new ArrayList<>();
 		for (Map.Entry<String, ArrayList<Paquete>> entry : Servidor.getSalas().entrySet()) {
-			SettingsPartida setPart=Servidor.getMaxSalas().get(entry.getKey());
-			envioSalas.add(new SalaSerealizable(entry.getValue().size(),setPart));
+			SettingsPartida setPart = Servidor.getMaxSalas().get(entry.getKey());
+			envioSalas.add(new SalaSerealizable(entry.getValue().size(), setPart));
 		}
 		try {
 			salidaObj.writeObject(envioSalas);
@@ -135,5 +121,18 @@ public class HiloAtencionCliente extends Thread {
 			e.printStackTrace();
 		}
 	}
-
+	public void enviarJugadores()
+	{
+		ArrayList<String> nickPlayers = new ArrayList<>();
+		for (Paquete item : Servidor.getSalas().get(paquete.getSala())) {
+			nickPlayers.add(item.getNick());
+		}
+		try {
+			salidaObj.writeObject(nickPlayers);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

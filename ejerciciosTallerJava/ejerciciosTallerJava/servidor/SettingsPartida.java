@@ -9,11 +9,11 @@ public class SettingsPartida implements Serializable {
 	private String nombreSala;
 	private Integer prendasAmor;
 	
-//	public SettingsPartida(Integer cantJugadores, String nombreSala, Integer prendasAmor) {
-//		this.cantJugadores = cantJugadores;
-//		this.nombreSala = nombreSala;
-//		this.prendasAmor = prendasAmor;
-//	}
+	public SettingsPartida(Integer cantJugadores, String nombreSala, Integer prendasAmor) {
+		this.cantJugadores = cantJugadores;
+		this.nombreSala = nombreSala;
+		this.prendasAmor = prendasAmor;
+	}
 	
 	public SettingsPartida(SettingsPartida other) {
 		cantJugadores = other.cantJugadores;

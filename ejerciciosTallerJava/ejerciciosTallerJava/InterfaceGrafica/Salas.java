@@ -147,12 +147,12 @@ public class Salas extends JFrame {
 				enviarMsj(dosObject, salas.get(indexSala).getSetPart().getNombreSala());
 				String hayEspacio = (String) leerMsj(disObject);
 				if (hayEspacio.equals("y")) {
-					DentroDeSala sala = new DentroDeSala();
+					DentroDeSala sala = new DentroDeSala(miSala);
 					dispose();
-					sala.init(disObject, dosObject);
-				}
-				else
-					JOptionPane.showMessageDialog(null, "La sala a la cual quiere ingresar esta llena eliga otra", 
+					enviarMsj(dosObject, "13");	//avisa ingreso
+					sala.init(disObject, dosObject,salas.get(indexSala).getSetPart().getNombreSala());
+				} else
+					JOptionPane.showMessageDialog(null, "La sala a la cual quiere ingresar esta llena eliga otra",
 							"Sala llena", JOptionPane.ERROR_MESSAGE);
 			}
 		});
@@ -200,17 +200,26 @@ public class Salas extends JFrame {
 			}
 		});
 
+//		JOptionPane.showMessageDialog(null, "Debe ingresar un nickName para continuar", 
+//		"Sala llena", JOptionPane.ERROR_MESSAGE);
+
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					enviarMsj(dosObject, textField.getText());
-					tocoEnter = true;
-					btnCrear.setEnabled(true);
-					list.setEnabled(true);
-					btnIngresar.setEnabled(true);
-					btnRefresh.setEnabled(true);
-					textField.setEnabled(false);
+					if (textField.getText().equals("") || textField.getText().equals("Ingrese Nickname"))
+
+						JOptionPane.showMessageDialog(null, "Debe ingresar un nickName para continuar",
+								"Ingreso nickName", JOptionPane.ERROR_MESSAGE);
+					else {
+						enviarMsj(dosObject, textField.getText());
+						tocoEnter = true;
+						btnCrear.setEnabled(true);
+						list.setEnabled(true);
+						btnIngresar.setEnabled(true);
+						btnRefresh.setEnabled(true);
+						textField.setEnabled(false);
+					}
 				}
 			}
 		});

@@ -28,27 +28,27 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import comandos.CrearSala;
 import servidor.SettingsPartida;
 
 public class InterfazCrearSala extends JFrame {
 
 	private JPanel contentPane;
-	private SettingsPartida setPartida = new SettingsPartida();
-	private boolean seteoCantJuga = false;
-	private boolean seteoPrendas = false;
+	private SettingsPartida setPartida = new SettingsPartida(2, "default", 1);
 	private boolean tocoEnter = false;
-	private Salas sala;
+	private Salas JsalaPrincipal;
 
 	public InterfazCrearSala(Salas sala) {
 		setResizable(false);
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(InterfazCrearSala.class.getResource("/loveImg/IconoCarta.png")));
 		setTitle("Configuracion sala");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setBounds(450, 250, 450, 300);
 		contentPane = new JPanel();
@@ -56,7 +56,7 @@ public class InterfazCrearSala extends JFrame {
 		contentPane.setBorder(new EmptyBorder(8, 8, 8, 8));
 		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		setContentPane(contentPane);
-		this.sala=sala;
+		this.JsalaPrincipal = sala;
 		setUndecorated(true);
 	}
 
@@ -68,10 +68,10 @@ public class InterfazCrearSala extends JFrame {
 		JPanel panel1 = new JPanel();
 		JPanel panel2 = new JPanel();
 		JPanel panel3 = new JPanel();
-		
-		GridLayout layout =new GridLayout();
+
+		GridLayout layout = new GridLayout();
 		layout.setHgap(40);
-		
+
 		JPanel gridBotones = new JPanel(layout);
 		// LABELS
 
@@ -123,13 +123,21 @@ public class InterfazCrearSala extends JFrame {
 		nombreSala.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				String nombSala = nombreSala.getText();
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					String nombSala = nombreSala.getText();
-					tocoEnter = true;
-					setPartida.setNombreSala(nombSala);
-					cantPrendasAmor.setEnabled(true);
-					cantJugadores.setEnabled(true);
-					nombreSala.setEnabled(false);
+					if (nombSala.equals("") || nombreSala.equals("Ingrese nombre de sala"))
+
+						JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de sala", "Nombre de sala",
+								JOptionPane.ERROR_MESSAGE);
+					else {
+
+						tocoEnter = true;
+						setPartida.setNombreSala(nombSala);
+						cantPrendasAmor.setEnabled(true);
+						cantJugadores.setEnabled(true);
+						botonCrear.setEnabled(true);
+						nombreSala.setEnabled(false);
+					}
 				}
 			}
 		});
@@ -140,9 +148,7 @@ public class InterfazCrearSala extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String selectValue = (String) cantJugadores.getSelectedItem();
 				setPartida.setCantJugadores(Integer.valueOf(selectValue));
-				seteoCantJuga = true;
-				if (seteoCantJuga && seteoPrendas)
-					botonCrear.setEnabled(true);
+
 			}
 		});
 
@@ -152,9 +158,7 @@ public class InterfazCrearSala extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String selectValue = (String) cantJugadores.getSelectedItem();
 				setPartida.setPrendasAmor(Integer.valueOf(selectValue));
-				seteoPrendas = true;
-				if (seteoCantJuga && seteoPrendas)
-					botonCrear.setEnabled(true);
+
 			}
 		});
 
@@ -163,7 +167,7 @@ public class InterfazCrearSala extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				enviarMsj(dosObject, "volver");
-				sala.setVisible(true);
+				JsalaPrincipal.setVisible(true);
 				dispose();
 			}
 		});
@@ -172,15 +176,20 @@ public class InterfazCrearSala extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				if (seteoCantJuga && seteoPrendas) {
-					enviarMsj(dosObject, "crear");
+				enviarMsj(dosObject, "crear");
+				enviarMsj(dosObject, setPartida.getNombreSala());
+				String existeSala = (String) leerMsj(disObject);
+				if (!existeSala.equals("existe")) {
 					enviarMsj(dosObject, setPartida);
-					DentroDeSala sala = new DentroDeSala();
+					DentroDeSala sala = new DentroDeSala(JsalaPrincipal);
 					dispose();
-					sala.init(disObject, dosObject);
+					sala.init(disObject, dosObject,setPartida.getNombreSala());
+				} else {
+					JOptionPane.showMessageDialog(null, "El nombre de la sala ya existe debe ingresar uno distinto",
+							"Error de creacion de sala", JOptionPane.ERROR_MESSAGE);
+					enviarMsj(dosObject, "2");
+					nombreSala.setEnabled(true);
 				}
-
 			}
 		});
 
@@ -193,8 +202,6 @@ public class InterfazCrearSala extends JFrame {
 		panel1.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 		panel2.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-		
-		
 		panel0.add(title1);
 		panel1.add(title2);
 		panel1.add(Box.createHorizontalStrut(30));
@@ -205,14 +212,14 @@ public class InterfazCrearSala extends JFrame {
 		gridBotones.add(botonCrear);
 		gridBotones.add(botonVolver);
 		panel3.add(gridBotones);
-		
+
 		getContentPane().add(panel0);
 		getContentPane().add(panel1);
 		getContentPane().add(panel2);
 		getContentPane().add(panel3);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		
+
 	}
 
 	public void enviarMsj(ObjectOutputStream dosObject, Object msj) {

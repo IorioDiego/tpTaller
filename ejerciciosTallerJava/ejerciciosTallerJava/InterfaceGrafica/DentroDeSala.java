@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -28,6 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
+import Cliente.HiloEscuchar;
 import servidor.SalaSerealizable;
 
 public class DentroDeSala extends JFrame {
@@ -35,22 +37,23 @@ public class DentroDeSala extends JFrame {
 	
 	private InterfazCrearSala crearSala;
 	private JPanel contentPane;
-	
+	private Salas salaPrincipal;
 	private JTextField textField;
+	private ArrayList<String> nickNames;
 	//private JLabel jugadores;
 
 	private JButton comenzar;
 	
 	
-	public void init(ObjectInputStream disObject, ObjectOutputStream dosObject) {
+	public void init(ObjectInputStream disObject, ObjectOutputStream dosObject,String nombreSala) {
 		
-		String[] valores= {"gato","perro","loro","pollo","vaca"};
 
 		JPanel panelIzq = new JPanel();
 		JPanel panelDer = new JPanel();
 		JPanel panelAbajo = new JPanel();
 		JPanel  cBoxContainer1 =new JPanel();
 		JPanel  cBoxContainer2 =new JPanel();
+		
 		
 		GridLayout layout =new GridLayout();
 		layout.setHgap(40);
@@ -60,15 +63,7 @@ public class DentroDeSala extends JFrame {
 		
 		JButton botonVolver = new JButton("Volver");
 		
-		botonVolver.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				enviarMsj(dosObject, "volver");
-				crearSala.setVisible(true);
-				dispose();
-			}
-		});
+		
 		
 		JPanel topContainer = new JPanel();
 		panelIzq.setLayout(new BoxLayout(panelIzq, BoxLayout.Y_AXIS));
@@ -78,12 +73,22 @@ public class DentroDeSala extends JFrame {
 		
 		((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		JLabel jugadores = new JLabel("Jugadores:     ");
-		JLabel combolabel1 = new JLabel("combolabel1:   ");
-		JLabel combolabel2 = new JLabel("combolabel2:   ");
+		JLabel combolabel1 = new JLabel("Orden de ronda[izq/der]   ");
+		JLabel combolabel2 = new JLabel("Jugador que comieza la ronda   ");
 		
 		jugadores.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		
-		JList lista = new JList(valores);
+		enviarMsj(dosObject, "12");
+		nickNames = (ArrayList<String>)leerMsj(disObject);
+		DefaultListModel dlm = new DefaultListModel();
+
+		for (String item : nickNames) {
+			dlm.addElement(item);
+		}
+		
+		
+		
+		JList lista = new JList(dlm);
 		lista.setPreferredSize(new Dimension(300, 300));
 		lista.setMaximumSize(new Dimension(300, 300));
 		
@@ -96,8 +101,27 @@ public class DentroDeSala extends JFrame {
 		panelDer.setPreferredSize(new Dimension(500, 300));
 		panelDer.setMaximumSize(new Dimension(500, 300));		
 
-		JComboBox combo1 = new JComboBox(valores);
-		JComboBox combo2 = new JComboBox(valores);
+		JComboBox combo1 = new JComboBox();
+		JComboBox combo2 = new JComboBox();
+		
+		for (String item : nickNames) {
+			combo1.addItem(item);
+			combo2.addItem(item);
+		}
+		
+		HiloEscuchar ingresoJug = new HiloEscuchar(disObject, dosObject, dlm,combo1,combo2);
+		ingresoJug.start(); //hilo de actualizacion
+		
+		
+		botonVolver.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				enviarMsj(dosObject, "8");
+				salaPrincipal.setVisible(true);
+				dispose();
+			}
+		});
 		
 		panelAbajo.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
 		
@@ -127,8 +151,8 @@ public class DentroDeSala extends JFrame {
 		getContentPane().add(topContainer);
 		getContentPane().add(panelAbajo);
 		
-        setTitle("Configuracion de la Partida");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("Configuracion de la Partida " + "Sala: " + nombreSala);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //VER POR QUE LO IGNORA
         setLocationRelativeTo(null);
         setFocusable(true);
         requestFocusInWindow();
@@ -136,17 +160,15 @@ public class DentroDeSala extends JFrame {
         setBounds(500, 250, 500, 270);
 	}
 	
-	public DentroDeSala(){
+	public DentroDeSala(Salas sala){
 		contentPane = new JPanel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setBounds(200, 117, 1366, 768);
 		setContentPane(contentPane);
+		salaPrincipal=sala;
 	}
 	
-//	public static void main(String[] args) {
-//	DentroDeSala sala = new DentroDeSala();
-//	sala.init();
-//	}
+
 	
 	public void enviarMsj(ObjectOutputStream dosObject, Object msj) {
 		try {

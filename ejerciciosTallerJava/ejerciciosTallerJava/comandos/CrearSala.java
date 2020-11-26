@@ -18,9 +18,17 @@ public class CrearSala implements ComandosServer {
 		if (msj.equals("2")) {
 			try {
 				if (((String) paquete.getEntrada().readObject()).equals("crear")) {
-					SettingsPartida setPart = new SettingsPartida((SettingsPartida) paquete.getEntrada().readObject());
-					paquete.setSala(setPart.getNombreSala());
-					Servidor.crearSala(paquete, setPart.getNombreSala(), setPart);
+					String nombSala = (String) paquete.getEntrada().readObject();
+					if (!Servidor.getSalas().containsKey(nombSala)) {
+						paquete.getSalida().writeObject("no existe");
+						SettingsPartida setPart = new SettingsPartida(
+								(SettingsPartida) paquete.getEntrada().readObject());
+						paquete.setSala(setPart.getNombreSala());
+						Servidor.crearSala(paquete, setPart.getNombreSala(), setPart);
+					} else {
+						paquete.getSalida().writeObject("existe");
+						resp = "y";
+					}
 				} else
 					resp = "y";
 			} catch (Exception e) {
