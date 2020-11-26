@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -29,6 +32,8 @@ import servidor.SalaSerealizable;
 
 public class DentroDeSala extends JFrame {
 
+	
+	private InterfazCrearSala crearSala;
 	private JPanel contentPane;
 	
 	private JTextField textField;
@@ -46,6 +51,24 @@ public class DentroDeSala extends JFrame {
 		JPanel panelAbajo = new JPanel();
 		JPanel  cBoxContainer1 =new JPanel();
 		JPanel  cBoxContainer2 =new JPanel();
+		
+		GridLayout layout =new GridLayout();
+		layout.setHgap(40);
+		//layout.setHgap(40);
+		
+		JPanel gridBotones = new JPanel(layout);
+		
+		JButton botonVolver = new JButton("Volver");
+		
+		botonVolver.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				enviarMsj(dosObject, "volver");
+				crearSala.setVisible(true);
+				dispose();
+			}
+		});
 		
 		JPanel topContainer = new JPanel();
 		panelIzq.setLayout(new BoxLayout(panelIzq, BoxLayout.Y_AXIS));
@@ -95,7 +118,10 @@ public class DentroDeSala extends JFrame {
 		panelDer.add(cBoxContainer1);
 		panelDer.add(cBoxContainer2);
 		JButton comenzar = new JButton("Comenzar Partida");
-		panelAbajo.add(comenzar);
+		gridBotones.add(comenzar);
+		gridBotones.add(botonVolver);
+		panelAbajo.add(gridBotones);
+		
 		topContainer.add(panelIzq);
 		topContainer.add(panelDer);
 		getContentPane().add(topContainer);
@@ -121,4 +147,21 @@ public class DentroDeSala extends JFrame {
 //	DentroDeSala sala = new DentroDeSala();
 //	sala.init();
 //	}
+	
+	public void enviarMsj(ObjectOutputStream dosObject, Object msj) {
+		try {
+			dosObject.writeObject(msj);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Object leerMsj(ObjectInputStream disObject) {
+		try {
+			return disObject.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
