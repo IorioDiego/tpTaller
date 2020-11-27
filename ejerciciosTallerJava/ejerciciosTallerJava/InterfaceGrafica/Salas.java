@@ -10,10 +10,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +38,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.sun.java.swing.plaf.windows.resources.windows;
+
 import comandos.CrearSala;
 import servidor.Paquete;
 import servidor.SalaSerealizable;
@@ -51,6 +57,9 @@ public class Salas extends JFrame {
 	private JButton crear;
 	private JButton Ingresar;
 	private Salas miSala = this;
+	private ObjectInputStream dis;
+	private ObjectOutputStream dos;
+	private Socket cliente;
 
 	Font fuente = new Font("Calibri", Font.PLAIN, 16);
 
@@ -59,14 +68,16 @@ public class Salas extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void init(ObjectInputStream disObject, ObjectOutputStream dosObject) {
+	public void init(ObjectInputStream disObject, ObjectOutputStream dosObject, Socket cliente) {
 
 		JPanel gui = new JPanel();
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		getContentPane().add(Box.createVerticalStrut(5));
 		textField = new JTextField("Ingrese Nickname", 25);
 		gui.add(textField);
-
+		dis = disObject;
+		dos = dosObject;
+		this.cliente = cliente;
 		gui.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		gui.setPreferredSize(new Dimension(400, 35));
@@ -149,8 +160,8 @@ public class Salas extends JFrame {
 				if (hayEspacio.equals("y")) {
 					DentroDeSala sala = new DentroDeSala(miSala);
 					dispose();
-					enviarMsj(dosObject, "13");	//avisa ingreso
-					sala.init(disObject, dosObject,salas.get(indexSala).getSetPart().getNombreSala());
+					enviarMsj(dosObject, "13"); // avisa ingreso
+					sala.init(disObject, dosObject, salas.get(indexSala).getSetPart().getNombreSala());
 				} else
 					JOptionPane.showMessageDialog(null, "La sala a la cual quiere ingresar esta llena eliga otra",
 							"Sala llena", JOptionPane.ERROR_MESSAGE);
@@ -228,14 +239,33 @@ public class Salas extends JFrame {
 		getContentPane().add(botones);
 		getContentPane().add(Box.createVerticalStrut(10));
 		setTitle("Seleccion de salas");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setFocusable(true);
 		requestFocusInWindow();
-
+		cerrar();
 		setResizable(false);
 		setBounds(500, 250, 450, 300);
+	}
+
+	public void cerrar() {
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				confirmarSalida();
+			}
+
+		});
+	}
+
+	public void confirmarSalida() {
+		int valor = JOptionPane.showConfirmDialog(this, "Quiere salir de la aplicacion", "Cerrar",
+				JOptionPane.WARNING_MESSAGE);
+		if (valor == JOptionPane.YES_OPTION) {
+			enviarMsj(dos, "-/-1");
+			cerrarConexion();
+			System.exit(0);
+		}
 	}
 
 	public Salas() {
@@ -255,6 +285,17 @@ public class Salas extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void cerrarConexion() {
+		try {
+			dis.close();
+			dos.close();
+			cliente.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public Object leerMsj(ObjectInputStream disObject) {

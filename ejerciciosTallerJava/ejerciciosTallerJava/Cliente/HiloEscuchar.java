@@ -9,7 +9,9 @@ import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 
+import InterfaceGrafica.DentroDeSala;
 import InterfaceGrafica.Salas;
 
 public class HiloEscuchar extends Thread {
@@ -18,17 +20,22 @@ public class HiloEscuchar extends Thread {
 	private ObjectOutputStream salida;
 	private DefaultListModel dlm;
 	private ArrayList<String> nickNames;
+	private Salas miSala;
+	private DentroDeSala configSala;
 	private JComboBox<String> combo1;
 	private JComboBox<String> combo2;
 
 //	private ObjectOutputStream;
-	public HiloEscuchar(ObjectInputStream entrada, ObjectOutputStream salida, DefaultListModel dlm, JComboBox combo1,
-			JComboBox combo2) {
+	public HiloEscuchar(ObjectInputStream entrada, ObjectOutputStream salida, 
+			DefaultListModel dlm, JComboBox combo1,
+			JComboBox combo2,Salas miSala,DentroDeSala configSala) {
 		this.entrada = entrada;
 		this.dlm = dlm;
 		this.salida = salida;
 		this.combo1 = combo1;
 		this.combo2 = combo2;
+		this.miSala = miSala;
+		this.configSala = configSala;
 	}
 
 	@Override
@@ -51,6 +58,10 @@ public class HiloEscuchar extends Thread {
 					}
 				}
 			}
+			configSala.dispose();
+			miSala.setVisible(true);
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

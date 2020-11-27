@@ -3,7 +3,7 @@ package servidor;
 import java.io.IOException;
 import java.io.Serializable;
 
-public class AppServidor implements Serializable {
+public class AppServidor {
 	
 	public static void main(String[] args) {
 

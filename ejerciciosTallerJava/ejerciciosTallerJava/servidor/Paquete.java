@@ -11,18 +11,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class Paquete implements Serializable {
+public class Paquete{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2585930666645442349L;
-	private static SimpleDateFormat formatFecha = new SimpleDateFormat(" [dd/MM/yyyy HH:mm:ss] ");
+	private boolean esHost=false;
 	private Socket cliente;
-	private String salaActiva;
 	private boolean enChatPrivado = false;
 	private Date inicioConexion;
 	private String sala = "..";
 	private String nick;
+	
 	private ObjectInputStream entrada;
 	private ObjectOutputStream salida;
 	
@@ -39,6 +38,15 @@ public class Paquete implements Serializable {
 		return enChatPrivado;
 	}
 	
+	public void setHostSala(boolean host)
+	{
+		esHost = host;
+	}
+	
+	public boolean esHost()
+	{
+		return esHost;
+	}
 	
 	public void dejarSala(String sala)
 	{
@@ -54,35 +62,12 @@ public class Paquete implements Serializable {
 		return inicioConexion;
 	}
 	
-	public String getSalaActiva() {
-		return salaActiva;
-	}
-
-	public void setSalaActiva(String salaActiva) {
-		this.salaActiva = salaActiva;
-	}
 	
 	public Paquete()
 	{
 		
 	}
-	public String getTiempoConexion()
-	{
-        Date tiempoActual = new Date();
-        long diffInMillies = Math.abs(inicioConexion.getTime() - tiempoActual.getTime());
-        long diff = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-        int dias = (int)diff/86400;
-        int horas = (int)(diff%86400)/3600;
-        int minutos = (int)diff%3600/60;
-        int segundos = (int)diff%60;
-        return String.format("Tiempo activo de %s: %02d dias %02d hh %02d mm %02d ss",nick,dias,horas,minutos,segundos);
-	}
-	
-	@Override
-	public String toString() {
-		
-		return formatFecha.format(new Date()) + "Mensaje de " + nick + " : " ;
-	}
+
 	public String getNick() {
 		return nick;
 	}
@@ -95,14 +80,6 @@ public class Paquete implements Serializable {
 		return cliente;
 	}
 	
-//	public int cantidadSalas()
-//	{
-//		return salas.size(); 
-//	}
-	
-//	public ArrayList<String> getSala() {
-//		return salas;
-//	}
 	
 	public String getSala()
 	{

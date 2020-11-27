@@ -21,6 +21,7 @@ public class IngresarSala implements ComandosServer {
 					paquete.getSalida().writeObject("y");
 					if (Servidor.agregarClienteSala(paquete, sala))
 						paquete.setSala(sala);
+						paquete.setHostSala(false);
 				} else {
 					paquete.getSalida().writeObject("n");
 					resp="y";

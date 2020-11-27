@@ -18,6 +18,7 @@ import comandos.ComandosServer;
 import comandos.CrearSala;
 import comandos.Default;
 import comandos.EnviarMsjAllSala;
+import comandos.ExpulsarAtodos;
 import comandos.IngresarSala;
 import comandos.Refrescar;
 import comandos.RefreshJugadores;
@@ -28,9 +29,7 @@ public class HiloAtencionCliente extends Thread {
 
 	private Socket cliente;
 	private Paquete paquete;
-	private DataInputStream entrada;
 	private Date inicioConexion;
-	private DataOutputStream salida;
 	private ComandosServer comanSer;
 	private ObjectOutputStream salidaObj;
 	private ObjectInputStream entradaObj;
@@ -39,16 +38,60 @@ public class HiloAtencionCliente extends Thread {
 		this.cliente = socket;
 		this.inicioConexion = new Date();
 		try {
-//			this.entrada = new DataInputStream(cliente.getInputStream());
-//			this.salida = new DataOutputStream(cliente.getOutputStream());
 			this.salidaObj = new ObjectOutputStream(cliente.getOutputStream());
 			this.salidaObj.flush();
 			this.entradaObj = new ObjectInputStream(cliente.getInputStream());
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.comanSer = new Salir();
+	}
+	
+
+	@Override
+	public void run() {
+		try {
+			String msj, resultComando;
+			ChainOfResposability();
+			boolean existeSala = true;
+			enviarSalas();
+			String nickName = (String) entradaObj.readObject(); //en caso de que salga sin poner nickname
+			if (nickName.equals("-/-1"))
+				cerrarConexion();
+			else {
+				paquete = new Paquete(inicioConexion, cliente, nickName, entradaObj, salidaObj);
+				do {
+					do {
+						// String salaElegida = (String)entradaObj.readObject();
+						// System.out.println("la sala elegida fue: " + salaElegida);
+						// SettingsPartida setPart = (SettingsPartida)entradaObj.readObject();
+						// System.out.println(setPart);
+
+						// salida.writeUTF(opcionesSala);
+						// if (paquete.cantidadSalas() >= 1)
+						// salida.writeUTF("4)-Salir de sala");
+						msj = (String) entradaObj.readObject();
+					} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
+
+///------>			Dentro de sala
+					if (!resultComando.equals("Salir")) {
+						do {
+							String sala;
+							// enviarJugadores();
+							msj = (String) entradaObj.readObject();
+						} while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby"));
+					}
+				} while (!resultComando.equals("Salir"));
+			}
+		} catch (IOException ex) {
+			ex.getStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void ChainOfResposability()
+	{
 		ComandosServer crearSala = new CrearSala();
 		ComandosServer ingresoSala = new IngresarSala();
 		ComandosServer chatGeneral = new EnviarMsjAllSala();
@@ -58,7 +101,9 @@ public class HiloAtencionCliente extends Thread {
 		ComandosServer refrescar = new Refrescar();
 		ComandosServer refrescarPlayer = new RefreshJugadores();
 		ComandosServer avisarIngreso = new AvisarIngreso();
-
+		ComandosServer expulsaAtodos = new ExpulsarAtodos();
+		
+		this.comanSer = new Salir();
 		comanSer.establecerSiguiente(crearSala);
 		crearSala.establecerSiguiente(ingresoSala);
 		ingresoSala.establecerSiguiente(chatGeneral);
@@ -67,46 +112,8 @@ public class HiloAtencionCliente extends Thread {
 		volverAllobby.establecerSiguiente(refrescar);
 		refrescar.establecerSiguiente(refrescarPlayer);
 		refrescarPlayer.establecerSiguiente(avisarIngreso);
-		avisarIngreso.establecerSiguiente(chatComDefault);
-	}
-
-	@Override
-	public void run() {
-		try {
-			String msj, resultComando;
-			boolean existeSala = true;
-			enviarSalas();
-			String nickName = (String) entradaObj.readObject();
-			paquete = new Paquete(inicioConexion, cliente, nickName, entradaObj, salidaObj);
-			do {
-				do {
-					// String salaElegida = (String)entradaObj.readObject();
-					// System.out.println("la sala elegida fue: " + salaElegida);
-					// SettingsPartida setPart = (SettingsPartida)entradaObj.readObject();
-					// System.out.println(setPart);
-
-					// salida.writeUTF(opcionesSala);
-					// if (paquete.cantidadSalas() >= 1)
-					// salida.writeUTF("4)-Salir de sala");
-					msj = (String) entradaObj.readObject();
-				} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
-
-///------>			Dentro de sala
-				if (!resultComando.equals("Salir")) {
-					do {
-						String sala;
-						//enviarJugadores();
-						msj = (String)entradaObj.readObject();
-					} while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby"));
-				}
-			} while (!resultComando.equals("Salir"));
-
-		} catch (IOException ex) {
-			ex.getStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
+		avisarIngreso.establecerSiguiente(expulsaAtodos);
+		expulsaAtodos.establecerSiguiente(chatComDefault);
 	}
 
 	public void enviarSalas() {
@@ -121,8 +128,8 @@ public class HiloAtencionCliente extends Thread {
 			e.printStackTrace();
 		}
 	}
-	public void enviarJugadores()
-	{
+
+	public void enviarJugadores() {
 		ArrayList<String> nickPlayers = new ArrayList<>();
 		for (Paquete item : Servidor.getSalas().get(paquete.getSala())) {
 			nickPlayers.add(item.getNick());
@@ -133,6 +140,15 @@ public class HiloAtencionCliente extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	public void cerrarConexion() {
+		try {
+			salidaObj.close();
+			entradaObj.close();
+			cliente.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

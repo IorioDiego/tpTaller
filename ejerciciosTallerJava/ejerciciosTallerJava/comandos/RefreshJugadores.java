@@ -23,11 +23,19 @@ public class RefreshJugadores implements ComandosServer {
 	public String procesar(Paquete paquete, String msj) {
 		if (msj.equals("12")) {
 			try {
+				String host = "";
 				ArrayList<String> nickPlayers = new ArrayList<>();
 				for (Paquete item : Servidor.getSalas().get(paquete.getSala())) {
-					nickPlayers.add(item.getNick());
+					String nick = item.getNick();
+					nickPlayers.add(nick);
+					if(item.esHost())
+						host = nick;
 				}
 				paquete.getSalida().writeObject(nickPlayers);
+				if (paquete.esHost())
+					paquete.getSalida().writeObject(host + " Host");
+				else
+					paquete.getSalida().writeObject(host + " noHost");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

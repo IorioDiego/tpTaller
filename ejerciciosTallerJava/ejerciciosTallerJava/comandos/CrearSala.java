@@ -25,6 +25,7 @@ public class CrearSala implements ComandosServer {
 								(SettingsPartida) paquete.getEntrada().readObject());
 						paquete.setSala(setPart.getNombreSala());
 						Servidor.crearSala(paquete, setPart.getNombreSala(), setPart);
+						paquete.setHostSala(true);
 					} else {
 						paquete.getSalida().writeObject("existe");
 						resp = "y";

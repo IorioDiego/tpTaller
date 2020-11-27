@@ -15,10 +15,8 @@ public class Salir implements ComandosServer {
 
 	public String procesar(Paquete paquete,String msj) {
 		String resp="Salir";
-		if (msj.equals("1")) {
+		if (msj.equals("-/-1")) {
 			try {
-				paquete.getSalida().writeUTF("Desconexion Finalizada:...");
-				paquete.getSalida().writeUTF("--Salir");
 				paquete.getSalida().close();
 				paquete.getEntrada().close();
 				paquete.getCliente().close();

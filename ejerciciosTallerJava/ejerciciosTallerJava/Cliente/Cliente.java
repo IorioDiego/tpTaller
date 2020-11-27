@@ -27,13 +27,9 @@ public class Cliente {
 
 	private String ip;
 	private int puerto;
-	private BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in));
-	private DataInputStream dis;
-	private DataOutputStream dos;
 	private ObjectInputStream disObj = null;
 	private ObjectOutputStream dosObj = null;
 	private Socket socket;
-	private Integer tocoBoton = -1;
 //	private  Map<String, ArrayList<Paquete>> salas ;
 	private ArrayList<SalaSerealizable> salas;
 	private Salas sala = new Salas();
@@ -57,7 +53,7 @@ public class Cliente {
 				sala.agregarSalas(sal);
 			}
 			activarInterfaz();
-
+			//cerrarConexion();
 //			HiloEscuchar hiloEscucha = new HiloEscuchar(dis,sala);
 //			hiloEscucha.start();
 //			while (hiloEscucha.isAlive()) {
@@ -65,7 +61,7 @@ public class Cliente {
 //				dos.writeUTF(msj);
 //				Thread.sleep(200);
 //			}
-//			cerrarConexion();
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -80,7 +76,7 @@ public class Cliente {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					sala.init(disObj, dosObj);
+					sala.init(disObj, dosObj,socket);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -90,11 +86,8 @@ public class Cliente {
 
 	public void cerrarConexion() {
 		try {
-			keyRead.close();
-			dis.close();
 			disObj.close();
 			dosObj.close();
-			dos.close();
 			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();

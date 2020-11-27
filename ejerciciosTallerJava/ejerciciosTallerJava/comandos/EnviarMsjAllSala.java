@@ -20,11 +20,10 @@ public class EnviarMsjAllSala implements ComandosServer {
 			try {
 				paquete.getSalida().writeUTF("Para cambiar de sala de chat ingrese [salir]");
 				while (!(msj = paquete.getEntrada().readUTF()).equals("salir")) {
-					for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSalaActiva())) {
+					for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 						if (!paqueteCliente.getCliente().equals(paquete.getCliente()) && 
 								paqueteCliente.getCliente().isConnected() &&
-								!paqueteCliente.isEnChatPrivado() &&
-								paqueteCliente.getSalaActiva().equals(paquete.getSalaActiva())) {
+								!paqueteCliente.isEnChatPrivado()) {
 							paqueteCliente.getSalida().writeUTF("[General] "+paquete + msj);
 						}
 					}

@@ -22,17 +22,7 @@ public class ChatPrivado implements ComandosServer {
 			try {
 				Paquete paqPrivado = new Paquete();
 				boolean exiteUsuario = false;
-				paquete.getSalida().writeUTF("Ingresa nombre del usuario con el que quiere chatear:" + "\n");
-
-				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSalaActiva()))
-					paquete.getSalida().writeUTF(paqueteCliente.getNick());
-				String nickName = paquete.getEntrada().readUTF();
-
-				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSalaActiva()))
-					if (paqueteCliente.getNick().equals(nickName)) {
-						paqPrivado = paqueteCliente;
-						exiteUsuario = true;
-					}
+			
 
 				if (exiteUsuario) {
 					paquete.setEnChatPrivado(true);
