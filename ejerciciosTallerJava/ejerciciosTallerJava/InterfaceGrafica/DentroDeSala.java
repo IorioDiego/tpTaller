@@ -35,14 +35,17 @@ import servidor.SalaSerealizable;
 public class DentroDeSala extends JFrame {
 
 	private InterfazCrearSala crearSala;
+	//private DefaultListModel dlm;
 	private JPanel contentPane;
 	private Salas salaPrincipal;
 	private JTextField textField;
 	private ArrayList<String> nickNames;
+	private JComboBox combo1;
+	private JComboBox combo2;
 	private boolean esHost = true;
 	// private JLabel jugadores;
 
-	private JButton comenzar;
+	private JButton btnComenzar;
 
 	public void init(ObjectInputStream disObject, ObjectOutputStream dosObject, String nombreSala) {
 
@@ -94,8 +97,8 @@ public class DentroDeSala extends JFrame {
 		panelDer.setPreferredSize(new Dimension(500, 300));
 		panelDer.setMaximumSize(new Dimension(500, 300));
 
-		JComboBox combo1 = new JComboBox();
-		JComboBox combo2 = new JComboBox();
+		combo1 = new JComboBox();
+		combo2 = new JComboBox();
 
 		for (String item : nickNames) {
 			combo1.addItem(item);
@@ -112,7 +115,16 @@ public class DentroDeSala extends JFrame {
 					enviarMsj(dosObject, "8");
 			}
 		});
-
+		
+//		btnComenzar.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				
+//			}
+//		});
+		
+		
 		panelAbajo.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
 
 		cBoxContainer1.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
@@ -131,8 +143,8 @@ public class DentroDeSala extends JFrame {
 		cBoxContainer2.add(combo2);
 		panelDer.add(cBoxContainer1);
 		panelDer.add(cBoxContainer2);
-		JButton comenzar = new JButton("Comenzar Partida");
-		gridBotones.add(comenzar);
+		btnComenzar = new JButton("Comenzar Partida");
+		gridBotones.add(btnComenzar);
 		gridBotones.add(botonVolver);
 		panelAbajo.add(gridBotones);
 
@@ -142,15 +154,19 @@ public class DentroDeSala extends JFrame {
 		getContentPane().add(panelAbajo);
 
 		// String esHost = (String) leerMsj(disObject);
-		String[] partes = ((String) leerMsj(disObject)).split(" ");
-		if (partes[1].equals("noHost")) {
+		//String[] partes = ((String) leerMsj(disObject)).split(" ");
+		String esHostserver = (String) leerMsj(disObject);
+		String nombreHost = (String) leerMsj(disObject);
+		String cantJugadores = (String) leerMsj(disObject);
+		
+		if (esHostserver.equals("noHost")) {
 			combo1.setEnabled(false);
 			combo2.setEnabled(false);
 			esHost = false;
 		}
-		comenzar.setEnabled(false);
+		btnComenzar.setEnabled(false);
 
-		setTitle("Configuracion de la Partida " + "Sala: " + nombreSala + "Host: " + partes[0]);
+		setTitle("Configuracion de la Partida " + "Sala: " + nombreSala + "Host: " + nombreHost);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // VER POR QUE LO IGNORA
 		setLocationRelativeTo(null);
 		setFocusable(true);
@@ -169,6 +185,20 @@ public class DentroDeSala extends JFrame {
 		setContentPane(contentPane);
 		salaPrincipal = sala;
 	}
+
+	public JComboBox getCombo1() {
+		return combo1;
+	}
+
+	public JComboBox getCombo2() {
+		return combo2;
+	}
+
+
+	public JButton getComenzar() {
+		return btnComenzar;
+	}
+
 
 	public void enviarMsj(ObjectOutputStream dosObject, Object msj) {
 		try {

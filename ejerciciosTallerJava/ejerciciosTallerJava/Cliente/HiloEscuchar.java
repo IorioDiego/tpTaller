@@ -26,9 +26,8 @@ public class HiloEscuchar extends Thread {
 	private JComboBox<String> combo2;
 
 //	private ObjectOutputStream;
-	public HiloEscuchar(ObjectInputStream entrada, ObjectOutputStream salida, 
-			DefaultListModel dlm, JComboBox combo1,
-			JComboBox combo2,Salas miSala,DentroDeSala configSala) {
+	public HiloEscuchar(ObjectInputStream entrada, ObjectOutputStream salida, DefaultListModel dlm, JComboBox combo1,
+			JComboBox combo2, Salas miSala, DentroDeSala configSala) {
 		this.entrada = entrada;
 		this.dlm = dlm;
 		this.salida = salida;
@@ -42,26 +41,40 @@ public class HiloEscuchar extends Thread {
 	public void run() {
 		try {
 			String msj;
-			while ((msj = (String) entrada.readObject()).equals("--ComenzoJuego") || !msj.equals("-salir")) {
-				if (msj.equals("actualizar") || msj.equals("salioJugador")) {
+			int cont = 1;
+			while (!((msj = (String) entrada.readObject()).equals("--ComenzoJuego")) && !msj.equals("-salir")) {
+				if (msj.equals("salioJugador"))
+					cont--;
+				if (msj.equals("actualizar"))
+					cont++;
+				//if (msj.equals("actualizar") || msj.equals("salioJugador")) {
 					dlm.clear();
 					salida.writeObject("12");
 					nickNames = (ArrayList<String>) entrada.readObject();
 					for (String item : nickNames) {
 						dlm.addElement(item);
 					}
-					combo1.removeAllItems();
-					combo2.removeAllItems();
+					String esHostserver = (String) entrada.readObject();
+					String nombreHost = (String) entrada.readObject();
+					Integer cantJugadores = Integer.valueOf((String) entrada.readObject());
+
+					configSala.getCombo1().removeAllItems();
+					configSala.getCombo2().removeAllItems();
 					for (String item : nickNames) {
-						combo1.addItem(item);
-						combo2.addItem(item);
+						configSala.getCombo1().addItem(item);
+						configSala.getCombo2().addItem(item);
 					}
-				}
+					if (cantJugadores == cont) {
+						if (esHostserver.equals("Host"))
+							configSala.getComenzar().setEnabled(true);
+					} else
+						configSala.getComenzar().setEnabled(false);
+				//}
 			}
+			//cont--;
 			configSala.dispose();
 			miSala.setVisible(true);
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -47,13 +47,15 @@ import servidor.SettingsPartida;
 
 public class Salas extends JFrame {
 
-	private ArrayList<SalaSerealizable> salas;
+	private ArrayList<SalaSerealizable> salas = new ArrayList<SalaSerealizable>();
 	private JPanel contentPane;
+	private DefaultListModel dlm;
 	private JPanel nickname = new JPanel();
 	private JTextField textField;
 	private JList<String> list;
 	private boolean tocoEnter = false;
 	private static Integer indexSala;
+	private JButton btnIngresar;
 	private JButton crear;
 	private JButton Ingresar;
 	private Salas miSala = this;
@@ -106,7 +108,7 @@ public class Salas extends JFrame {
 		botones.setLayout(layout);
 
 		JButton btnCrear = new JButton("Crear Sala");
-		JButton btnIngresar = new JButton("Ingresar a Sala");
+		btnIngresar = new JButton("Ingresar a Sala");
 		JButton btnRefresh = new JButton("Refrescar salas");
 
 		botones.add(btnCrear);
@@ -131,7 +133,7 @@ public class Salas extends JFrame {
 //
 // 		
 
-		DefaultListModel dlm = new DefaultListModel();
+		dlm = new DefaultListModel();
 
 		for (SalaSerealizable item : salas) {
 			dlm.addElement(item);
@@ -173,12 +175,7 @@ public class Salas extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				enviarMsj(dosObject, "11");
-				salas = (ArrayList<SalaSerealizable>) leerMsj(disObject);
-				dlm.clear();
-				for (SalaSerealizable item : salas) {
-					dlm.addElement(item);
-				}
-
+				refresh();
 			}
 		});
 
@@ -227,7 +224,8 @@ public class Salas extends JFrame {
 						tocoEnter = true;
 						btnCrear.setEnabled(true);
 						list.setEnabled(true);
-						btnIngresar.setEnabled(true);
+						if (salas.size() > 0)
+							btnIngresar.setEnabled(true);
 						btnRefresh.setEnabled(true);
 						textField.setEnabled(false);
 					}
@@ -266,6 +264,19 @@ public class Salas extends JFrame {
 			cerrarConexion();
 			System.exit(0);
 		}
+	}
+	
+	public void refresh()
+	{
+		salas = (ArrayList<SalaSerealizable>) leerMsj(dis);
+		dlm.clear();
+		for (SalaSerealizable item : salas) {
+			dlm.addElement(item);
+		}
+		if (salas.size() == 0)
+			btnIngresar.setEnabled(false);
+		else
+			btnIngresar.setEnabled(true);
 	}
 
 	public Salas() {

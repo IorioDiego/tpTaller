@@ -96,7 +96,7 @@ public class HiloAtencionCliente extends Thread {
 		ComandosServer ingresoSala = new IngresarSala();
 		ComandosServer chatGeneral = new EnviarMsjAllSala();
 		ComandosServer chatPrivado = new ChatPrivado();
-		ComandosServer chatComDefault = new Default();
+		ComandosServer comDefault = new Default();
 		ComandosServer volverAllobby = new VolverLobby();
 		ComandosServer refrescar = new Refrescar();
 		ComandosServer refrescarPlayer = new RefreshJugadores();
@@ -113,7 +113,7 @@ public class HiloAtencionCliente extends Thread {
 		refrescar.establecerSiguiente(refrescarPlayer);
 		refrescarPlayer.establecerSiguiente(avisarIngreso);
 		avisarIngreso.establecerSiguiente(expulsaAtodos);
-		expulsaAtodos.establecerSiguiente(chatComDefault);
+		expulsaAtodos.establecerSiguiente(comDefault);
 	}
 
 	public void enviarSalas() {

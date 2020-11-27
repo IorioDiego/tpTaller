@@ -28,14 +28,18 @@ public class RefreshJugadores implements ComandosServer {
 				for (Paquete item : Servidor.getSalas().get(paquete.getSala())) {
 					String nick = item.getNick();
 					nickPlayers.add(nick);
-					if(item.esHost())
+					if (item.esHost())
 						host = nick;
 				}
 				paquete.getSalida().writeObject(nickPlayers);
+				Integer cantPlayers = Servidor.getMaxSalas().get(paquete.getSala()).getCantJugadores();
 				if (paquete.esHost())
-					paquete.getSalida().writeObject(host + " Host");
+					paquete.getSalida().writeObject("Host");
 				else
-					paquete.getSalida().writeObject(host + " noHost");
+					paquete.getSalida().writeObject("noHost");
+				paquete.getSalida().writeObject(host);
+				paquete.getSalida().writeObject(cantPlayers.toString());
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
