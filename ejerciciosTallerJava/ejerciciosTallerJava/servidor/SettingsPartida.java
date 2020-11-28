@@ -8,6 +8,8 @@ public class SettingsPartida implements Serializable {
 	private Integer cantJugadores;
 	private String nombreSala;
 	private Integer prendasAmor;
+	private static String jugadorIncial;
+	private static String orden;
 	
 	public SettingsPartida(Integer cantJugadores, String nombreSala, Integer prendasAmor) {
 		this.cantJugadores = cantJugadores;
@@ -42,8 +44,15 @@ public class SettingsPartida implements Serializable {
 		this.prendasAmor = prendasAmor;
 	}
 
+	public static  void setOrden(String o) {
+		orden = o;
+	}
 
+	public static void setJugadorIncial(String jI) {
+		jugadorIncial = jI;
+	}
 
+	
 	public Integer getCantJugadores() {
 		return cantJugadores;
 	}
@@ -51,13 +60,23 @@ public class SettingsPartida implements Serializable {
 	public String getNombreSala() {
 		return nombreSala;
 	}
-
+	
 	public Integer getPrendasAmor() {
 		return prendasAmor;
 	}
 
 
 
+	public String getJugadorIncial() {
+		return jugadorIncial;
+	}
+
+	
+	public String getOrden() {
+		return orden;
+	}
+
+	
 	@Override
 	public String toString() {
 		return "SettingsPartida [cantJugadores=" + cantJugadores + ", nombreSala=" + nombreSala + ", prendasAmor="

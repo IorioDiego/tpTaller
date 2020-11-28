@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 
 import InterfaceGrafica.DentroDeSala;
 import InterfaceGrafica.Salas;
+import servidor.Paquete;
+import servidor.Servidor;
 
 public class HiloEscuchar extends Thread {
 
@@ -47,34 +49,41 @@ public class HiloEscuchar extends Thread {
 					cont--;
 				if (msj.equals("actualizar"))
 					cont++;
-				//if (msj.equals("actualizar") || msj.equals("salioJugador")) {
-					dlm.clear();
-					salida.writeObject("12");
-					nickNames = (ArrayList<String>) entrada.readObject();
-					for (String item : nickNames) {
-						dlm.addElement(item);
-					}
-					String esHostserver = (String) entrada.readObject();
-					String nombreHost = (String) entrada.readObject();
-					Integer cantJugadores = Integer.valueOf((String) entrada.readObject());
+				// if (msj.equals("actualizar") || msj.equals("salioJugador")) {
+				dlm.clear();
+				salida.writeObject("12");
+				nickNames = (ArrayList<String>) entrada.readObject();
+				for (String item : nickNames) {
+					dlm.addElement(item);
+				}
+				String esHostserver = (String) entrada.readObject();
+				String nombreHost = (String) entrada.readObject();
+				Integer cantJugadores = Integer.valueOf((String) entrada.readObject());
 
-					configSala.getCombo1().removeAllItems();
-					configSala.getCombo2().removeAllItems();
-					for (String item : nickNames) {
-						configSala.getCombo1().addItem(item);
-						configSala.getCombo2().addItem(item);
-					}
-					if (cantJugadores == cont) {
-						if (esHostserver.equals("Host"))
-							configSala.getComenzar().setEnabled(true);
-					} else
-						configSala.getComenzar().setEnabled(false);
-				//}
+				configSala.getCombo1().removeAllItems();
+				configSala.getCombo2().removeAllItems();
+				configSala.getCombo1().addItem("Izquierda");
+				configSala.getCombo1().addItem("Derecha");
+				for (String item : nickNames) {
+//					configSala.getCombo1().addItem(item);
+					
+					configSala.getCombo2().addItem(item);
+				}
+				if (cantJugadores == cont) {
+					if (esHostserver.equals("Host"))
+						configSala.getComenzar().setEnabled(true);
+				} else
+					configSala.getComenzar().setEnabled(false);
+				// }
 			}
-			//cont--;
+			// cont--;
+			if (msj.equals("-salir")){
+				miSala.setVisible(true);
+			}
 			configSala.dispose();
-			miSala.setVisible(true);
-
+		
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

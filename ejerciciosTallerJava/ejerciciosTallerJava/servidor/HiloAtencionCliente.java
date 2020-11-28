@@ -12,9 +12,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+import InterfaceGrafica.ComenzarRonda;
+import comandos.AniadirConfig;
 import comandos.AvisarIngreso;
 import comandos.ChatPrivado;
 import comandos.ComandosServer;
+import comandos.ComenzarPartida;
 import comandos.CrearSala;
 import comandos.Default;
 import comandos.EnviarMsjAllSala;
@@ -24,6 +27,7 @@ import comandos.Refrescar;
 import comandos.RefreshJugadores;
 import comandos.Salir;
 import comandos.VolverLobby;
+import game.Partida;
 
 public class HiloAtencionCliente extends Thread {
 
@@ -79,6 +83,12 @@ public class HiloAtencionCliente extends Thread {
 							// enviarJugadores();
 							msj = (String) entradaObj.readObject();
 						} while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby"));
+//						}while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby") && 
+//							(!(resultComando = comanSer.procesar(paquete, msj)).equals("--ComenzoJuego")));
+//						if(resultComando.equals("--ComenzoJuego")){
+//							ArrayList<String> nickNames = (ArrayList<String> ) entradaObj.readObject();
+//							Partida partida = new Partida(nickName);
+//						}
 					}
 				} while (!resultComando.equals("Salir"));
 			}
@@ -102,6 +112,8 @@ public class HiloAtencionCliente extends Thread {
 		ComandosServer refrescarPlayer = new RefreshJugadores();
 		ComandosServer avisarIngreso = new AvisarIngreso();
 		ComandosServer expulsaAtodos = new ExpulsarAtodos();
+		ComandosServer comenzarPartida = new ComenzarPartida();
+		ComandosServer aniadirConfig = new AniadirConfig();
 		
 		this.comanSer = new Salir();
 		comanSer.establecerSiguiente(crearSala);
@@ -113,7 +125,9 @@ public class HiloAtencionCliente extends Thread {
 		refrescar.establecerSiguiente(refrescarPlayer);
 		refrescarPlayer.establecerSiguiente(avisarIngreso);
 		avisarIngreso.establecerSiguiente(expulsaAtodos);
-		expulsaAtodos.establecerSiguiente(comDefault);
+		expulsaAtodos.establecerSiguiente(aniadirConfig);
+		aniadirConfig.establecerSiguiente(comenzarPartida);
+		comenzarPartida.establecerSiguiente(comDefault);
 	}
 
 	public void enviarSalas() {

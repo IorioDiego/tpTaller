@@ -38,7 +38,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.sun.java.swing.plaf.windows.resources.windows;
+
 
 import comandos.CrearSala;
 import servidor.Paquete;

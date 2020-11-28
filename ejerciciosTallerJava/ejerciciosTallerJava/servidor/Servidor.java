@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import game.Jugador;
+import game.Partida;
+
 public class Servidor {
 
 	private static Map<String, SettingsPartida> maxSalas = new HashMap<String, SettingsPartida>();
@@ -89,4 +92,15 @@ public class Servidor {
 		Servidor.maxSalas = maxSalas;
 	}
 
+	public static Partida generarPartida(Paquete host) {
+		int id = 0;
+		ArrayList<Jugador> jugadores = new ArrayList<>();
+		for (Paquete paqueteCliente : darClientesDeSala(host.getSala())) {
+			jugadores.add(new Jugador(paqueteCliente.getNick(), id));
+
+		}
+
+		return new Partida(maxSalas.get(host.getSala()).getPrendasAmor(),
+				maxSalas.get(host.getSala()).getCantJugadores(), jugadores,host.getNick());
+	}
 }

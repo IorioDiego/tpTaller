@@ -27,6 +27,8 @@ public class Partida extends Observer {
 	private Carta cartaEliminda;
 	private boolean huboEliminacion = false;
 
+	private String host;
+	
 	public Carta getCartaEliminda() {
 		return cartaEliminda;
 	}
@@ -55,7 +57,7 @@ public class Partida extends Observer {
 
 	}
 
-	public Partida(int afecto, int cantJugadores, ArrayList<Jugador> jugadores) {
+	public Partida(int afecto, int cantJugadores, ArrayList<Jugador> jugadores,String host) {
 		this.afecto = afecto;
 		this.cantJugadores = cantJugadores;
 		this.jugadores = jugadores;
