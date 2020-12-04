@@ -31,4 +31,9 @@ public class Sound {
 		gainControl.setValue(20f * (float) Math.log10(volume));
 	}
 	
+	public void loopear()
+	{
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+	}
+	
 }

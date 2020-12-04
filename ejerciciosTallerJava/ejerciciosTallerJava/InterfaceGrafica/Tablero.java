@@ -15,6 +15,7 @@ import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -28,6 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -59,7 +62,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 
-
 public class Tablero extends JFrame {
 
 	private ArrayList<Jugador> jugadores = new ArrayList<>();
@@ -84,6 +86,7 @@ public class Tablero extends JFrame {
 	private int CantJugadores;
 	private int anchoCarta = 100;
 	private int largoCarta = 140;
+	private float volumen = (float) 0.7;
 
 	private BufferedImage guardia;
 	private BufferedImage princesa;
@@ -121,7 +124,7 @@ public class Tablero extends JFrame {
 
 	private static int jugadorElegido;
 	private static int cartaElegida;
-	
+
 	private ImageIcon descriprueca = new ImageIcon("loveImg/banner.jpg");
 
 	public void bloquearBoton() {
@@ -212,13 +215,16 @@ public class Tablero extends JFrame {
 			baron = ImageIO.read(new File("cartasImg/baron.jpg"));
 			condesa = ImageIO.read(new File("cartasImg/condesa.jpg"));
 			sacerdote = ImageIO.read(new File("cartasImg/sacerdote.jpg"));
-			sonidoTirarCarta = new Sound("sounds/tirarCarta.wav");
 			fondoVerCarta = ImageIO.read(new File("loveImg/fondoVerCartaOp.jpeg"));
+			sonidoTirarCarta = new Sound("sounds/tirarCarta.wav");
+			sonidoFondo = new Sound("sounds/music.wav");
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-
+		sonidoFondo.setVolume(volumen);
+		sonidoFondo.play();
+		sonidoFondo.loopear();
 		this.jugadores = jugadores;
 		CantJugadores = jugadores.size();
 		this.partida = partida;
@@ -233,6 +239,7 @@ public class Tablero extends JFrame {
 		predefined.setLayout(new GridLayout(4, 1));
 		predefined.setBorder(new TitledBorder("Jugadores"));
 		predefined.setBackground(Color.decode("#f7db97"));
+
 		JPanel imagen = new JPanel(new BorderLayout()) {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -245,7 +252,6 @@ public class Tablero extends JFrame {
 				Dimension size = super.getPreferredSize();
 				size.width = Math.max(banner.getIconWidth(), size.width);
 				size.width = Math.max(banner.getIconHeight(), size.height);
-
 				return size;
 			}
 		};
@@ -481,6 +487,23 @@ public class Tablero extends JFrame {
 		// setBounds(500, 156, 905, 727);***1
 		setBounds(80, 36, 1366, 768);
 
+		addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_S && volumen >= 0 && volumen < 1) { /// Subir volumen
+					volumen += 0.1;
+					sonidoFondo.setVolume(volumen);
+				}
+				if (e.getKeyCode() == KeyEvent.VK_B && volumen > 0.1 && volumen <= 1) { /// Bajar volumen
+					volumen -= 0.1;
+					sonidoFondo.setVolume(volumen);
+				}
+
+			}
+
+		});
+
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent m) {
@@ -518,16 +541,18 @@ public class Tablero extends JFrame {
 						}
 
 						turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
+						
+						
 					} else if (m.getButton() == MouseEvent.BUTTON3) {
 						JDialog j = new JDialog();
 						j.setUndecorated(true);
 						j.setVisible(true);
-						j.setBounds(480,210,600,360);
-						
+						j.setBounds(480, 210, 600, 360);
+
 						ImageIcon descrip = new ImageIcon(jugadorActivo.getMano(1).toString());
-						
+
 						JPanel cartaDescrip = new JPanel(new BorderLayout()) {
-							
+
 							/**
 							 * 
 							 */
@@ -548,33 +573,31 @@ public class Tablero extends JFrame {
 								return size;
 							}
 						};
-						
-						
+
 						ImageIcon exit = new ImageIcon("loveImg/exit.png");
-						Image image = exit.getImage(); 
-						Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);  
+						Image image = exit.getImage();
+						Image newimg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 						exit = new ImageIcon(newimg);
-						  cartaDescrip.setLayout(new BorderLayout());
-						  int gap = -3;
-						  cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
+						cartaDescrip.setLayout(new BorderLayout());
+						int gap = -3;
+						cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
 
-						  JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-						  southPanel.setOpaque(false);
-						  JButton button = new JButton(exit);
-						  button.setPreferredSize(new Dimension(50, 50));
+						JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+						southPanel.setOpaque(false);
+						JButton button = new JButton(exit);
+						button.setPreferredSize(new Dimension(50, 50));
 
-						  button.setOpaque(false);
-						  button.setContentAreaFilled(false);
-						  button.setBorderPainted(false);
-						  southPanel.add(button);
-						  cartaDescrip.add(southPanel, BorderLayout.NORTH);
-						  
-						  button.addActionListener(e -> {
+						button.setOpaque(false);
+						button.setContentAreaFilled(false);
+						button.setBorderPainted(false);
+						southPanel.add(button);
+						cartaDescrip.add(southPanel, BorderLayout.NORTH);
+
+						button.addActionListener(e -> {
 							j.dispose();
-					      });
+						});
 						j.add(cartaDescrip);
-						
-						
+
 					}
 					refresh();
 				} else if ((m.getX() >= 200 && m.getX() <= 510)
@@ -627,16 +650,16 @@ public class Tablero extends JFrame {
 
 						turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 					} else if (m.getButton() == MouseEvent.BUTTON3) {
-						
+
 						JDialog j = new JDialog();
 						j.setUndecorated(true);
 						j.setVisible(true);
-						j.setBounds(480,210,600,360);
-						
+						j.setBounds(480, 210, 600, 360);
+
 						ImageIcon descrip = new ImageIcon(jugadorActivo.getMano(1).toString());
-						
+
 						JPanel cartaDescrip = new JPanel(new BorderLayout()) {
-							
+
 							/**
 							 * 
 							 */
@@ -657,34 +680,33 @@ public class Tablero extends JFrame {
 								return size;
 							}
 						};
-						
-						
+
 						ImageIcon exit = new ImageIcon("loveImg/exit.png");
-						Image image = exit.getImage(); 
-						Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);  
+						Image image = exit.getImage();
+						Image newimg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 						exit = new ImageIcon(newimg);
-						  cartaDescrip.setLayout(new BorderLayout());
-						  int gap = -3;
-						  cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
+						cartaDescrip.setLayout(new BorderLayout());
+						int gap = -3;
+						cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
 
-						  JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-						  southPanel.setOpaque(false);
-						  JButton button = new JButton(exit);
-						  button.setPreferredSize(new Dimension(50, 50));
+						JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+						southPanel.setOpaque(false);
+						JButton button = new JButton(exit);
+						button.setPreferredSize(new Dimension(50, 50));
 
-						  button.setOpaque(false);
-						  button.setContentAreaFilled(false);
-						  button.setBorderPainted(false);
-						  southPanel.add(button);
-						  cartaDescrip.add(southPanel, BorderLayout.NORTH);
-						  
-						  button.addActionListener(e -> {
+						button.setOpaque(false);
+						button.setContentAreaFilled(false);
+						button.setBorderPainted(false);
+						southPanel.add(button);
+						cartaDescrip.add(southPanel, BorderLayout.NORTH);
+
+						button.addActionListener(e -> {
 							j.dispose();
-					      });
+						});
 						j.add(cartaDescrip);
-						
+
 					}
-					
+
 					refresh();
 
 				}
@@ -701,7 +723,7 @@ public class Tablero extends JFrame {
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			
+
 			Graphics2D g2 = (Graphics2D) g;
 			Dimension currentDimension = getContentPane().getSize();
 			// g2.scale(currentDimension.getWidth() / 800, currentDimension.getHeight() /
@@ -724,7 +746,7 @@ public class Tablero extends JFrame {
 				 * distDescarte, 140);
 				 */// ***10
 				DibujoCarta cartaJugadorElim = new DibujoCarta(jugadores.get(Tablero.getJugadorElegido()).getMano(0),
-						290 + distDescarte, 265);
+						430 + distDescarte, 295);
 				dibujos.add(cartaJugadorElim);
 				partida.setHuboEliminacion(false);
 
@@ -746,15 +768,14 @@ public class Tablero extends JFrame {
 			 */
 
 			Font seagram = null;
-			
-			try{
-				seagram = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Seagram tfb.ttf")).deriveFont(18f);	
+
+			try {
+				seagram = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Seagram tfb.ttf")).deriveFont(18f);
 				GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Seagram tfb.ttf")));
-				
-			}
-			catch(IOException | FontFormatException e){
-				
+
+			} catch (IOException | FontFormatException e) {
+
 			}
 			g2.setFont(seagram);
 			g2.setPaint(Color.decode("#653b33"));
@@ -812,7 +833,7 @@ public class Tablero extends JFrame {
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 15));
 				g2.setPaint(Color.WHITE);
 				g2.drawImage(fondoVerCarta, 330, 150, 555, 380, this);
-				
+
 				// g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 15));
 				// g2.setPaint(Color.WHITE);
 				// g2.drawImage(fondoVerCarta, 5, 120, 800, 300, this);

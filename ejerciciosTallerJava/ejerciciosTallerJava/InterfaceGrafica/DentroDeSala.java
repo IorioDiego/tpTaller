@@ -195,8 +195,6 @@ public class DentroDeSala extends JFrame {
 		getContentPane().add(topContainer);
 		getContentPane().add(panelAbajo);
 
-		// String esHost = (String) leerMsj(disObject);
-		// String[] partes = ((String) leerMsj(disObject)).split(" ");
 		String esHostserver = (String) leerMsj(disObject);
 		String nombreHost = (String) leerMsj(disObject);
 		String cantJugadores = (String) leerMsj(disObject);
@@ -208,8 +206,8 @@ public class DentroDeSala extends JFrame {
 		}
 		btnComenzar.setEnabled(false);
 
-		setTitle("Configuracion de la Partida " + "Sala: " + nombreSala + "Host: " + nombreHost);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // VER POR QUE LO IGNORA
+		setTitle("Configuracion de la Partida " + "Sala: " + nombreSala + " Host: " + nombreHost);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
 		setLocationRelativeTo(null);
 		setFocusable(true);
 		requestFocusInWindow();
