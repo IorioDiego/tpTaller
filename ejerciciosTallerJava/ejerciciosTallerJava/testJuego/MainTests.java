@@ -34,10 +34,10 @@ public class MainTests {
 			
 			
 		});
-		Clip clip = AudioSystem.getClip();
-		clip.open(AudioSystem.getAudioInputStream(new File("sounds/music.wav")));
-		clip.start();
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
+//		Clip clip = AudioSystem.getClip();
+//		clip.open(AudioSystem.getAudioInputStream(new File("sounds/music.wav")));
+//		clip.start();
+//		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
 	}
 

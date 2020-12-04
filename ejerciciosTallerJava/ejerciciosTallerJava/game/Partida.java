@@ -26,6 +26,9 @@ public class Partida extends Observer {
 	private int nroRonda;
 	private Carta cartaEliminda;
 	private boolean huboEliminacion = false;
+	//baron
+	private boolean eliminoOpBaron=false;
+	private boolean eliminoActBaron=false;
 
 	private String host;
 	
@@ -76,6 +79,24 @@ public class Partida extends Observer {
 
 	}
 
+	
+	public boolean isEliminoOpBaron() {
+		return eliminoOpBaron;
+	}
+
+	public void setEliminoOpBaron(boolean eliminoOpBaron) {
+		this.eliminoOpBaron = eliminoOpBaron;
+	}
+
+	public boolean isEliminoActBaron() {
+		return eliminoActBaron;
+	}
+
+	public void setEliminoActBaron(boolean eliminoActBaron) {
+		this.eliminoActBaron = eliminoActBaron;
+	}
+
+	
 	public Jugador getGanadoRonda() {
 		return ganadoRonda;
 	}
@@ -184,15 +205,15 @@ public class Partida extends Observer {
 		int primeroValido = 0;
 		ArrayList<Integer> jEmpatados = new ArrayList<Integer>();
 	
-		for (Jugador j : jugadores) {
-			if(! j.getEstado().equals(new Eliminado())) {
-				if(j.getManoCompleta().isEmpty()) {
-					j.tomarCarta(cartaEliminda);
-				}
-				
-			}
-				
-		}
+//		for (Jugador j : jugadores) {
+//			if(! j.getEstado().equals(new Eliminado())) {
+//				if(j.getManoCompleta().isEmpty()) {
+//					j.tomarCarta(cartaEliminda);
+//				}
+//				
+//			}
+//				
+//		}
 		
 		while (jugadores.get(primeroValido).getEstado().equals(new Eliminado())) {
 			primeroValido++;
