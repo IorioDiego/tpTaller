@@ -9,7 +9,7 @@ import game.Partida;
 public class Principe extends Carta {
 
 	public Principe() {
-		super(5, "Principe","descripciones/principeDescrip.png");
+		super(5, "Principe", "descripciones/principeDescrip.png");
 
 	}
 
@@ -25,23 +25,26 @@ public class Principe extends Carta {
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida, JDialog lista, JDialog listaCartas) {
 		lista.setVisible(true);
-		
+
 		Jugador oponente = partida.elegirJugador(Tablero.getJugadorElegido());
 
-
 		Carta jugada = oponente.descartar(oponente.sacarCartaDeMano(0));
-		
+
 		if (jugada.equals(new Princesa())) {
 			oponente.seJugoPrincesa();
 			oponente.descartar(jugada);
-		}else
-			partida.getMazo().darCarta(oponente);
-		
-		if(oponente.getManoCompleta().isEmpty() && !oponente.isBlockedOrDelete()) {
-			oponente.tomarCarta(partida.getCartaEliminda());
+		} else {
+			if(partida.getMazo().getCantCartas() != 0)
+				partida.getMazo().darCarta(oponente);
 		}
-		
-		
+
+		if (oponente.getManoCompleta().isEmpty() && !oponente.isBlockedOrDelete()) {
+			if (partida.getMazo().getCantCartas() == 0) {
+				jugador.tomarCarta(partida.getCartaEliminda());
+			} else {
+				oponente.tomarCarta(partida.getCartaEliminda());
+			}
+		}
 
 	}
 

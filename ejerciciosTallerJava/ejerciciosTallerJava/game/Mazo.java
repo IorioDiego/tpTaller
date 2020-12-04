@@ -51,7 +51,7 @@ public class Mazo extends Observable {
 	}
 
 	public void mezclar() {
-		//Collections.shuffle(mazo);
+		Collections.shuffle(mazo);
 	}
 
 	public Carta darCarta(Jugador jugador) {

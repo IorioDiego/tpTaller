@@ -31,6 +31,7 @@ public class Baron extends Carta {
 				oponente.descartar(oponente.getMano(0));
 				oponente.seJugoBaron();
 				partida.setHuboEliminacion(true);
+//				partida.setEliminoOpBaron(true);
 				}
 		else if( resultado < 0) {
 			
@@ -40,6 +41,7 @@ public class Baron extends Carta {
 				jugador.descartar(oponente.getMano(0));
 			jugador.seJugoBaron();
 			partida.setHuboEliminacion(true);
+			partida.setEliminoActBaron(true);
 		}
 	
 	}
