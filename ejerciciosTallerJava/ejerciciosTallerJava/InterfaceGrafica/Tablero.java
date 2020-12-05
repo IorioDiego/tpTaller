@@ -73,16 +73,16 @@ public class Tablero extends JFrame {
 	private ArrayList<DibujoCarta> dibujos = new ArrayList<>();
 
 	private JPanel contentPane;
-
+	private Tablero miTablero = this;
 	private BufferedImage dorso;
 	private DrawPanel drawPanel;
 	private Jugador jugadorActivo;
-	//BARON
+	private Salas sala;
+	// BARON
 	private Jugador jugadorBaron;
 	private Carta cartaBaron;
 	private Carta cartaBaronOp;
 
-	
 	private int distDescarte = 0;
 	private Partida partida;
 	private boolean dibManoOp = false;
@@ -131,8 +131,6 @@ public class Tablero extends JFrame {
 
 	private static int jugadorElegido;
 	private static int cartaElegida;
-	
-
 
 	private ImageIcon descriprueca = new ImageIcon("loveImg/banner.jpg");
 
@@ -212,8 +210,8 @@ public class Tablero extends JFrame {
 
 			if (cartaTiradas.getCartaDib().equals(new Principe())) {
 				distDescarte += 30;
-				DibujoCarta cartaOp = new DibujoCarta(
-						jugadores.get(getJugadorElegido()).getUltimaDescartada(), 430 + distDescarte, 295);
+				DibujoCarta cartaOp = new DibujoCarta(jugadores.get(getJugadorElegido()).getUltimaDescartada(),
+						430 + distDescarte, 295);
 				dibujos.add(cartaOp);
 
 				if (jugadores.get(getJugadorElegido()).getManoCompleta().isEmpty())
@@ -281,9 +279,9 @@ public class Tablero extends JFrame {
 		}
 		refresh();
 	}
-	
+
 	public void tocarCartaDerecha(MouseEvent m) {
-		
+
 //		JDialog j = new JDialog();
 		if (m.getButton() == MouseEvent.BUTTON1) {
 			distDescarte += 30;
@@ -307,8 +305,8 @@ public class Tablero extends JFrame {
 
 			if (cartaTiradas.getCartaDib().equals(new Principe())) {
 				distDescarte += 30;
-				DibujoCarta cartaOp = new DibujoCarta(
-						jugadores.get(getJugadorElegido()).getUltimaDescartada(), 430 + distDescarte, 295);
+				DibujoCarta cartaOp = new DibujoCarta(jugadores.get(getJugadorElegido()).getUltimaDescartada(),
+						430 + distDescarte, 295);
 				dibujos.add(cartaOp);
 
 				if (jugadores.get(getJugadorElegido()).getManoCompleta().isEmpty())
@@ -379,12 +377,11 @@ public class Tablero extends JFrame {
 		}
 
 		refresh();
-		
+
 	}
-	
-	
-	public void tomarCartaMazo(MouseEvent m){
-		
+
+	public void tomarCartaMazo(MouseEvent m) {
+
 		sonidoTirarCarta.play();
 		if (new Condesa().equals(partida.getMazo().darCarta(jugadorActivo))
 				&& new Condesa().equals(jugadorActivo.getUltimaDescartada())) {
@@ -397,10 +394,8 @@ public class Tablero extends JFrame {
 
 		tomoCarta = true;
 		refresh();
-		
-	}
-	
 
+	}
 
 	public static int getCartaElegida() {
 		return cartaElegida;
@@ -424,7 +419,7 @@ public class Tablero extends JFrame {
 		jugadorActivo = jugador;
 	}
 
-	public void init(ArrayList<Jugador> jugadores, Partida partida) {
+	public void init(ArrayList<Jugador> jugadores, Partida partida, Salas salaPrincipal) {
 		try {
 			background = ImageIO.read(new File("loveImg/rombos.jpg"));
 			dorso = ImageIO.read(new File("loveImg/dorso.jpg"));
@@ -447,18 +442,19 @@ public class Tablero extends JFrame {
 		sonidoFondo.setVolume(volumen);
 //		sonidoFondo.play();
 //		sonidoFondo.loopear();
+		this.sala = salaPrincipal;
 		this.jugadores = jugadores;
 		CantJugadores = jugadores.size();
 		this.partida = partida;
 
 		drawPanel = new DrawPanel();
 		getContentPane().add(drawPanel);
-	
+
 		for (Jugador jugador : jugadores) {
-			if(jugador.getNombre().equals(partida.getjInicial()))
+			if (jugador.getNombre().equals(partida.getjInicial()))
 				turnoJugador(jugador);
 		}
-		
+
 		lista = new JDialog(this, "Lista Jugadores", true);
 
 		JPanel predefined = new JPanel();
@@ -734,7 +730,6 @@ public class Tablero extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent m) {
 
-			
 				if ((m.getX() >= 575 && m.getX() <= 675 && (m.getY() >= 615 && m.getY() <= 755)
 						&& jugadorActivo.getTamanioMano() > 1)) {
 					tocarCartaIzquierda(m);
@@ -938,6 +933,10 @@ public class Tablero extends JFrame {
 //					refresh();
 
 				}
+				if (partida.isFinalizoPartida()) {
+					miTablero.dispose();
+					sala.setVisible(true);
+				}
 				refresh();
 			}
 		});
@@ -957,31 +956,27 @@ public class Tablero extends JFrame {
 			g2.scale(currentDimension.getWidth() / 1358, currentDimension.getHeight() / 768);
 			g2.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 			for (int i = 0; i < 5; i++) {
-				
+
 				g2.drawImage(dorso, 280 + i * 2, 285 + i * 3, 100, 140, this);
 				g2.setColor(Color.WHITE);
-				
+
 				g2.drawRect(280 + i * 2, 285 + i * 3, 100, 140);
 			}
 
 			if (partida.isHuboEliminacion()) {
 				distDescarte += 30;
 				Jugador eliminado = jugadores.get(Tablero.getJugadorElegido());
-			
-				if(partida.isEliminoActBaron()) {
+
+				if (partida.isEliminoActBaron()) {
 					eliminado = jugadorActivo;
-					partida.setEliminoActBaron(false);				 
+					partida.setEliminoActBaron(false);
 				}
-				
-				DibujoCarta cartaJugadorElim = new DibujoCarta(eliminado.getMano(0),
-						430 + distDescarte, 295);
+
+				DibujoCarta cartaJugadorElim = new DibujoCarta(eliminado.getMano(0), 430 + distDescarte, 295);
 				dibujos.add(cartaJugadorElim);
 				partida.setHuboEliminacion(false);
-				
 
 			}
-
-			
 
 			Font seagram = null;
 
@@ -997,13 +992,11 @@ public class Tablero extends JFrame {
 			g2.setPaint(Color.decode("#653b33"));
 			g2.drawString("Ronda: " + partida.getNroRonda(), 1234, 39);
 
-			
 			dibujarCartas(g2, "Dorso", 635, 10);
 			dibujarCartas(g2, jugadorActivo.getMano(0).getNombre(), 575, 615);
 			if (jugadorActivo.getTamanioMano() > 1)
 				dibujarCartas(g2, jugadorActivo.getMano(1).getNombre(), 695, 615);
 
-		
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setFont(seagram);
 			g2.setPaint(Color.decode("#653b33"));
@@ -1013,11 +1006,11 @@ public class Tablero extends JFrame {
 
 			if (partida.getCantJugadores() == 3) {
 				dibujarCartas(g2, "Dorso", 20, 285);
-				
+
 			}
 
 			if (partida.getCantJugadores() == 4) {
-				
+
 				dibujarCartas(g2, "Dorso", 20, 285);
 				dibujarCartas(g2, "Dorso", 1250, 285);
 
@@ -1034,13 +1027,12 @@ public class Tablero extends JFrame {
 				g2.setPaint(Color.WHITE);
 				g2.drawImage(fondoVerCarta, 330, 150, 555, 380, this);
 
-			
 				for (String texto : jugadores.get(Tablero.getJugadorElegido()).getMano(0).toString().split("\n")) {
 					g2.drawString(texto, 380, 450 + renglon);
 					renglon += 20;
 				}
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 40));
-			
+
 				g2.drawString(jugadores.get(Tablero.getJugadorElegido()).getNombre(), 510, 220);
 				dibujarCartas(g2, jugadores.get(Tablero.getJugadorElegido()).getMano(0).getNombre(), 560, 280);
 
@@ -1058,7 +1050,6 @@ public class Tablero extends JFrame {
 
 			if (compararManos) {
 
-				
 				g2.drawImage(fondoVerCarta, 330, 150, 555, 380, this);
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 35));
 				g2.setPaint(Color.WHITE);
@@ -1095,7 +1086,6 @@ public class Tablero extends JFrame {
 				g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
 				g2.drawString("Partida finalizada", 245, 170);
 				g2.drawString(" Ganador " + jugadorActivo.getNombre(), 250, 240);
-
 			}
 
 		}

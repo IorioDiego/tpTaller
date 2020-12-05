@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import game.Jugador;
+import game.Mazo;
 import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
@@ -25,6 +26,10 @@ public class ComenzarPartida implements ComandosServer {
 				SettingsPartida configPart = Servidor.darConfigSalas(paquete.getSala());
 				String orden = (String) paquete.getEntrada().readObject();
 				String jInicial = (String) paquete.getEntrada().readObject();
+				Mazo nuevoMazo = new Mazo();
+				nuevoMazo.mezclar();
+				configPart.setMazo(nuevoMazo);
+				
 				configPart.setOrden(orden);
 				configPart.setJugadorIncial(jInicial);
 				Partida partida = generarPartida(configPart, paquete);
@@ -34,6 +39,7 @@ public class ComenzarPartida implements ComandosServer {
 						paqueteCliente.getSalida().writeObject(partida);
 					}
 				}
+				
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}

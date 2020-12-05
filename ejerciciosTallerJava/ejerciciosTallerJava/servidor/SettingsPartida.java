@@ -2,6 +2,8 @@ package servidor;
 
 import java.io.Serializable;
 
+import game.Mazo;
+
 public class SettingsPartida implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -10,6 +12,7 @@ public class SettingsPartida implements Serializable {
 	private Integer prendasAmor;
 	private String jugadorIncial;
 	private String orden;
+	private Mazo mazo;
 	
 	public SettingsPartida(Integer cantJugadores, String nombreSala, Integer prendasAmor) {
 		this.cantJugadores = cantJugadores;
@@ -27,6 +30,14 @@ public class SettingsPartida implements Serializable {
 		
 	}
 	
+
+	public Mazo getMazo() {
+		return mazo;
+	}
+
+	public void setMazo(Mazo mazo) {
+		this.mazo = mazo;
+	}
 
 	public void setCantJugadores(Integer cantJugadores) {
 		this.cantJugadores = cantJugadores;
