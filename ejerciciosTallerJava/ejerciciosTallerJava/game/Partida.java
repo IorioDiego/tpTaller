@@ -21,6 +21,7 @@ import estados.Protegido;
 
 public class Partida extends Observer implements Serializable {
 	private int afecto;
+	//private ArrayList<Paquete> jugadores; ---> setearlo con el server
 	private int cantJugadores;
 	private ArrayList<Jugador> jugadores;
 	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
@@ -361,7 +362,7 @@ public class Partida extends Observer implements Serializable {
 
 	public int finalizarPartida(int i) {
 		finalizoPartida = true;
-		enviarMsj(dos,"2");
+		//enviarMsj(dos,"2");   ///mandar un mensaje a todos los clientes 
 		return i;
 	}
 

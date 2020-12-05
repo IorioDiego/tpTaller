@@ -321,10 +321,6 @@ public class Tablero extends JFrame {
 			j.setVisible(true);
 			j.setBounds(480, 210, 600, 360);
 	
-		
-	
-			
-
 			ImageIcon descrip = new ImageIcon(jugadorActivo.getMano(1).toString());
 
 			JPanel cartaDescrip = new JPanel(new BorderLayout()) {

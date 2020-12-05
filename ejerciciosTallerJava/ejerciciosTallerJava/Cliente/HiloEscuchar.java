@@ -111,6 +111,7 @@ public class HiloEscuchar extends Thread {
 					Tablero frame = new Tablero(nPartida);
 					frame.setVisible(true);
 					frame.init(nPartida.getJugadores(),nPartida,miSala);
+					//Dos y Dis al init
 					frame.setExtendedState(JFrame.NORMAL);
 				} catch (Exception e) {
 					e.printStackTrace();
