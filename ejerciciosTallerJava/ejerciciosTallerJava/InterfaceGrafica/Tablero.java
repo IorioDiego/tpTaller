@@ -3,6 +3,7 @@ package InterfaceGrafica;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -13,6 +14,7 @@ import java.awt.Image;
 import java.awt.Label;
 import java.awt.Paint;
 import java.awt.RenderingHints;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -54,6 +56,7 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Frame;
 import java.awt.GradientPaint;
 
 import javax.swing.BorderFactory;
@@ -63,7 +66,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 
 public class Tablero extends JFrame {
-
+	
+	
 	private ArrayList<Jugador> jugadores = new ArrayList<>();
 
 	private ArrayList<DibujoCarta> dibujos = new ArrayList<>();
@@ -223,8 +227,9 @@ public class Tablero extends JFrame {
 			j.setUndecorated(true);
 			j.setVisible(true);
 			j.setBounds(480, 210, 600, 360);
+			
 
-			ImageIcon descrip = new ImageIcon(jugadorActivo.getMano(1).toString());
+			ImageIcon descrip = new ImageIcon(jugadorActivo.getMano(0).toString());
 
 			JPanel cartaDescrip = new JPanel(new BorderLayout()) {
 
@@ -317,6 +322,10 @@ public class Tablero extends JFrame {
 			j.setUndecorated(true);
 			j.setVisible(true);
 			j.setBounds(480, 210, 600, 360);
+	
+		
+	
+			
 
 			ImageIcon descrip = new ImageIcon(jugadorActivo.getMano(1).toString());
 
@@ -436,8 +445,8 @@ public class Tablero extends JFrame {
 			e1.printStackTrace();
 		}
 		sonidoFondo.setVolume(volumen);
-		sonidoFondo.play();
-		sonidoFondo.loopear();
+//		sonidoFondo.play();
+//		sonidoFondo.loopear();
 		this.jugadores = jugadores;
 		CantJugadores = jugadores.size();
 		this.partida = partida;
@@ -1152,6 +1161,7 @@ public class Tablero extends JFrame {
 	}
 
 	public Tablero(Partida partida) {
+	
 		contentPane = new JPanel();
 		this.partida = partida;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
