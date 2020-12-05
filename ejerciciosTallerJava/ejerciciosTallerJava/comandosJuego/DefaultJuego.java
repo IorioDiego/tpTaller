@@ -1,0 +1,26 @@
+package comandosJuego;
+
+import java.io.IOException;
+
+import comandos.ComandosServer;
+import servidor.Paquete;
+
+public class DefaultJuego implements ComandosJuego {
+	
+	@Override
+	public void establecerSiguiente(ComandosJuego siguiente) {
+		
+		
+	}
+
+	@Override
+	public String procesar(Paquete paquete, String msj) {
+		try {
+			paquete.getSalida().writeUTF("Error,Comando invalido ingrese nuevamente");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "y";
+	}
+	
+}

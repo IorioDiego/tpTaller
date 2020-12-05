@@ -1,9 +1,13 @@
 package game;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import InterfaceGrafica.Salas;
 import cartas.Baron;
 import cartas.Carta;
 import cartas.Condesa;
@@ -22,6 +26,8 @@ public class Partida extends Observer implements Serializable {
 	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
 	private Mazo mazo;
 	private int jugadoresActivos;
+	private ObjectOutputStream dos;
+	private ObjectInputStream dis;
 	private boolean reinicio = false;
 	private boolean finalizoPartida;
 	private Jugador ganadoRonda = new Jugador();
@@ -53,6 +59,22 @@ public class Partida extends Observer implements Serializable {
 		return nroRonda;
 	}
 
+	public ObjectOutputStream getDos() {
+		return dos;
+	}
+
+	public void setDos(ObjectOutputStream dos) {
+		this.dos = dos;
+	}
+
+	public ObjectInputStream getDis() {
+		return dis;
+	}
+
+	public void setDis(ObjectInputStream dis) {
+		this.dis = dis;
+	}
+
 	public void setNroRonda(int nroRonda) {
 		this.nroRonda = nroRonda;
 	}
@@ -68,6 +90,8 @@ public class Partida extends Observer implements Serializable {
 	public Partida() {
 
 	}
+	
+
 
 	public Partida(int afecto, int cantJugadores, ArrayList<Jugador> jugadores, String jInicial, String orden) {
 		this.afecto = afecto;
@@ -89,7 +113,7 @@ public class Partida extends Observer implements Serializable {
 		if (orden.equals("Izquierda"))
 			Collections.reverse(this.jugadores);
 	}
-	
+
 	public boolean isEliminoOpBaron() {
 		return eliminoOpBaron;
 	}
@@ -141,9 +165,11 @@ public class Partida extends Observer implements Serializable {
 
 		huboEliminacion = false;
 
-		mazo = new Mazo();
+		enviarMsj(dos, "1");
+		mazo = (Mazo) leerMsj(dis);
+		// mazo = new Mazo();
 		mazo.register(this);
-		mazo.mezclar();
+		// mazo.mezclar();
 		cartaEliminda = mazo.eliminarPrimeraCarta();
 
 		cantJugadores = jugadoresActivos;
@@ -202,8 +228,9 @@ public class Partida extends Observer implements Serializable {
 
 	public void notificarseEndGame() {
 		for (int i = 0; i < jugadores.size(); i++) {
-			if (jugadores.get(i).getAfectosConseguidos() == afecto)
+			if (jugadores.get(i).getAfectosConseguidos() == afecto) {
 				finalizarPartida(i);
+			}
 		}
 	}
 
@@ -276,7 +303,7 @@ public class Partida extends Observer implements Serializable {
 				return j;
 			}
 		}
-		
+
 		for (int i = 0; i < index; i++) {
 			Jugador j = jugadores.get(i);
 			if (!j.getEstado().equals(new Eliminado()) && !j.isPasoTurno())
@@ -334,11 +361,29 @@ public class Partida extends Observer implements Serializable {
 
 	public int finalizarPartida(int i) {
 		finalizoPartida = true;
-
+		enviarMsj(dos,"2");
 		return i;
 	}
 
 	public int getJugadoresActivos() {
 		return jugadoresActivos;
 	}
+
+	public void enviarMsj(ObjectOutputStream dosObject, Object msj) {
+		try {
+			dosObject.writeObject(msj);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Object leerMsj(ObjectInputStream disObject) {
+		try {
+			return disObject.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

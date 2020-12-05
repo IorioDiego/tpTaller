@@ -22,8 +22,7 @@ public class ChatPrivado implements ComandosServer {
 			try {
 				Paquete paqPrivado = new Paquete();
 				boolean exiteUsuario = false;
-			
-
+		
 				if (exiteUsuario) {
 					paquete.setEnChatPrivado(true);
 					paquete.getSalida().writeUTF("Para salir de chat privado ingrese [salir]");

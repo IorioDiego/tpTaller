@@ -13,13 +13,13 @@ import java.util.Date;
 import java.util.Map;
 
 import InterfaceGrafica.ComenzarRonda;
-import comandos.AniadirConfig;
 import comandos.AvisarIngreso;
 import comandos.ChatPrivado;
 import comandos.ComandosServer;
 import comandos.ComenzarPartida;
 import comandos.CrearSala;
 import comandos.Default;
+import comandos.DentroDeJuego;
 import comandos.EnviarMsjAllSala;
 import comandos.ExpulsarAtodos;
 import comandos.IngresarSala;
@@ -27,6 +27,7 @@ import comandos.Refrescar;
 import comandos.RefreshJugadores;
 import comandos.Salir;
 import comandos.VolverLobby;
+import comandosJuego.ObtenerMazo;
 import game.Partida;
 
 public class HiloAtencionCliente extends Thread {
@@ -100,6 +101,10 @@ public class HiloAtencionCliente extends Thread {
 
 	}
 	
+	
+	
+	
+	
 	public void ChainOfResposability()
 	{
 		ComandosServer crearSala = new CrearSala();
@@ -113,7 +118,7 @@ public class HiloAtencionCliente extends Thread {
 		ComandosServer avisarIngreso = new AvisarIngreso();
 		ComandosServer expulsaAtodos = new ExpulsarAtodos();
 		ComandosServer comenzarPartida = new ComenzarPartida();
-		ComandosServer aniadirConfig = new AniadirConfig();
+		ComandosServer dentroDeJuego = new DentroDeJuego();
 		
 		this.comanSer = new Salir();
 		comanSer.establecerSiguiente(crearSala);
@@ -125,9 +130,9 @@ public class HiloAtencionCliente extends Thread {
 		refrescar.establecerSiguiente(refrescarPlayer);
 		refrescarPlayer.establecerSiguiente(avisarIngreso);
 		avisarIngreso.establecerSiguiente(expulsaAtodos);
-		expulsaAtodos.establecerSiguiente(aniadirConfig);
-		aniadirConfig.establecerSiguiente(comenzarPartida);
-		comenzarPartida.establecerSiguiente(comDefault);
+		expulsaAtodos.establecerSiguiente(comenzarPartida);
+		comenzarPartida.establecerSiguiente(dentroDeJuego);
+		dentroDeJuego.establecerSiguiente(comDefault);
 	}
 
 	public void enviarSalas() {

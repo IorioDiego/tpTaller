@@ -1,5 +1,6 @@
 package Cliente;
 
+import java.awt.EventQueue;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,6 +14,7 @@ import javax.swing.JFrame;
 
 import InterfaceGrafica.DentroDeSala;
 import InterfaceGrafica.Salas;
+import InterfaceGrafica.Tablero;
 import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
@@ -78,20 +80,43 @@ public class HiloEscuchar extends Thread {
 				// }
 			}
 			// cont--;
+			
 			if (msj.equals("-salir")) {
 				miSala.setVisible(true);
 			} else {
+				Partida nuevaPartida;
 				try {
-					Partida nuevaPartida = (Partida) entrada.readObject();
+					nuevaPartida = (Partida) entrada.readObject();
+					nuevaPartida.setDis(entrada);
+					nuevaPartida.setDos(salida);
+					salida.writeObject("17");
+					nuevaPartida.iniciarPartida();
+					iniciarJuego(nuevaPartida);
 				} catch (Exception e) {
 					e.getStackTrace();
 				}
-				
 			}
 			configSala.dispose();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void iniciarJuego(Partida nPartida)
+	{
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Tablero frame = new Tablero(nPartida);
+					frame.setVisible(true);
+					frame.init(nPartida.getJugadores(),nPartida,miSala);
+					frame.setExtendedState(JFrame.NORMAL);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
 	}
 }
