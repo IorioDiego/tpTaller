@@ -1,5 +1,6 @@
 package game;
 
+import java.io.Serializable;
 import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import javax.swing.JDialog;
@@ -14,7 +15,7 @@ import estados.Estado;
 import estados.Normal;
 import estados.Protegido;
 
-public class Jugador extends Observable {
+public class Jugador extends Observable implements Serializable {
 
 	private String nombre;
 	private int id;
@@ -26,9 +27,9 @@ public class Jugador extends Observable {
 
 	public Jugador() {};
 	
-	public Jugador(String nombre, int id) {
+	public Jugador(String nombre) {
 		this.nombre = nombre;
-		this.id = id;
+		//this.id = id;
 		this.afectosConseguidos = 0;
 	}
 

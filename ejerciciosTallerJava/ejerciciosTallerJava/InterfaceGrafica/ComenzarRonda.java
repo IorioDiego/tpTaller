@@ -84,17 +84,16 @@ public class ComenzarRonda extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 				ArrayList<Jugador> jugadores = new ArrayList<>();
-				jugadores.add(new Jugador("Dieguien", 3));
-				jugadores.add(new Jugador("Lucardo", 2));
-				jugadores.add(new Jugador("Tomarson", 1));
-				jugadores.add(new Jugador("Leandrinho", 4));
-				Partida partida = new Partida(25, jugadores.size(), jugadores,"Dieguin");
+				jugadores.add(new Jugador("Dieguien"));  //leandri
+				jugadores.add(new Jugador("Lucardo"));	//tomarson
+				jugadores.add(new Jugador("Tomarson"));	//lucardo
+				jugadores.add(new Jugador("Leandrinho"));  //diego
+				Partida partida = new Partida(25, jugadores.size(), jugadores,"Tomarson","Izquierda");
 				partida.iniciarPartida();
 
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
-						
 							Tablero frame = new Tablero(partida);
 							frame.setVisible(true);
 							frame.init(jugadores,partida);

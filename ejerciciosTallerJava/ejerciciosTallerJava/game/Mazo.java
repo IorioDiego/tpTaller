@@ -1,5 +1,6 @@
 package game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -13,7 +14,7 @@ import cartas.Principe;
 import cartas.Rey;
 import cartas.Sacerdote;
 
-public class Mazo extends Observable {
+public class Mazo extends Observable implements Serializable {
 
 	private ArrayList<Carta> mazo = new ArrayList<Carta>();
 

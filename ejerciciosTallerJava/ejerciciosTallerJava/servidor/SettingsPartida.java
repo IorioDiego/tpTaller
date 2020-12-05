@@ -8,8 +8,8 @@ public class SettingsPartida implements Serializable {
 	private Integer cantJugadores;
 	private String nombreSala;
 	private Integer prendasAmor;
-	private static String jugadorIncial;
-	private static String orden;
+	private String jugadorIncial;
+	private String orden;
 	
 	public SettingsPartida(Integer cantJugadores, String nombreSala, Integer prendasAmor) {
 		this.cantJugadores = cantJugadores;
@@ -44,11 +44,11 @@ public class SettingsPartida implements Serializable {
 		this.prendasAmor = prendasAmor;
 	}
 
-	public static  void setOrden(String o) {
+	public   void setOrden(String o) {
 		orden = o;
 	}
 
-	public static void setJugadorIncial(String jI) {
+	public  void setJugadorIncial(String jI) {
 		jugadorIncial = jI;
 	}
 

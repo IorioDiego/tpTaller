@@ -1,6 +1,8 @@
 package estados;
 
-public abstract class Estado {
+import java.io.Serializable;
+
+public abstract class Estado implements Serializable {
 	
 	public  Estado seJugoMucama() {
 		return this;

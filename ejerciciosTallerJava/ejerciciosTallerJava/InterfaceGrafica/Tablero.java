@@ -444,8 +444,12 @@ public class Tablero extends JFrame {
 
 		drawPanel = new DrawPanel();
 		getContentPane().add(drawPanel);
-		turnoJugador(jugadores.get(0));
-
+	
+		for (Jugador jugador : jugadores) {
+			if(jugador.getNombre().equals(partida.getjInicial()))
+				turnoJugador(jugador);
+		}
+		
 		lista = new JDialog(this, "Lista Jugadores", true);
 
 		JPanel predefined = new JPanel();

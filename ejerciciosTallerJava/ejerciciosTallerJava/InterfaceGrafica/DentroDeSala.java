@@ -32,12 +32,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
 import Cliente.HiloEscuchar;
+import game.Partida;
 import servidor.SalaSerealizable;
 
 public class DentroDeSala extends JFrame {
 
 	private InterfazCrearSala crearSala;
-	// private DefaultListModel dlm;
 	private JPanel contentPane;
 	private Salas salaPrincipal;
 	private JTextField textField;
@@ -179,13 +179,15 @@ public class DentroDeSala extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				enviarMsj(dosObject, "16");//añadorConfig
+//				enviarMsj(dosObject, "16");//añadorConfig
+			
+				enviarMsj(dosObject, "15");		//comenzarPartida
 				enviarMsj(dosObject, orden);
 				enviarMsj(dosObject, jugadorInicial);
-				enviarMsj(dosObject, "15");//comenzarPartida
+				//Partida nuevaPartida = (Partida)leerMsj(disObject);
 			}
 		});
-
+		
 		gridBotones.add(btnComenzar);
 		gridBotones.add(botonVolver);
 		panelAbajo.add(gridBotones);

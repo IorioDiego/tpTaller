@@ -19,12 +19,11 @@ public class AniadirConfig implements ComandosServer {
 		String resp = "?";
 		if (msj.equals("16")) {
 			try {
-				
+				SettingsPartida configPart = Servidor.darConfigSalas(paquete.getSala());
 				String orden = (String)paquete.getEntrada().readObject();
 				String jInicial = (String)paquete.getEntrada().readObject();
-				SettingsPartida.setOrden(orden);
-				SettingsPartida.setJugadorIncial(jInicial);
-				
+				configPart.setOrden(orden);
+				configPart.setJugadorIncial(jInicial);		
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

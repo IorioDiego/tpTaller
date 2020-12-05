@@ -87,20 +87,25 @@ public class Servidor {
 	public static Map<String, SettingsPartida> getMaxSalas() {
 		return maxSalas;
 	}
+	
+	public static SettingsPartida darConfigSalas(String sala) {
+		return maxSalas.get(sala);
+	}
+
 
 	public static void setMaxSalas(Map<String, SettingsPartida> maxSalas) {
 		Servidor.maxSalas = maxSalas;
 	}
 
-	public static Partida generarPartida(Paquete host) {
-		int id = 0;
-		ArrayList<Jugador> jugadores = new ArrayList<>();
-		for (Paquete paqueteCliente : darClientesDeSala(host.getSala())) {
-			jugadores.add(new Jugador(paqueteCliente.getNick(), id));
-
-		}
-
-		return new Partida(maxSalas.get(host.getSala()).getPrendasAmor(),
-				maxSalas.get(host.getSala()).getCantJugadores(), jugadores,host.getNick());
-	}
+//	public static Partida generarPartida(Paquete host) {
+//		int id = 0;
+//		ArrayList<Jugador> jugadores = new ArrayList<>();
+//		for (Paquete paqueteCliente : darClientesDeSala(host.getSala())) {
+//			jugadores.add(new Jugador(paqueteCliente.getNick(), id));
+//
+//		}
+//
+//		return new Partida(maxSalas.get(host.getSala()).getPrendasAmor(),
+//				maxSalas.get(host.getSala()).getCantJugadores(), jugadores,host.getNick());
+//	}
 }

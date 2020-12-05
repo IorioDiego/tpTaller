@@ -1,6 +1,8 @@
 package game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import cartas.Baron;
 import cartas.Carta;
@@ -13,7 +15,7 @@ import cartas.Sacerdote;
 import estados.Eliminado;
 import estados.Protegido;
 
-public class Partida extends Observer {
+public class Partida extends Observer implements Serializable {
 	private int afecto;
 	private int cantJugadores;
 	private ArrayList<Jugador> jugadores;
@@ -24,14 +26,21 @@ public class Partida extends Observer {
 	private boolean finalizoPartida;
 	private Jugador ganadoRonda = new Jugador();
 	private int nroRonda;
+	private String jInicial;
 	private Carta cartaEliminda;
 	private boolean huboEliminacion = false;
-	//baron
-	private boolean eliminoOpBaron=false;
-	private boolean eliminoActBaron=false;
+	// baron
+	private boolean eliminoOpBaron = false;
+	private boolean eliminoActBaron = false;
 
-	private String host;
-	
+	public String getjInicial() {
+		return jInicial;
+	}
+
+	public void setjInicial(String jInicial) {
+		this.jInicial = jInicial;
+	}
+
 	public Carta getCartaEliminda() {
 		return cartaEliminda;
 	}
@@ -60,7 +69,7 @@ public class Partida extends Observer {
 
 	}
 
-	public Partida(int afecto, int cantJugadores, ArrayList<Jugador> jugadores,String host) {
+	public Partida(int afecto, int cantJugadores, ArrayList<Jugador> jugadores, String jInicial, String orden) {
 		this.afecto = afecto;
 		this.cantJugadores = cantJugadores;
 		this.jugadores = jugadores;
@@ -68,6 +77,7 @@ public class Partida extends Observer {
 		this.reinicio = false;
 		this.finalizoPartida = false;
 		this.nroRonda = 0;
+		this.jInicial = jInicial;
 		///////////////////////
 		listaCartas.add(new Sacerdote());
 		listaCartas.add(new Baron());
@@ -76,9 +86,9 @@ public class Partida extends Observer {
 		listaCartas.add(new Rey());
 		listaCartas.add(new Condesa());
 		listaCartas.add(new Princesa());
-
+		if (orden.equals("Izquierda"))
+			Collections.reverse(this.jugadores);
 	}
-
 	
 	public boolean isEliminoOpBaron() {
 		return eliminoOpBaron;
@@ -96,7 +106,6 @@ public class Partida extends Observer {
 		this.eliminoActBaron = eliminoActBaron;
 	}
 
-	
 	public Jugador getGanadoRonda() {
 		return ganadoRonda;
 	}
@@ -200,11 +209,11 @@ public class Partida extends Observer {
 
 	@Override
 	public void notificarseFinMazo() {
-	
+
 		int fuerza = 0, ganador = 0, empate = 0;
 		int primeroValido = 0;
 		ArrayList<Integer> jEmpatados = new ArrayList<Integer>();
-	
+
 //		for (Jugador j : jugadores) {
 //			if(! j.getEstado().equals(new Eliminado())) {
 //				if(j.getManoCompleta().isEmpty()) {
@@ -214,7 +223,7 @@ public class Partida extends Observer {
 //			}
 //				
 //		}
-		
+
 		while (jugadores.get(primeroValido).getEstado().equals(new Eliminado())) {
 			primeroValido++;
 		}
@@ -259,12 +268,27 @@ public class Partida extends Observer {
 	}
 
 	public Jugador proximoTurnoJugador(Jugador jugadorActivo) {
-		for (Jugador jugador : jugadores) {
-			if (!jugador.getEstado().equals(new Eliminado()) && !jugador.getNombre().equals(jugadorActivo.getNombre())
-					&& !jugador.isPasoTurno()) {
-				return jugador;
+		int index = jugadores.indexOf(jugadorActivo);
+
+		for (int i = index + 1; i < jugadores.size(); i++) {
+			Jugador j = jugadores.get(i);
+			if (!j.getEstado().equals(new Eliminado()) && !j.isPasoTurno()) {
+				return j;
 			}
 		}
+		
+		for (int i = 0; i < index; i++) {
+			Jugador j = jugadores.get(i);
+			if (!j.getEstado().equals(new Eliminado()) && !j.isPasoTurno())
+				return j;
+		}
+
+//		for (Jugador jugador : jugadores) {
+//			if (!jugador.getEstado().equals(new Eliminado()) && !jugador.getNombre().equals(jugadorActivo.getNombre())
+//					&& !jugador.isPasoTurno()) {
+//				return jugador;
+//			}
+//		}
 		for (Jugador jugador : jugadores) {
 			jugador.setPasoTurno(false);
 		}

@@ -2,6 +2,7 @@ package cartas;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -10,7 +11,7 @@ import javax.swing.JLabel;
 import game.Jugador;
 import game.Partida;
 
-public abstract class Carta {
+public abstract class Carta implements Serializable {
 
 	private int fuerza;
 	private String nombre;

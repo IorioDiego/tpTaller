@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 
 import InterfaceGrafica.DentroDeSala;
 import InterfaceGrafica.Salas;
+import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
 
@@ -66,7 +67,7 @@ public class HiloEscuchar extends Thread {
 				configSala.getCombo1().addItem("Derecha");
 				for (String item : nickNames) {
 //					configSala.getCombo1().addItem(item);
-					
+
 					configSala.getCombo2().addItem(item);
 				}
 				if (cantJugadores == cont) {
@@ -77,13 +78,18 @@ public class HiloEscuchar extends Thread {
 				// }
 			}
 			// cont--;
-			if (msj.equals("-salir")){
+			if (msj.equals("-salir")) {
 				miSala.setVisible(true);
+			} else {
+				try {
+					Partida nuevaPartida = (Partida) entrada.readObject();
+				} catch (Exception e) {
+					e.getStackTrace();
+				}
+				
 			}
 			configSala.dispose();
-		
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

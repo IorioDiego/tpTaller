@@ -19,7 +19,7 @@ import game.Partida;
 
 public class MainTests {
 
-	public static void main(String[] args) throws MalformedURLException, LineUnavailableException, IOException, UnsupportedAudioFileException {
+	public static void main(String[] args) {
 	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -34,10 +34,6 @@ public class MainTests {
 			
 			
 		});
-//		Clip clip = AudioSystem.getClip();
-//		clip.open(AudioSystem.getAudioInputStream(new File("sounds/music.wav")));
-//		clip.start();
-//		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
 	}
 
