@@ -2,6 +2,7 @@ package comandosJuego;
 
 import java.io.IOException;
 
+import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
 
@@ -16,14 +17,14 @@ public class VolverPantallaInicial implements ComandosJuego {
 	}
 
 	@Override
-	public String procesar(Paquete paquete, String msj) {
+	public String procesar(Paquete paquete, String msj,Partida partida) {
 		if (msj.equals("2")) {
 			String salirDeSala = paquete.getSala();
 			paquete.dejarSala(salirDeSala);
 			Servidor.eliminarClienteDeSala(paquete, salirDeSala);
 			return "--Salir";
 		} else
-			return siguiente.procesar(paquete, msj);
+			return siguiente.procesar(paquete, msj,partida);
 	}
 
 }

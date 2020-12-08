@@ -6,6 +6,7 @@ import javax.swing.JDialog;
 
 import game.Jugador;
 import game.Partida;
+import servidor.Paquete;
 
 public class Princesa extends Carta {
 
@@ -24,7 +25,7 @@ public class Princesa extends Carta {
 	}
 
 	@Override
-	public void activarEfecto(Jugador jugador, Partida partida,JDialog lista,JDialog listaCartas) {
+	public void activarEfecto(Jugador jugador, Partida partida,Paquete paquete) {
 		jugador.seJugoPrincesa();
 		
 	}

@@ -3,6 +3,7 @@ package comandosJuego;
 import java.io.IOException;
 
 import comandos.ComandosServer;
+import game.Partida;
 import servidor.Paquete;
 
 public class DefaultJuego implements ComandosJuego {
@@ -14,7 +15,7 @@ public class DefaultJuego implements ComandosJuego {
 	}
 
 	@Override
-	public String procesar(Paquete paquete, String msj) {
+	public String procesar(Paquete paquete, String msj,Partida partida) {
 		try {
 			paquete.getSalida().writeUTF("Error,Comando invalido ingrese nuevamente");
 		} catch (IOException e) {

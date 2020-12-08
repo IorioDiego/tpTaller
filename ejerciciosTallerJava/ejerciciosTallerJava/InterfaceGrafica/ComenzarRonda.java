@@ -83,27 +83,27 @@ public class ComenzarRonda extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
-				ArrayList<Jugador> jugadores = new ArrayList<>();
-				jugadores.add(new Jugador("Dieguien"));  //leandri
-				jugadores.add(new Jugador("Lucardo"));	//tomarson
-				jugadores.add(new Jugador("Tomarson"));	//lucardo
-				jugadores.add(new Jugador("Leandrinho"));  //diego
-				Partida partida = new Partida(25, jugadores.size(), jugadores,"Tomarson","Izquierda");
-				partida.iniciarPartida();
-
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						try {
-							Tablero frame = new Tablero(partida);
-							frame.setVisible(true);
-							//frame.init(jugadores,partida);
-							frame.setExtendedState(JFrame.NORMAL);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-					
-				});
+//				ArrayList<Jugador> jugadores = new ArrayList<>();
+//				jugadores.add(new Jugador("Dieguien"));  //leandri
+//				jugadores.add(new Jugador("Lucardo"));	//tomarson
+//				jugadores.add(new Jugador("Tomarson"));	//lucardo
+//				jugadores.add(new Jugador("Leandrinho"));  //diego
+//				Partida partida = new Partida(25, jugadores.size(), jugadores,"Tomarson","Izquierda");
+//				partida.iniciarPartida();
+//
+//				EventQueue.invokeLater(new Runnable() {
+//					public void run() {
+//						try {
+//							Tablero frame = new Tablero(partida);
+//							frame.setVisible(true);
+//							//frame.init(jugadores,partida);
+//							frame.setExtendedState(JFrame.NORMAL);
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//					}
+//					
+//				});
 			}
 		});
 		contentPane.add(btnNewButton, BorderLayout.SOUTH);	

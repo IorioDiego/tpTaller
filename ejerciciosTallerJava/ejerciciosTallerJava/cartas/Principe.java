@@ -1,10 +1,14 @@
 package cartas;
 
+import java.io.IOException;
+
 import javax.swing.JDialog;
 
 import InterfaceGrafica.Tablero;
 import game.Jugador;
 import game.Partida;
+import servidor.Paquete;
+import servidor.Servidor;
 
 public class Principe extends Carta {
 
@@ -23,28 +27,76 @@ public class Principe extends Carta {
 	}
 
 	@Override
-	public void activarEfecto(Jugador jugador, Partida partida, JDialog lista, JDialog listaCartas) {
-		lista.setVisible(true);
+	public void activarEfecto(Jugador jugador, Partida partida,Paquete paquete) {
+		
+		try {
+			int jElegido = (int) paquete.getEntrada().readObject();
+			
 
-		Jugador oponente = partida.elegirJugador(Tablero.getJugadorElegido());
+			Jugador oponente = partida.elegirJugador(jElegido);
 
-		Carta jugada = oponente.descartar(oponente.sacarCartaDeMano(0));
-
-		if (jugada.equals(new Princesa())) {
-			oponente.seJugoPrincesa();
-			oponente.descartar(jugada);
-		} else {
-			if(partida.getMazo().getCantCartas() != 0)
-				partida.getMazo().darCarta(oponente);
-		}
-
-		if (oponente.getManoCompleta().isEmpty() && !oponente.isBlockedOrDelete()) {
-			if (partida.getMazo().getCantCartas() == 0) {
-				jugador.tomarCarta(partida.getCartaEliminda());
-			} else {
-				oponente.tomarCarta(partida.getCartaEliminda());
+			Carta jugada = oponente.descartar(oponente.sacarCartaDeMano(0));
+			
+			for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
+				if (paqueteCliente.getCliente().isConnected()&& !paquete.equals(paqueteCliente)) {
+					paquete.getSalida().writeObject("actualizarTablero");
+					paquete.getSalida().writeObject(jugada);
+				}
 			}
+			
+
+			if (jugada.equals(new Princesa())) {
+				oponente.seJugoPrincesa();
+//				oponente.descartar(jugada);
+			} else {
+				if(partida.getMazo().getCantCartas() != 0)
+					partida.getMazo().darCarta(oponente);
+			}
+
+			if (oponente.getManoCompleta().isEmpty() && !oponente.isBlockedOrDelete()) {
+				if (partida.getMazo().getCantCartas() == 0) {
+					jugador.tomarCarta(partida.getCartaEliminda());
+				} else {
+					oponente.tomarCarta(partida.getCartaEliminda());
+				}
+			}
+			
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+
+		
+		
+		
+		
+		
+		//		lista.setVisible(true);
+//
+//		Jugador oponente = partida.elegirJugador(Tablero.getJugadorElegido());
+//
+//		Carta jugada = oponente.descartar(oponente.sacarCartaDeMano(0));
+//
+//		if (jugada.equals(new Princesa())) {
+//			oponente.seJugoPrincesa();
+//			oponente.descartar(jugada);
+//		} else {
+//			if(partida.getMazo().getCantCartas() != 0)
+//				partida.getMazo().darCarta(oponente);
+//		}
+//
+//		if (oponente.getManoCompleta().isEmpty() && !oponente.isBlockedOrDelete()) {
+//			if (partida.getMazo().getCantCartas() == 0) {
+//				jugador.tomarCarta(partida.getCartaEliminda());
+//			} else {
+//				oponente.tomarCarta(partida.getCartaEliminda());
+//			}
+//		}
 
 	}
 

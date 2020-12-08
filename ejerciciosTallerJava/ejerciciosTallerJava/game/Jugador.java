@@ -14,6 +14,7 @@ import estados.Eliminado;
 import estados.Estado;
 import estados.Normal;
 import estados.Protegido;
+import servidor.Paquete;
 
 public class Jugador extends Observable implements Serializable {
 
@@ -98,12 +99,12 @@ public class Jugador extends Observable implements Serializable {
 	}
 
 
-	public void jugarCarta(Partida partida,int index,JDialog lista,JDialog listaCartas) {// recive indice del evento
+	public void jugarCarta(Partida partida,int index,Paquete paquete) {// recive indice del evento
 //		int indiceAux = this.elegirCartaParaJugar(index); // revisar esto, elegirCarta.. devuelve el index q recive x param
 //		Carta cartaElegida = sacarCartaDeMano(indiceAux); // 
 		
 		Carta cartaElegida = sacarCartaDeMano(index);
-		cartaElegida.activarEfecto(this, partida, lista,listaCartas);
+		cartaElegida.activarEfecto(this, partida,paquete);
 		descartar(cartaElegida);
 		pasoTurno=true;
 	}

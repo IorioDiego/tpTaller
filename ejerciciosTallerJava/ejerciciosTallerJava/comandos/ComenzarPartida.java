@@ -26,20 +26,17 @@ public class ComenzarPartida implements ComandosServer {
 				SettingsPartida configPart = Servidor.darConfigSalas(paquete.getSala());
 				String orden = (String) paquete.getEntrada().readObject();
 				String jInicial = (String) paquete.getEntrada().readObject();
-				Mazo nuevoMazo = new Mazo();
-				nuevoMazo.mezclar();
-				configPart.setMazo(nuevoMazo);
-				
 				configPart.setOrden(orden);
 				configPart.setJugadorIncial(jInicial);
-				Partida partida = generarPartida(configPart, paquete);
+				Partida partida = generarPartida(configPart, paquete,paquete.getSala());
 				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 					if (paqueteCliente.getCliente().isConnected()) {
 						paqueteCliente.getSalida().writeObject(comenzarPartida);
 						paqueteCliente.getSalida().writeObject(partida);
 					}
 				}
-				
+				configPart.setPartida(partida);
+				configPart.getPartida().iniciarPartida();
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -48,13 +45,13 @@ public class ComenzarPartida implements ComandosServer {
 			return siguiente.procesar(paquete, msj);
 	}
 
-	public Partida generarPartida(SettingsPartida config, Paquete cliente) {
+	public Partida generarPartida(SettingsPartida config, Paquete cliente,String nSala) {
 		ArrayList<Jugador> jugadores = new ArrayList<>();
 		for (Paquete paqueteCliente : Servidor.darClientesDeSala(cliente.getSala())) {
 			jugadores.add(new Jugador(paqueteCliente.getNick()));
 		}
 		Partida nuevaPartida = new Partida(config.getPrendasAmor(), jugadores.size(), jugadores,
-				config.getJugadorIncial(), config.getOrden());
+				config.getJugadorIncial(), config.getOrden(),nSala);
 		return nuevaPartida;
 	}
 }

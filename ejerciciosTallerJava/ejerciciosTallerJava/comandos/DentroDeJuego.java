@@ -1,10 +1,12 @@
 package comandos;
 
+import comandosJuego.CambioJugador;
 import comandosJuego.ComandosJuego;
 import comandosJuego.DefaultJuego;
-import comandosJuego.ObtenerMazo;
+import comandosJuego.JugarCartas;
+import comandosJuego.TomarCartas;
 import comandosJuego.VolverPantallaInicial;
-import game.Mazo;
+import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
 
@@ -20,12 +22,14 @@ public class DentroDeJuego implements ComandosServer {
 
 	public String procesar(Paquete paquete, String msj) {
 		String resp = "--VolverAlLobby";
+		Partida partida = Servidor.darConfigSalas(paquete.getSala()).getPartida();
 		ChainParaJuego();
 		if (msj.equals("17")) {
 			try {
 				do {
-					msj = (String) paquete.getEntrada().readObject();
-				} while (!(comanJuego.procesar(paquete, msj)).equals("--Salir"));
+					
+					msj = (String) paquete.getEntrada().readObject();	
+				} while (!(comanJuego.procesar(paquete, msj,partida)).equals("--Salir"));
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -38,11 +42,15 @@ public class DentroDeJuego implements ComandosServer {
 	public void ChainParaJuego()
 	{	
 		ComandosJuego defaultJuego = new DefaultJuego();
-		ComandosJuego finJuego = new VolverPantallaInicial();
+		ComandosJuego tomarCarta = new TomarCartas();
+		ComandosJuego jugarCarta =  new JugarCartas();
+		ComandosJuego cambioJugador = new CambioJugador();
 		
-		this.comanJuego = new ObtenerMazo();
-		comanJuego.establecerSiguiente(finJuego);
-		finJuego.establecerSiguiente(defaultJuego);
+		this.comanJuego = new VolverPantallaInicial();
+		comanJuego.establecerSiguiente(tomarCarta);
+		tomarCarta.establecerSiguiente(jugarCarta);
+		jugarCarta.establecerSiguiente(cambioJugador);
+		cambioJugador.establecerSiguiente(defaultJuego);
 	}
 	
 }

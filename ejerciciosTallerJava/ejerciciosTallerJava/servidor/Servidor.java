@@ -17,6 +17,7 @@ public class Servidor {
 	private static Map<String, SettingsPartida> maxSalas = new HashMap<String, SettingsPartida>();
 	private static Map<String, ArrayList<Paquete>> salas = new HashMap<String, ArrayList<Paquete>>();
 
+
 	public Servidor(int puerto) throws IOException {
 		ServerSocket servidor = new ServerSocket(puerto);
 		System.out.println("Server inicializando...");
@@ -97,6 +98,7 @@ public class Servidor {
 		Servidor.maxSalas = maxSalas;
 	}
 
+	
 //	public static Partida generarPartida(Paquete host) {
 //		int id = 0;
 //		ArrayList<Jugador> jugadores = new ArrayList<>();

@@ -18,10 +18,12 @@ import cartas.Rey;
 import cartas.Sacerdote;
 import estados.Eliminado;
 import estados.Protegido;
+import servidor.Paquete;
+import servidor.Servidor;
 
 public class Partida extends Observer implements Serializable {
 	private int afecto;
-	//private ArrayList<Paquete> jugadores; ---> setearlo con el server
+	// private ArrayList<Paquete> jugadores; ---> setearlo con el server
 	private int cantJugadores;
 	private ArrayList<Jugador> jugadores;
 	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
@@ -34,6 +36,7 @@ public class Partida extends Observer implements Serializable {
 	private Jugador ganadoRonda = new Jugador();
 	private int nroRonda;
 	private String jInicial;
+	private String nombreSala;
 	private Carta cartaEliminda;
 	private boolean huboEliminacion = false;
 	// baron
@@ -91,10 +94,9 @@ public class Partida extends Observer implements Serializable {
 	public Partida() {
 
 	}
-	
 
-
-	public Partida(int afecto, int cantJugadores, ArrayList<Jugador> jugadores, String jInicial, String orden) {
+	public Partida(int afecto, int cantJugadores, ArrayList<Jugador> jugadores, String jInicial, String orden,
+			String nSala) {
 		this.afecto = afecto;
 		this.cantJugadores = cantJugadores;
 		this.jugadores = jugadores;
@@ -103,6 +105,7 @@ public class Partida extends Observer implements Serializable {
 		this.finalizoPartida = false;
 		this.nroRonda = 0;
 		this.jInicial = jInicial;
+		this.nombreSala = nSala;
 		///////////////////////
 		listaCartas.add(new Sacerdote());
 		listaCartas.add(new Baron());
@@ -155,6 +158,7 @@ public class Partida extends Observer implements Serializable {
 	}
 
 	public void iniciarRonda() {
+		Paquete primerJ = null;
 		nroRonda++;
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
@@ -166,17 +170,38 @@ public class Partida extends Observer implements Serializable {
 
 		huboEliminacion = false;
 
-		enviarMsj(dos, "1");
-		mazo = (Mazo) leerMsj(dis);
-		// mazo = new Mazo();
-		mazo.register(this);
-		// mazo.mezclar();
+		// enviarMsj(dos, "1");
+		// mazo = (Mazo) leerMsj(dis);
+		mazo = new Mazo();
+		// mazo.register(this);
+		mazo.mezclar();
 		cartaEliminda = mazo.eliminarPrimeraCarta();
 
 		cantJugadores = jugadoresActivos;
 
-		for (Jugador jugador : jugadores) {
-			mazo.darCarta(jugador);
+//		for (Jugador jugador : jugadores) {
+//			mazo.darCarta(jugador);
+//		}
+		ArrayList<Paquete> p = Servidor.darClientesDeSala(nombreSala);
+
+		try {
+			for (int i = 0; i < p.size(); i++) {
+
+				Carta cartaDada = mazo.darCarta(jugadores.get(i));
+				p.get(i).getSalida().writeObject(cartaDada);
+				p.get(i).getSalida().writeObject(p.get(i).getNick());
+
+			}
+
+			for (Paquete paquete : p) {
+				if (paquete.getNick().equals(jInicial)) {
+					paquete.getSalida().writeObject("tuTurno");
+				}
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
@@ -362,7 +387,7 @@ public class Partida extends Observer implements Serializable {
 
 	public int finalizarPartida(int i) {
 		finalizoPartida = true;
-		//enviarMsj(dos,"2");   ///mandar un mensaje a todos los clientes 
+		// enviarMsj(dos,"2"); ///mandar un mensaje a todos los clientes
 		return i;
 	}
 

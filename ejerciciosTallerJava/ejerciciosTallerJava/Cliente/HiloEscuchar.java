@@ -90,7 +90,7 @@ public class HiloEscuchar extends Thread {
 					nuevaPartida.setDis(entrada);
 					nuevaPartida.setDos(salida);
 					salida.writeObject("17");
-					nuevaPartida.iniciarPartida();
+//					nuevaPartida.iniciarPartida();
 					iniciarJuego(nuevaPartida);
 				} catch (Exception e) {
 					e.getStackTrace();
@@ -110,7 +110,7 @@ public class HiloEscuchar extends Thread {
 				try {
 					Tablero frame = new Tablero(nPartida);
 					frame.setVisible(true);
-					frame.init(nPartida.getJugadores(),nPartida,miSala);
+					frame.init(nPartida.getJugadores(),nPartida,miSala,entrada,salida);
 					//Dos y Dis al init
 					frame.setExtendedState(JFrame.NORMAL);
 				} catch (Exception e) {

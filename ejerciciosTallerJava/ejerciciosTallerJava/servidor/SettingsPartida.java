@@ -3,6 +3,7 @@ package servidor;
 import java.io.Serializable;
 
 import game.Mazo;
+import game.Partida;
 
 public class SettingsPartida implements Serializable {
 
@@ -12,7 +13,7 @@ public class SettingsPartida implements Serializable {
 	private Integer prendasAmor;
 	private String jugadorIncial;
 	private String orden;
-	private Mazo mazo;
+	private Partida partida;
 	
 	public SettingsPartida(Integer cantJugadores, String nombreSala, Integer prendasAmor) {
 		this.cantJugadores = cantJugadores;
@@ -31,12 +32,12 @@ public class SettingsPartida implements Serializable {
 	}
 	
 
-	public Mazo getMazo() {
-		return mazo;
+	public Partida getPartida() {
+		return partida;
 	}
 
-	public void setMazo(Mazo mazo) {
-		this.mazo = mazo;
+	public void setPartida(Partida partida) {
+		this.partida = partida;
 	}
 
 	public void setCantJugadores(Integer cantJugadores) {

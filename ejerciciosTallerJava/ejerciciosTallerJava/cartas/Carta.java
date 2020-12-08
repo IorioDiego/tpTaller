@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 
 import game.Jugador;
 import game.Partida;
+import servidor.Paquete;
 
 public abstract class Carta implements Serializable {
 
@@ -34,7 +35,7 @@ public abstract class Carta implements Serializable {
 
 	public abstract int getFuerzaCarta();
 
-	public abstract void activarEfecto(Jugador jugador, Partida partida,JDialog lista,JDialog listaCartas);
+	public abstract void activarEfecto(Jugador jugador, Partida partida,Paquete paquete);
 
 
 	
