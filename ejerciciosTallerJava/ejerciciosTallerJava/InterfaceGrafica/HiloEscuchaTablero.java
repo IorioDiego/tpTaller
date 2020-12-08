@@ -50,12 +50,9 @@ public class HiloEscuchaTablero extends Thread {
 			break;
 		case "Principe": {
 
-			
-			
 			cartaOp = (Carta) Tablero.leerMsj(dis);
 			nombreOp = (String) leerMsj(dis);
 			
-
 			if (tablero.getNombreJActivo().equals(nombreOp)) {
 				Carta nuevaCarta = (Carta) Tablero.leerMsj(dis);
 				tablero.getMano().add(nuevaCarta);

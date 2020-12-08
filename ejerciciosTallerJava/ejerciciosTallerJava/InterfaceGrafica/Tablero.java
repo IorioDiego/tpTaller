@@ -729,7 +729,7 @@ public class Tablero extends JFrame {
 				if ((m.getX() >= 575 && m.getX() <= 675 && (m.getY() >= 615 && m.getY() <= 755) && mano.size() >= 1)) {
 					if (m.getButton() == MouseEvent.BUTTON3)
 						mostrarLista(0);
-					else if (miTurno)
+					else if (miTurno && mano.size() == 2)
 						tocarCartaIzquierda(m, entrada, salida, lista, listaCartas);
 
 				} else if ((m.getX() >= 200 && m.getX() <= 510)
@@ -843,9 +843,10 @@ public class Tablero extends JFrame {
 
 			}
 
-			for (DibujoCarta dib : dibujos) {
-				dibujarCartas(g2, dib.getCartaDib().getNombre(), dib.getEjeX(), dib.getEjeY());
-			}
+//			for (DibujoCarta dib : dibujos) {
+//				dibujarCartas(g2, dib.getCartaDib().getNombre(), dib.getEjeX(), dib.getEjeY());
+//			}
+			
 			for (int i = 0; i < partida.getJugadores().size(); i++) {
 				String nombre = partida.getJugadores().get(i).getNombre();
 				int idx = indexDes.get(nombre);
