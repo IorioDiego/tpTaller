@@ -27,41 +27,36 @@ public class Principe extends Carta {
 	}
 
 	@Override
-	public void activarEfecto(Jugador jugador, Partida partida,Paquete paquete) {
-		
+	public void activarEfecto(Jugador jugador, Partida partida, Paquete paquete) {
+
 		try {
 			int jElegido = (int) paquete.getEntrada().readObject();
-			
 
 			Jugador oponente = partida.elegirJugador(jElegido);
 
 			Carta jugada = oponente.descartar(oponente.sacarCartaDeMano(0));
-			
+
 			for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
-				if (paqueteCliente.getCliente().isConnected()&& !paquete.equals(paqueteCliente)) {
+				if (paqueteCliente.getCliente().isConnected() && !paquete.equals(paqueteCliente)) {
 					paquete.getSalida().writeObject("actualizarTablero");
 					paquete.getSalida().writeObject(jugada);
+					paquete.getSalida().writeObject(oponente.getNombre());
+					
 				}
 			}
-			
-
 			if (jugada.equals(new Princesa())) {
 				oponente.seJugoPrincesa();
-//				oponente.descartar(jugada);
 			} else {
-				if(partida.getMazo().getCantCartas() != 0)
-					partida.getMazo().darCarta(oponente);
+				if (partida.getMazo().getCantCartas() != 0)
+					paquete.getSalida().writeObject(partida.getMazo().darCarta(oponente));
 			}
 
 			if (oponente.getManoCompleta().isEmpty() && !oponente.isBlockedOrDelete()) {
 				if (partida.getMazo().getCantCartas() == 0) {
-					jugador.tomarCarta(partida.getCartaEliminda());
-				} else {
-					oponente.tomarCarta(partida.getCartaEliminda());
+					paquete.getSalida().writeObject(oponente.tomarCarta(partida.getCartaEliminda()));
 				}
 			}
-			
-			
+
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,14 +64,8 @@ public class Principe extends Carta {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
-		
-		
-		
-		
-		
-		//		lista.setVisible(true);
+		// lista.setVisible(true);
 //
 //		Jugador oponente = partida.elegirJugador(Tablero.getJugadorElegido());
 //

@@ -28,6 +28,7 @@ public class JugarCartas implements ComandosJuego {
 						paqueteCliente.getSalida().writeObject("actualizarTablero");
 						paqueteCliente.getSalida().writeObject(cartaJugada);
 						paqueteCliente.getSalida().writeObject(paquete.getNick());
+						
 					}
 				}
 				

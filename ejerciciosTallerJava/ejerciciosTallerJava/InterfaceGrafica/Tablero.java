@@ -88,11 +88,13 @@ public class Tablero extends JFrame {
 
 	private boolean levantarCarta = false;
 	private boolean jugarCarta = false;
+	private boolean miTurno = false;
+	
 //	private Map<String, ArrayList<DibujoCarta>> descarteTodos = new HashMap<String, ArrayList<DibujoCarta>>();
 
 	private String nombreJActivo;
 
-	private boolean miTurno = false;
+	
 	private Tablero t = this;
 
 	int indexJ1;
@@ -166,7 +168,7 @@ public class Tablero extends JFrame {
 	private ImageIcon descriprueca = new ImageIcon("loveImg/banner.jpg");
 
 	public void bloquearBoton() {
-
+//comando, y pedir el array de jugadores
 		for (int i = 0; i < jugadores.size(); i++) {
 			if (jugadores.get(i).isBlockedOrDelete()) {
 				switch (i) {
@@ -500,6 +502,23 @@ public class Tablero extends JFrame {
 		tomoCarta = true;
 		refresh();
 
+	}
+	
+
+	public String getNombreJActivo() {
+		return nombreJActivo;
+	}
+
+	public void setNombreJActivo(String nombreJActivo) {
+		this.nombreJActivo = nombreJActivo;
+	}
+
+	public ArrayList<Carta> getMano() {
+		return mano;
+	}
+
+	public void setMano(ArrayList<Carta> mano) {
+		this.mano = mano;
 	}
 
 	public ArrayList<ArrayList<DibujoCarta>> getDescartes() {

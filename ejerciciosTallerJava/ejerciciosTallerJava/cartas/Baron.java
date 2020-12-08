@@ -35,9 +35,7 @@ public class Baron extends Carta {
 			int resultado = jugador.compararMano(oponente);
 			paquete.getSalida().writeObject("actualizarTablero");
 			paquete.getSalida().writeObject(oponente.getMano(0));// esta es para mostrar
-			if (resultado > 0) {
-				
-				
+			if (resultado > 0) {			
 				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 					if (paqueteCliente.getCliente().isConnected()&& !paquete.equals(paqueteCliente)) {
 						paquete.getSalida().writeObject("actualizarTablero");
