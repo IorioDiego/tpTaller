@@ -23,9 +23,7 @@ public class HiloEscuchaTablero extends Thread {
 			String msj = (String) leerMsj(dis);
 
 			if (msj.equals("tuTurno")) {
-
 				cambioTurno();
-
 			} else if (msj.equals("actualizarTablero")) {
 				actualizar();
 

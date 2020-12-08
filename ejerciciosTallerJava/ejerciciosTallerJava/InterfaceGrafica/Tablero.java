@@ -89,12 +89,11 @@ public class Tablero extends JFrame {
 	private boolean levantarCarta = false;
 	private boolean jugarCarta = false;
 	private boolean miTurno = false;
-	
+
 //	private Map<String, ArrayList<DibujoCarta>> descarteTodos = new HashMap<String, ArrayList<DibujoCarta>>();
 
 	private String nombreJActivo;
 
-	
 	private Tablero t = this;
 
 	int indexJ1;
@@ -121,7 +120,7 @@ public class Tablero extends JFrame {
 	private boolean dibManoOp = false;
 	private Sound sonidoFondo;
 	private Sound sonidoTirarCarta;
-	private ImageIcon banner = new ImageIcon("loveImg/banner.jpg");
+	private ImageIcon banner;
 	private BufferedImage background;
 	private int CantJugadores;
 	private int anchoCarta = 100;
@@ -138,6 +137,7 @@ public class Tablero extends JFrame {
 	private BufferedImage baron;
 	private BufferedImage cartaAmor;
 	private BufferedImage fondoVerCarta;
+	private ImageIcon exit;
 
 	private boolean tomoCarta = false;
 	private boolean finalizar = false;
@@ -165,7 +165,7 @@ public class Tablero extends JFrame {
 	private static int jugadorElegido;
 	private static int cartaElegida;
 
-	private ImageIcon descriprueca = new ImageIcon("loveImg/banner.jpg");
+	// private ImageIcon descriprueca = new ImageIcon("loveImg/banner.jpg");
 
 	public void bloquearBoton() {
 //comando, y pedir el array de jugadores
@@ -223,55 +223,52 @@ public class Tablero extends JFrame {
 	public void tocarCartaIzquierda(MouseEvent m, ObjectInputStream entrada, ObjectOutputStream salida, JDialog lista,
 			JDialog listaCartas) {
 
-		if (m.getButton() == MouseEvent.BUTTON1) {
+		Tablero.enviarMsj(salida, "4");
+		Tablero.enviarMsj(salida, mano.get(0));
+		Tablero.enviarMsj(salida, 0);
 
-			Tablero.enviarMsj(salida, "4");
-			Tablero.enviarMsj(salida, mano.get(0));
-			Tablero.enviarMsj(salida, 0);
+		int idx = indexDes.get(nombreJActivo);
+		Integer[] pos = posiciones.get(nombreJActivo);
+		int x = pos[0];
+		int y = pos[1];
+		int nuevaDist = distdDes.get(nombreJActivo) + 30;
+		distdDes.replace(nombreJActivo, nuevaDist);
+		DibujoCarta dibujo = new DibujoCarta(mano.get(0), x + nuevaDist, y);
+		descartes.get(idx).add(dibujo);
 
-			int idx = indexDes.get(nombreJActivo);
-			Integer[] pos = posiciones.get(nombreJActivo);
-			int x = pos[0];
-			int y = pos[1];
-			int nuevaDist = distdDes.get(nombreJActivo) + 30;
-			distdDes.replace(nombreJActivo, nuevaDist);
-			DibujoCarta dibujo = new DibujoCarta(mano.get(0), x + nuevaDist, y);
-			descartes.get(idx).add(dibujo);
+		if (mano.get(0).equals(new Guardia()) || mano.get(0).equals(new Sacerdote()) || mano.get(0).equals(new Baron())
+				|| mano.get(0).equals(new Rey()) || mano.get(0).equals(new Principe())) {
+			lista.setVisible(true);
 
-			if (mano.get(0).equals(new Guardia()) || mano.get(0).equals(new Sacerdote())
-					|| mano.get(0).equals(new Baron()) || mano.get(0).equals(new Rey())
-					|| mano.get(0).equals(new Principe())) {
-				lista.setVisible(true);
+			if (mano.get(0).equals(new Guardia())) {
+				listaCartas.setVisible(true);
 
-				if (mano.get(0).equals(new Guardia())) {
-					listaCartas.setVisible(true);
-
-				}
 			}
+		}
 
-			distDescarte += 30;
+		distDescarte += 30;
 //			DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(0), 430 + distDescarte, 295);
-			DibujoCarta cartaTiradas = new DibujoCarta(mano.get(0), 430 + distDescarte, 295);
-			dibujos.add(cartaTiradas);
+		DibujoCarta cartaTiradas = new DibujoCarta(mano.get(0), 430 + distDescarte, 295);
+		dibujos.add(cartaTiradas);
 //			if (jugadorActivo.getMano(0).equals(new Sacerdote()))
-			if (mano.get(0).equals(new Sacerdote()))
+		if (mano.get(0).equals(new Sacerdote()))
 //				dibManoOp = true;
 
 //			if (jugadorActivo.getMano(0).equals(new Baron())) {
-				if (mano.get(0).equals(new Baron())) {
+			if (mano.get(0).equals(new Baron())) {
 //				jugadorBaron = jugadorActivo;
 //				cartaBaron = jugadorActivo.getMano(1);
 //				cartaBaronOp = jugadores.get(getJugadorElegido()).getMano(0);
 //				compararManos = true;
-				}
+			}
 
 //			jugadorActivo.jugarCarta(partida, 0, lista, listaCartas);
-			Tablero.enviarMsj(salida, "5");
-			sonidoTirarCarta.play();
-			mano.remove(0);
-			refresh();
 
-			if (cartaTiradas.getCartaDib().equals(new Principe())) {
+		sonidoTirarCarta.play();
+		mano.remove(0);
+		refresh();
+
+		if (cartaTiradas.getCartaDib().equals(new Principe())) {
 //				distDescarte += 30;
 //				DibujoCarta cartaOp = new DibujoCarta(jugadores.get(getJugadorElegido()).getUltimaDescartada(),
 //						430 + distDescarte, 295);
@@ -280,121 +277,63 @@ public class Tablero extends JFrame {
 //				if (jugadores.get(getJugadorElegido()).getManoCompleta().isEmpty())
 //					jugadores.get(getJugadorElegido()).getManoCompleta().add(partida.getCartaEliminda());
 
-			}
-
-			turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
-		} else if (m.getButton() == MouseEvent.BUTTON3) {
-			JDialog j = new JDialog();
-			j.setUndecorated(true);
-			j.setVisible(true);
-			j.setBounds(480, 210, 600, 360);
-
-			ImageIcon descrip = new ImageIcon(mano.get(0).toString());
-
-			JPanel cartaDescrip = new JPanel(new BorderLayout()) {
-
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void paintComponent(Graphics g) {
-					super.paintComponent(g);
-					g.drawImage(descrip.getImage(), 0, 0, getWidth(), getHeight(), this);
-				}
-
-				@Override
-				public Dimension getPreferredSize() {
-					Dimension size = super.getPreferredSize();
-					size.width = Math.max(descrip.getIconWidth(), size.width);
-					size.width = Math.max(descrip.getIconHeight(), size.height);
-
-					return size;
-				}
-			};
-
-			ImageIcon exit = new ImageIcon("loveImg/exit.png");
-			Image image = exit.getImage();
-			Image newimg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
-			exit = new ImageIcon(newimg);
-			cartaDescrip.setLayout(new BorderLayout());
-			int gap = -3;
-			cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
-
-			JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-			southPanel.setOpaque(false);
-			JButton button = new JButton(exit);
-			button.setPreferredSize(new Dimension(50, 50));
-
-			button.setOpaque(false);
-			button.setContentAreaFilled(false);
-			button.setBorderPainted(false);
-			southPanel.add(button);
-			cartaDescrip.add(southPanel, BorderLayout.NORTH);
-
-			button.addActionListener(e -> {
-				j.dispose();
-			});
-			j.add(cartaDescrip);
-
 		}
+		jugarCarta = true;
+		Tablero.enviarMsj(salida, "5");
+		// turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 		refresh();
 	}
 
 	public void tocarCartaDerecha(MouseEvent m, ObjectInputStream entrada, ObjectOutputStream salida, JDialog lista,
 			JDialog listaCartas) {
 
+		Tablero.enviarMsj(salida, "4");
+		Tablero.enviarMsj(salida, mano.get(1));
+		Tablero.enviarMsj(salida, 1);
 
-		if (m.getButton() == MouseEvent.BUTTON1) {
-			Tablero.enviarMsj(salida, "4");
-			Tablero.enviarMsj(salida, mano.get(1));
-			Tablero.enviarMsj(salida, 1);
+		int idx = indexDes.get(nombreJActivo);
+		Integer[] pos = posiciones.get(nombreJActivo);
+		int x = pos[0];
+		int y = pos[1];
+		int nuevaDist = distdDes.get(nombreJActivo) + 30;
+		distdDes.replace(nombreJActivo, nuevaDist);
+		DibujoCarta dibujo = new DibujoCarta(mano.get(1), x + nuevaDist, y);
+		descartes.get(idx).add(dibujo);
 
-			int idx = indexDes.get(nombreJActivo);
-			Integer[] pos = posiciones.get(nombreJActivo);
-			int x = pos[0];
-			int y = pos[1];
-			int nuevaDist = distdDes.get(nombreJActivo) + 30;
-			distdDes.replace(nombreJActivo, nuevaDist);
-			DibujoCarta dibujo = new DibujoCarta(mano.get(1), x + nuevaDist, y);
-			descartes.get(idx).add(dibujo);
+		if (mano.get(1).equals(new Guardia()) || mano.get(1).equals(new Sacerdote()) || mano.get(1).equals(new Baron())
+				|| mano.get(1).equals(new Rey()) || mano.get(1).equals(new Principe())) {
+			lista.setVisible(true);
 
-			if (mano.get(1).equals(new Guardia()) || mano.get(1).equals(new Sacerdote())
-					|| mano.get(1).equals(new Baron()) || mano.get(1).equals(new Rey())
-					|| mano.get(1).equals(new Principe())) {
-				lista.setVisible(true);
+			if (mano.get(1).equals(new Guardia())) {
+				listaCartas.setVisible(true);
 
-				if (mano.get(1).equals(new Guardia())) {
-					listaCartas.setVisible(true);
-
-				}
 			}
+		}
 
-			distDescarte += 30;
+		distDescarte += 30;
 //			DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(1), 430 + distDescarte, 295);
-			DibujoCarta cartaTiradas = new DibujoCarta(mano.get(1), 430 + distDescarte, 295);
-			dibujos.add(cartaTiradas);
+		DibujoCarta cartaTiradas = new DibujoCarta(mano.get(1), 430 + distDescarte, 295);
+		dibujos.add(cartaTiradas);
 
 //			if (jugadorActivo.getMano(1).equals(new Sacerdote()))
-			if (mano.get(1).equals(new Sacerdote()))
+		if (mano.get(1).equals(new Sacerdote()))
 //				dibManoOp = true;
 
 //			if (jugadorActivo.getMano(1).equals(new Baron())) {
-				if (mano.get(1).equals(new Baron())) {
+			if (mano.get(1).equals(new Baron())) {
 //				jugadorBaron = jugadorActivo;
 //				cartaBaron = jugadorActivo.getMano(0);
 //				cartaBaronOp = jugadores.get(getJugadorElegido()).getMano(0);
 //				compararManos = true;
 
-				}
+			}
 
 //			jugadorActivo.jugarCarta(partida, 1, lista, listaCartas);
-			sonidoTirarCarta.play();
-			mano.remove(1);
-			refresh();
+		sonidoTirarCarta.play();
+		mano.remove(1);
+		refresh();
 
-			if (cartaTiradas.getCartaDib().equals(new Principe())) {
+		if (cartaTiradas.getCartaDib().equals(new Principe())) {
 //				distDescarte += 30;
 //				DibujoCarta cartaOp = new DibujoCarta(jugadores.get(getJugadorElegido()).getUltimaDescartada(),
 //						430 + distDescarte, 295);
@@ -402,68 +341,10 @@ public class Tablero extends JFrame {
 //
 //				if (jugadores.get(getJugadorElegido()).getManoCompleta().isEmpty())
 //					jugadores.get(getJugadorElegido()).getManoCompleta().add(partida.getCartaEliminda());
-			}
-
-			// turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
-			Tablero.enviarMsj(salida, "5");
-
-		} else if (m.getButton() == MouseEvent.BUTTON3) {
-
-			JDialog j = new JDialog();
-			j.setUndecorated(true);
-			j.setVisible(true);
-			j.setBounds(480, 210, 600, 360);
-
-			ImageIcon descrip = new ImageIcon(mano.get(1).toString());
-
-			JPanel cartaDescrip = new JPanel(new BorderLayout()) {
-
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void paintComponent(Graphics g) {
-					super.paintComponent(g);
-					g.drawImage(descrip.getImage(), 0, 0, getWidth(), getHeight(), this);
-				}
-
-				@Override
-				public Dimension getPreferredSize() {
-					Dimension size = super.getPreferredSize();
-					size.width = Math.max(descrip.getIconWidth(), size.width);
-					size.width = Math.max(descrip.getIconHeight(), size.height);
-
-					return size;
-				}
-			};
-
-			ImageIcon exit = new ImageIcon("loveImg/exit.png");
-			Image image = exit.getImage();
-			Image newimg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
-			exit = new ImageIcon(newimg);
-			cartaDescrip.setLayout(new BorderLayout());
-			int gap = -3;
-			cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
-
-			JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-			southPanel.setOpaque(false);
-			JButton button = new JButton(exit);
-			button.setPreferredSize(new Dimension(50, 50));
-
-			button.setOpaque(false);
-			button.setContentAreaFilled(false);
-			button.setBorderPainted(false);
-			southPanel.add(button);
-			cartaDescrip.add(southPanel, BorderLayout.NORTH);
-
-			button.addActionListener(e -> {
-				j.dispose();
-			});
-			j.add(cartaDescrip);
-
 		}
+		// turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
+		jugarCarta = true;
+		Tablero.enviarMsj(salida, "5");
 
 		refresh();
 
@@ -503,101 +384,6 @@ public class Tablero extends JFrame {
 		refresh();
 
 	}
-	
-
-	public String getNombreJActivo() {
-		return nombreJActivo;
-	}
-
-	public void setNombreJActivo(String nombreJActivo) {
-		this.nombreJActivo = nombreJActivo;
-	}
-
-	public ArrayList<Carta> getMano() {
-		return mano;
-	}
-
-	public void setMano(ArrayList<Carta> mano) {
-		this.mano = mano;
-	}
-
-	public ArrayList<ArrayList<DibujoCarta>> getDescartes() {
-		return descartes;
-	}
-
-	public void setDescartes(ArrayList<ArrayList<DibujoCarta>> descartes) {
-		this.descartes = descartes;
-	}
-
-	public Map<String, Integer> getIndexDes() {
-		return indexDes;
-	}
-
-	public void setIndexDes(Map<String, Integer> indexDes) {
-		this.indexDes = indexDes;
-	}
-
-	public Map<String, Integer> getDistdDes() {
-		return distdDes;
-	}
-
-	public void setDistdDes(Map<String, Integer> distdDes) {
-		this.distdDes = distdDes;
-	}
-
-	public Map<String, Integer[]> getPosiciones() {
-		return posiciones;
-	}
-
-	public void setPosiciones(Map<String, Integer[]> posiciones) {
-		this.posiciones = posiciones;
-	}
-
-	public boolean isMiTurno() {
-		return miTurno;
-	}
-
-	public void setMiTurno(boolean miTurno) {
-		this.miTurno = miTurno;
-	}
-
-	public static int getCartaElegida() {
-		return cartaElegida;
-	}
-
-	public void setCartaElegida(int cartaElegida) {
-		Tablero.cartaElegida = cartaElegida;
-	}
-
-	public static int getJugadorElegido() {
-		return jugadorElegido;
-	}
-
-	public void setJugadorElegido(int jugadorElegido) {
-		Tablero.jugadorElegido = jugadorElegido;
-	}
-
-	public void turnoJugador(Jugador jugador) {
-		if (!compararManos && !dibManoOp)
-			cambiarJugador = true;
-		jugadorActivo = jugador;
-	}
-
-	public ObjectInputStream getIn() {
-		return in;
-	}
-
-	public void setIn(ObjectInputStream in) {
-		this.in = in;
-	}
-
-	public ObjectOutputStream getOut() {
-		return out;
-	}
-
-	public void setOut(ObjectOutputStream out) {
-		this.out = out;
-	}
 
 	public void init(ArrayList<Jugador> jugadores, Partida partida, Salas salaPrincipal, ObjectInputStream entrada,
 			ObjectOutputStream salida) {
@@ -616,6 +402,8 @@ public class Tablero extends JFrame {
 			fondoVerCarta = ImageIO.read(new File("loveImg/fondoVerCartaOp.jpeg"));
 			sonidoTirarCarta = new Sound("sounds/tirarCarta.wav");
 			sonidoFondo = new Sound("sounds/music.wav");
+			banner = new ImageIcon("loveImg/banner.jpg");
+			exit = new ImageIcon("loveImg/exit.png");
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -829,7 +617,7 @@ public class Tablero extends JFrame {
 		volverC = new JButton("Volver");
 
 		volverC.setBackground(Color.decode("#f7db97"));
-		
+
 		salirC.add(volverC);
 
 		listaCartas.getContentPane().setBackground(Color.decode("#f7db97"));
@@ -906,7 +694,7 @@ public class Tablero extends JFrame {
 		setFocusable(true);
 		requestFocusInWindow();
 
-		setResizable(false); 
+		setResizable(false);
 		// setBounds(500, 156, 905, 727);***1
 		setBounds(80, 36, 1366, 768);
 
@@ -929,43 +717,43 @@ public class Tablero extends JFrame {
 
 		});
 
+//		if (partida.isFinalizoPartida()) {
+//		miTablero.dispose();
+//		sala.setVisible(true);
+//	}
+
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent m) {
 
-				if (miTurno) {
-					if ((m.getX() >= 575 && m.getX() <= 675 && (m.getY() >= 615 && m.getY() <= 755)
-							&& mano.size() >= 1)) {
-
+				if ((m.getX() >= 575 && m.getX() <= 675 && (m.getY() >= 615 && m.getY() <= 755) && mano.size() >= 1)) {
+					if (m.getButton() == MouseEvent.BUTTON3)
+						mostrarLista(0);
+					else if (miTurno)
 						tocarCartaIzquierda(m, entrada, salida, lista, listaCartas);
-						jugarCarta = true;
 
-					} else if ((m.getX() >= 200 && m.getX() <= 510)
-							&& (m.getY() >= 210 && m.getY() <= 470 && mano.size() == 1)) {
-
+				} else if ((m.getX() >= 200 && m.getX() <= 510)
+						&& (m.getY() >= 210 && m.getY() <= 470 && mano.size() == 1)) {
+					if (miTurno) {
 						tomarCartaMazo(m, entrada, salida);
 						levantarCarta = true;
+					}
 
-
-					} else if ((m.getX() >= 695 && m.getX() <= 795 && (m.getY() >= 615 && m.getY() <= 755))
-							&& mano.size() == 2) {
-
+				} else if ((m.getX() >= 695 && m.getX() <= 795 && (m.getY() >= 615 && m.getY() <= 755))
+						&& mano.size() == 2) {
+					if (m.getButton() == MouseEvent.BUTTON3)
+						mostrarLista(1);
+					else if (miTurno)
 						tocarCartaDerecha(m, entrada, salida, lista, listaCartas);
-						jugarCarta = true;
+				}
+				refresh();
+				if (jugarCarta && levantarCarta) {
+					miTurno = false;
+					jugarCarta = false;
+					levantarCarta = false;
+					synchronized (espera) {
+						espera.notify();
 					}
-
-//					if (partida.isFinalizoPartida()) {
-//						miTablero.dispose();
-//						sala.setVisible(true);
-//					}
-					refresh();
-					if (jugarCarta && levantarCarta) {
-						miTurno = false;
-						synchronized (espera) {
-							espera.notify();
-						}
-					}
-
 				}
 			}
 		});
@@ -1182,6 +970,7 @@ public class Tablero extends JFrame {
 			return new Dimension(1366, 768);
 
 		}
+
 	}
 
 	public static void cambioJugador() {
@@ -1253,5 +1042,151 @@ public class Tablero extends JFrame {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public String getNombreJActivo() {
+		return nombreJActivo;
+	}
+
+	public void setNombreJActivo(String nombreJActivo) {
+		this.nombreJActivo = nombreJActivo;
+	}
+
+	public ArrayList<Carta> getMano() {
+		return mano;
+	}
+
+	public void setMano(ArrayList<Carta> mano) {
+		this.mano = mano;
+	}
+
+	public ArrayList<ArrayList<DibujoCarta>> getDescartes() {
+		return descartes;
+	}
+
+	public void setDescartes(ArrayList<ArrayList<DibujoCarta>> descartes) {
+		this.descartes = descartes;
+	}
+
+	public Map<String, Integer> getIndexDes() {
+		return indexDes;
+	}
+
+	public void setIndexDes(Map<String, Integer> indexDes) {
+		this.indexDes = indexDes;
+	}
+
+	public Map<String, Integer> getDistdDes() {
+		return distdDes;
+	}
+
+	public void setDistdDes(Map<String, Integer> distdDes) {
+		this.distdDes = distdDes;
+	}
+
+	public Map<String, Integer[]> getPosiciones() {
+		return posiciones;
+	}
+
+	public void setPosiciones(Map<String, Integer[]> posiciones) {
+		this.posiciones = posiciones;
+	}
+
+	public boolean isMiTurno() {
+		return miTurno;
+	}
+
+	public void setMiTurno(boolean miTurno) {
+		this.miTurno = miTurno;
+	}
+
+	public static int getCartaElegida() {
+		return cartaElegida;
+	}
+
+	public void setCartaElegida(int cartaElegida) {
+		Tablero.cartaElegida = cartaElegida;
+	}
+
+	public static int getJugadorElegido() {
+		return jugadorElegido;
+	}
+
+	public void setJugadorElegido(int jugadorElegido) {
+		Tablero.jugadorElegido = jugadorElegido;
+	}
+
+	public void turnoJugador(Jugador jugador) {
+		if (!compararManos && !dibManoOp)
+			cambiarJugador = true;
+		jugadorActivo = jugador;
+	}
+
+	public ObjectInputStream getIn() {
+		return in;
+	}
+
+	public void setIn(ObjectInputStream in) {
+		this.in = in;
+	}
+
+	public ObjectOutputStream getOut() {
+		return out;
+	}
+
+	public void setOut(ObjectOutputStream out) {
+		this.out = out;
+	}
+
+	public void mostrarLista(int indexMano) {
+		JDialog j = new JDialog();
+		j.setUndecorated(true);
+		j.setVisible(true);
+		j.setBounds(480, 210, 600, 360);
+
+		ImageIcon descrip = new ImageIcon(mano.get(indexMano).toString());
+
+		JPanel cartaDescrip = new JPanel(new BorderLayout()) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(descrip.getImage(), 0, 0, getWidth(), getHeight(), this);
+			}
+
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension size = super.getPreferredSize();
+				size.width = Math.max(descrip.getIconWidth(), size.width);
+				size.width = Math.max(descrip.getIconHeight(), size.height);
+
+				return size;
+			}
+		};
+
+		Image image = exit.getImage();
+		Image newimg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		exit = new ImageIcon(newimg);
+		cartaDescrip.setLayout(new BorderLayout());
+		int gap = -3;
+		cartaDescrip.setBorder(BorderFactory.createEmptyBorder(gap, gap, gap, gap));
+
+		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		southPanel.setOpaque(false);
+		JButton button = new JButton(exit);
+		button.setPreferredSize(new Dimension(50, 50));
+
+		button.setOpaque(false);
+		button.setContentAreaFilled(false);
+		button.setBorderPainted(false);
+		southPanel.add(button);
+		cartaDescrip.add(southPanel, BorderLayout.NORTH);
+
+		button.addActionListener(e -> {
+			j.dispose();
+		});
+		j.add(cartaDescrip);
 	}
 }
