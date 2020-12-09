@@ -38,7 +38,14 @@ public class HiloEscuchaTablero extends Thread {
 		String nombreJugo = (String) leerMsj(dis);
 		String nombreOp = null;
 		Carta cartaOp = null;
+		Carta cartaBaron = null;
+		Carta cartaPerdedor = null;
+		boolean itsMeMario = false;
 		boolean sw = false;
+		nombreOp = (String) leerMsj(dis);
+		if (tablero.getNombreJActivo().equals(nombreOp)) {
+			itsMeMario = true;
+		}
 
 		switch (cJugada.getNombre()) {
 		case "Princesa": {
@@ -51,13 +58,14 @@ public class HiloEscuchaTablero extends Thread {
 		case "Principe": {
 
 			cartaOp = (Carta) Tablero.leerMsj(dis);
-			nombreOp = (String) leerMsj(dis);
-			
-			if (tablero.getNombreJActivo().equals(nombreOp)) {
+
+			if (itsMeMario) {
 				Carta nuevaCarta = (Carta) Tablero.leerMsj(dis);
 				tablero.getMano().add(nuevaCarta);
-				tablero.remove(0);
+				tablero.getMano().remove(0);
 				sw = true;
+				itsMeMario = false;
+
 			}
 
 		}
@@ -66,6 +74,18 @@ public class HiloEscuchaTablero extends Thread {
 		}
 			break;
 		case "Baron": {
+			tablero.setJugadorBaronOp(nombreOp);
+			tablero.setCartaBaronOp((Carta) leerMsj(dis));
+			cartaBaron = (Carta) leerMsj(dis);
+			tablero.setJugadorBaron(nombreJugo);
+			tablero.setCompararManos(true);
+	
+			cartaOp = (Carta) leerMsj(dis);
+			String msj = (String) leerMsj(dis);
+			if (msj.equals("Perdi")) {
+				sw = true;
+			}
+			
 		}
 			break;
 		case "Sacerdote": {
@@ -82,6 +102,7 @@ public class HiloEscuchaTablero extends Thread {
 		pintarCarta(cJugada, nombreJugo);
 		if (sw) {
 			pintarCarta(cartaOp, nombreOp);
+			sw = false;
 		}
 
 		tablero.refresh();

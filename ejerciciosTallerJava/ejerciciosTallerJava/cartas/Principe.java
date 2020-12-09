@@ -33,27 +33,31 @@ public class Principe extends Carta {
 			int jElegido = (int) paquete.getEntrada().readObject();
 
 			Jugador oponente = partida.elegirJugador(jElegido);
+			Paquete paqueteOp = null;
 
 			Carta jugada = oponente.descartar(oponente.sacarCartaDeMano(0));
 
 			for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
-				if (paqueteCliente.getCliente().isConnected() && !paquete.equals(paqueteCliente)) {
-					paquete.getSalida().writeObject("actualizarTablero");
-					paquete.getSalida().writeObject(jugada);
-					paquete.getSalida().writeObject(oponente.getNombre());
+				if (paqueteCliente.getCliente().isConnected()) {
+					if(oponente.getNombre().equals(paqueteCliente.getNick())) {
+						paqueteOp=paqueteCliente;	
+					}
 					
+				
+					paqueteCliente.getSalida().writeObject(oponente.getNombre());
+					paqueteCliente.getSalida().writeObject(jugada);
 				}
 			}
 			if (jugada.equals(new Princesa())) {
 				oponente.seJugoPrincesa();
 			} else {
 				if (partida.getMazo().getCantCartas() != 0)
-					paquete.getSalida().writeObject(partida.getMazo().darCarta(oponente));
+					paqueteOp.getSalida().writeObject(partida.getMazo().darCarta(oponente));
 			}
 
 			if (oponente.getManoCompleta().isEmpty() && !oponente.isBlockedOrDelete()) {
 				if (partida.getMazo().getCantCartas() == 0) {
-					paquete.getSalida().writeObject(oponente.tomarCarta(partida.getCartaEliminda()));
+					paqueteOp.getSalida().writeObject(oponente.tomarCarta(partida.getCartaEliminda()));
 				}
 			}
 
