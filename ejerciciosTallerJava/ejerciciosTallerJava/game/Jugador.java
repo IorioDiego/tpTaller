@@ -66,6 +66,10 @@ public class Jugador extends Observable implements Serializable {
 		notificarEstadoEliminado();
 	}
 
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
 	public void seJugoGuardia() {
 		estado = estado.seJugoGuardia();
 		notificarEstadoEliminado();

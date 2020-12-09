@@ -50,7 +50,10 @@ import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import org.omg.IOP.Codec;
+
 import cartas.*;
+import estados.Estado;
 import game.Jugador;
 import game.Partida;
 import servidor.Paquete;
@@ -204,7 +207,12 @@ public class Tablero extends JFrame {
 	public void bloquearBoton() {
 //comando, y pedir el array de jugadores
 		enviarMsj(out, "6");
-		partida = (Partida) leerMsj(in);
+
+		for (int i = 0; i < partida.getJugadores().size(); i++) {
+			Estado estado = (Estado) leerMsj(in);
+			partida.getJugadores().get(i).setEstado(estado);
+		}
+
 		for (int i = 0; i < partida.getJugadores().size(); i++) {
 			if (jugadores.get(i).isBlockedOrDelete()) {
 				switch (i) {
@@ -231,6 +239,12 @@ public class Tablero extends JFrame {
 	}
 
 	public void desbloquearBoton() {
+		enviarMsj(out, "6");
+
+		for (int i = 0; i < partida.getJugadores().size(); i++) {
+			Estado estado = (Estado) leerMsj(in);
+			partida.getJugadores().get(i).setEstado(estado);
+		}
 
 		for (int i = 0; i < jugadores.size(); i++) {
 			if (!jugadores.get(i).isBlockedOrDelete()) {
@@ -258,14 +272,17 @@ public class Tablero extends JFrame {
 
 	public void tocarCartaIzquierda(MouseEvent m, ObjectInputStream entrada, ObjectOutputStream salida, JDialog lista,
 			JDialog listaCartas) {
+		Carta miCarta = mano.get(0);
 		Carta cartaOp = null;
 		String nombreOp = null;
 		Carta cartaPerdedor = null;
 		boolean sw = false;
 		bloquearBoton();
+		desbloquearBoton();
 		Tablero.enviarMsj(salida, "4");
 		Tablero.enviarMsj(salida, mano.get(0));
 		Tablero.enviarMsj(salida, 0);
+		mano.remove(0);
 
 //		int idx = indexDes.get(nombreJActivo);
 //		Integer[] pos = posiciones.get(nombreJActivo);
@@ -276,11 +293,11 @@ public class Tablero extends JFrame {
 //		DibujoCarta dibujo = new DibujoCarta(mano.get(0), x + nuevaDist, y);
 //		descartes.get(idx).add(dibujo);
 
-		if (mano.get(0).equals(new Guardia()) || mano.get(0).equals(new Sacerdote()) || mano.get(0).equals(new Baron())
-				|| mano.get(0).equals(new Rey()) || mano.get(0).equals(new Principe())) {
+		if (miCarta.equals(new Guardia()) || miCarta.equals(new Sacerdote()) || miCarta.equals(new Baron())
+				|| miCarta.equals(new Rey()) || miCarta.equals(new Principe())) {
 			lista.setVisible(true);
-			
-			if (mano.get(0).equals(new Guardia())) {
+
+			if (miCarta.equals(new Guardia())) {
 				listaCartas.setVisible(true);
 
 			}
@@ -288,7 +305,7 @@ public class Tablero extends JFrame {
 
 		boolean itsMeMario = false;
 
-		switch (mano.get(0).getNombre()) {
+		switch (miCarta.getNombre()) {
 		case "Princesa": {
 		}
 
@@ -303,20 +320,19 @@ public class Tablero extends JFrame {
 			if (getNombreJActivo().equals(nombreOp)) {
 				itsMeMario = true;
 			}
-			
+
 			if (itsMeMario) {
 				Carta nuevaCarta = (Carta) Tablero.leerMsj(entrada);
 				getMano().add(nuevaCarta);
 				getMano().remove(0);
-				
+
 				itsMeMario = false;
 			}
 
 		}
 			break;
 		case "Mucama": {
-			
-			
+
 		}
 			break;
 		case "Baron": {
@@ -349,26 +365,40 @@ public class Tablero extends JFrame {
 		}
 			break;
 		case "Rey": {
+			
+			nombreOp = (String) leerMsj(entrada);
+			cartaOp = (Carta) leerMsj(entrada);
+			if (getNombreJActivo().equals(nombreOp)) {
+				itsMeMario = true;
+			}
+
+			if (itsMeMario) {
+				cartaOp = (Carta) leerMsj(entrada);
+			}
+			getMano().remove(0);
+			getMano().add(cartaOp);
+
 		}
 			break;
 		}
 
-		pintarCarta(mano.get(0), nombreJActivo);
+		pintarCarta(miCarta, nombreJActivo);
 		if (sw) {
 			pintarCarta(cartaOp, nombreOp);
 
 		}
 		sw = false;
+
 		distDescarte += 30;
 //			DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(0), 430 + distDescarte, 295);
-		DibujoCarta cartaTiradas = new DibujoCarta(mano.get(0), 430 + distDescarte, 295);
+		DibujoCarta cartaTiradas = new DibujoCarta(miCarta, 430 + distDescarte, 295);
 		dibujos.add(cartaTiradas);
 //			if (jugadorActivo.getMano(0).equals(new Sacerdote()))
-		if (mano.get(0).equals(new Sacerdote()))
+		if (miCarta.equals(new Sacerdote()))
 //				dibManoOp = true;
 
 //			if (jugadorActivo.getMano(0).equals(new Baron())) {
-			if (mano.get(0).equals(new Baron())) {
+			if (miCarta.equals(new Baron())) {
 //				jugadorBaron = jugadorActivo;
 //				cartaBaron = jugadorActivo.getMano(1);
 //				cartaBaronOp = jugadores.get(getJugadorElegido()).getMano(0);
@@ -378,7 +408,7 @@ public class Tablero extends JFrame {
 //			jugadorActivo.jugarCarta(partida, 0, lista, listaCartas);
 
 		sonidoTirarCarta.play();
-		mano.remove(0);
+
 		refresh();
 		if (cartaTiradas.getCartaDib().equals(new Principe())) {
 //				distDescarte += 30;
@@ -399,14 +429,16 @@ public class Tablero extends JFrame {
 	public void tocarCartaDerecha(MouseEvent m, ObjectInputStream entrada, ObjectOutputStream salida, JDialog lista,
 			JDialog listaCartas) {
 
+		Carta miCarta = mano.get(1);
 		Carta cartaOp = null;
 		String nombreOp = null;
 		boolean sw = false;
 		bloquearBoton();
+		desbloquearBoton();
 		Tablero.enviarMsj(salida, "4");
 		Tablero.enviarMsj(salida, mano.get(1));
 		Tablero.enviarMsj(salida, 1);
-
+		mano.remove(1);
 //		int idx = indexDes.get(nombreJActivo);
 //		Integer[] pos = posiciones.get(nombreJActivo);
 //		int x = pos[0];
@@ -416,19 +448,19 @@ public class Tablero extends JFrame {
 //		DibujoCarta dibujo = new DibujoCarta(mano.get(1), x + nuevaDist, y);
 //		descartes.get(idx).add(dibujo);
 
-		if (mano.get(1).equals(new Guardia()) || mano.get(1).equals(new Sacerdote()) || mano.get(1).equals(new Baron())
-				|| mano.get(1).equals(new Rey()) || mano.get(1).equals(new Principe())) {
+		if (miCarta.equals(new Guardia()) || miCarta.equals(new Sacerdote()) || miCarta.equals(new Baron())
+				|| miCarta.equals(new Rey()) || miCarta.equals(new Principe())) {
 
 			lista.setVisible(true);
 
-			if (mano.get(1).equals(new Guardia())) {
+			if (miCarta.equals(new Guardia())) {
 				listaCartas.setVisible(true);
 
 			}
 		}
 		boolean itsMeMario = false;
 
-		switch (mano.get(1).getNombre()) {
+		switch (miCarta.getNombre()) {
 		case "Princesa": {
 		}
 
@@ -447,7 +479,7 @@ public class Tablero extends JFrame {
 				Carta nuevaCarta = (Carta) Tablero.leerMsj(entrada);
 				getMano().add(nuevaCarta);
 				getMano().remove(0);
-				
+
 				itsMeMario = false;
 			}
 
@@ -488,11 +520,22 @@ public class Tablero extends JFrame {
 		}
 			break;
 		case "Rey": {
+			nombreOp = (String) leerMsj(entrada);
+			cartaOp = (Carta) leerMsj(entrada);
+			if (getNombreJActivo().equals(nombreOp)) {
+				itsMeMario = true;
+			}
+
+			if (itsMeMario) {
+				cartaOp = (Carta) leerMsj(entrada);
+			}
+			getMano().remove(0);
+			getMano().add(cartaOp);
 		}
 			break;
 		}
 
-		pintarCarta(mano.get(1), nombreJActivo);
+		pintarCarta(miCarta, nombreJActivo);
 		if (sw) {
 			pintarCarta(cartaOp, nombreOp);
 		}
@@ -500,15 +543,15 @@ public class Tablero extends JFrame {
 
 		distDescarte += 30;
 //			DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(1), 430 + distDescarte, 295);
-		DibujoCarta cartaTiradas = new DibujoCarta(mano.get(1), 430 + distDescarte, 295);
+		DibujoCarta cartaTiradas = new DibujoCarta(miCarta, 430 + distDescarte, 295);
 		dibujos.add(cartaTiradas);
 
 //			if (jugadorActivo.getMano(1).equals(new Sacerdote()))
-		if (mano.get(1).equals(new Sacerdote()))
+		if (miCarta.equals(new Sacerdote()))
 //				dibManoOp = true;
 
 //			if (jugadorActivo.getMano(1).equals(new Baron())) {
-			if (mano.get(1).equals(new Baron())) {
+			if (miCarta.equals(new Baron())) {
 //				jugadorBaron = jugadorActivo;
 //				cartaBaron = jugadorActivo.getMano(0);
 //				cartaBaronOp = jugadores.get(getJugadorElegido()).getMano(0);
@@ -518,7 +561,6 @@ public class Tablero extends JFrame {
 
 //			jugadorActivo.jugarCarta(partida, 1, lista, listaCartas);
 		sonidoTirarCarta.play();
-		mano.remove(1);
 
 		if (cartaTiradas.getCartaDib().equals(new Principe())) {
 //				distDescarte += 30;
@@ -545,7 +587,26 @@ public class Tablero extends JFrame {
 		Carta cTomada = (Carta) Tablero.leerMsj(entrada);
 		String quienJuega = (String) Tablero.leerMsj(entrada);
 		Carta cDescartada = (Carta) Tablero.leerMsj(entrada);
+		boolean condesa  =false;
 		mano.add(cTomada);
+		if (cTomada.equals(new Condesa()) && (mano.contains(new Principe()) 
+				|| mano.contains(new Rey()))) {
+			cDescartada = mano.remove(1);
+			condesa= true;
+		}else if (mano.contains(new Condesa()) && (cTomada.equals(new Principe()) 
+				|| cTomada.equals(new Rey()))) {
+			cDescartada = mano.remove(0);
+			condesa= true;
+		}
+		
+		if(condesa) {
+			enviarMsj(salida, "7");
+			enviarMsj(salida, cDescartada);
+			pintarCarta(cDescartada, nombreJActivo);
+			enviarMsj(salida, "5");
+			jugarCarta = true;
+		}
+		
 
 //		if (new Condesa().equals(partida.getMazo().darCarta(jugadorActivo))
 //				&& new Condesa().equals(jugadorActivo.getUltimaDescartada())) {
@@ -567,7 +628,7 @@ public class Tablero extends JFrame {
 //			Tablero.enviarMsj(salida, "5");
 //		}
 
-		tomoCarta = true;
+			tomoCarta = true;
 		refresh();
 
 	}

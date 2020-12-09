@@ -34,9 +34,9 @@ public abstract class Estado implements Serializable {
 		return obj.getClass().getName().equals(this.getClass().getName());
 	}
 	
-	@Override
-	public String toString() {
-		return this.getClass().getName();
-	}
+//	@Override
+//	public String toString() {
+//		return this.getClass().getName();
+//	}
 	
 }

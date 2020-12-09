@@ -2,12 +2,12 @@ package comandosJuego;
 
 import cartas.Carta;
 import game.Jugador;
-import game.Mazo;
 import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
 
-public class TomarCartas implements ComandosJuego {
+public class DibujarCondesa implements ComandosJuego{
+
 	private ComandosJuego siguiente;
 	@Override
 	public void establecerSiguiente(ComandosJuego siguiente) {
@@ -17,19 +17,22 @@ public class TomarCartas implements ComandosJuego {
 	@Override
 	public String procesar(Paquete paquete, String msj, Partida partida) {
 		String resp = "?";
-		if (msj.equals("3")) {
+		if (msj.equals("7")) {
 			try {
-
-				Jugador jugadorActivo = null;
-				for (Jugador j : partida.getJugadores()) {
-					if (j.getNombre().equals(paquete.getNick())) {
-						jugadorActivo = j;
+			
+				Carta cartaJugada = (Carta) paquete.getEntrada().readObject();
+			
+				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
+					if ( !paquete.equals(paqueteCliente)) {
+						paqueteCliente.getSalida().writeObject("actualizarTablero");
+						paqueteCliente.getSalida().writeObject(cartaJugada);
+						paqueteCliente.getSalida().writeObject(paquete.getNick());
+						
 					}
 				}
-				Carta cartaTomada = partida.getMazo().darCarta(jugadorActivo);
-				paquete.getSalida().writeObject(cartaTomada);
-				paquete.getSalida().writeObject(paquete.getNick());
-				paquete.getSalida().writeObject(jugadorActivo.getUltimaDescartada());
+				
+			
+			
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -24,7 +24,11 @@ public class Mazo extends Observable implements Serializable {
 	
 		
 		mazo.add(new Baron());
+		mazo.add(new Rey());
+		
 		mazo.add(new Mucama());
+		mazo.add(new Condesa());
+		mazo.add(new Rey());
 		mazo.add(new Mucama());
 		mazo.add(new Baron());
 		mazo.add(new Guardia());
@@ -44,7 +48,7 @@ public class Mazo extends Observable implements Serializable {
 		//mazo.add(new Principe());
 		//mazo.add(new Principe());
 
-		mazo.add(new Rey());
+		
 
 		mazo.add(new Condesa());
 

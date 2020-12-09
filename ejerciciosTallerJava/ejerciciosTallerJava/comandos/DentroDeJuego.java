@@ -4,6 +4,7 @@ import comandosJuego.BloquearJugadores;
 import comandosJuego.CambioJugador;
 import comandosJuego.ComandosJuego;
 import comandosJuego.DefaultJuego;
+import comandosJuego.DibujarCondesa;
 import comandosJuego.JugarCartas;
 import comandosJuego.TomarCartas;
 import comandosJuego.VolverPantallaInicial;
@@ -47,12 +48,14 @@ public class DentroDeJuego implements ComandosServer {
 		ComandosJuego jugarCarta =  new JugarCartas();
 		ComandosJuego cambioJugador = new CambioJugador();
 		ComandosJuego bloquearJugador= new BloquearJugadores();
+		ComandosJuego dibujarCondesa = new DibujarCondesa();
 		
 		this.comanJuego = new VolverPantallaInicial();
 		comanJuego.establecerSiguiente(tomarCarta);
 		tomarCarta.establecerSiguiente(jugarCarta);
 		jugarCarta.establecerSiguiente(cambioJugador);
-		cambioJugador.establecerSiguiente(bloquearJugador);
+		cambioJugador.establecerSiguiente(dibujarCondesa);
+		dibujarCondesa.establecerSiguiente(bloquearJugador);
 		bloquearJugador.establecerSiguiente(defaultJuego);
 	}
 	

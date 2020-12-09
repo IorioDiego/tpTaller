@@ -10,12 +10,12 @@ public class JugarCartas implements ComandosJuego {
 
 	
 	private ComandosJuego siguiente;
-
+	@Override
 	public void establecerSiguiente(ComandosJuego siguiente) {
 		this.siguiente = siguiente;
 
 	}
-
+	@Override
 	public String procesar(Paquete paquete, String msj, Partida partida) {
 		String resp = "?";
 		if (msj.equals("4")) {
