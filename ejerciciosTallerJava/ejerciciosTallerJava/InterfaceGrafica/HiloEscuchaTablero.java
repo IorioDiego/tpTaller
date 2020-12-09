@@ -37,6 +37,7 @@ public class HiloEscuchaTablero extends Thread {
 		Carta cJugada = (Carta) Tablero.leerMsj(dis);
 		String nombreJugo = (String) leerMsj(dis);
 		String nombreOp = null;
+		Carta cartaElegidaOp = null;
 		Carta cartaOp = null;
 		Carta cartaBaron = null;
 		Carta cartaBaronOp = null;
@@ -75,7 +76,6 @@ public class HiloEscuchaTablero extends Thread {
 		}
 			break;
 		case "Baron": {
-
 			nombreOp = (String) leerMsj(dis);
 			cartaBaronOp = (Carta) Tablero.leerMsj(dis);
 			cartaBaron = (Carta) Tablero.leerMsj(dis);
@@ -112,9 +112,23 @@ public class HiloEscuchaTablero extends Thread {
 		}
 			break;
 		case "Sacerdote": {
+
 		}
 			break;
 		case "Guardia": {
+			cartaElegidaOp = (Carta) Tablero.leerMsj(dis);
+			nombreOp = (String) leerMsj(dis);
+			tablero.setSeJugoGuardia(true);
+			tablero.setCartaElegidaGuardia(cartaElegidaOp);
+			tablero.setJugadorGuaridaOp(nombreOp);
+			tablero.setJugadorGuarida(nombreJugo);
+			String msj = (String) leerMsj(dis);
+			if (msj.equals("Acierto")) {
+				cartaOp = (Carta) Tablero.leerMsj(dis);
+				tablero.setAcertoGuardia(true);
+				sw = true;
+				//Remover la carta?
+			} 
 		}
 			break;
 		case "Rey": {
