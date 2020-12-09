@@ -185,6 +185,7 @@ public class Partida extends Observer implements Serializable {
 		ArrayList<Paquete> p = Servidor.darClientesDeSala(nombreSala);
 
 		try {
+
 			for (Paquete paqueteCliente : p) {
 				for (Jugador jugadorCliente : jugadores) {
 					if (paqueteCliente.getNick().equals(jugadorCliente.getNombre())) {
@@ -192,9 +193,9 @@ public class Partida extends Observer implements Serializable {
 						paqueteCliente.getSalida().writeObject(cartaDada);
 						paqueteCliente.getSalida().writeObject(paqueteCliente.getNick());
 					}
-
 				}
 			}
+			
 			for (Paquete paquete : p) {
 				if (paquete.getNick().equals(jInicial)) {
 					paquete.getSalida().writeObject("tuTurno");

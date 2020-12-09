@@ -31,18 +31,44 @@ public class Baron extends Carta {
 		try {
 			int jElegido = (int) paquete.getEntrada().readObject();
 
+			Paquete paquetOp = null;
 			Jugador oponente = partida.getJugadores().get(jElegido);
 			int resultado = jugador.compararMano(oponente);
-			paquete.getSalida().writeObject("actualizarTablero");
-			paquete.getSalida().writeObject(oponente.getMano(0));// esta es para mostrar
-			if (resultado > 0) {			
-				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
-					if (paqueteCliente.getCliente().isConnected()&& !paquete.equals(paqueteCliente)) {
-						paquete.getSalida().writeObject("actualizarTablero");
-						paquete.getSalida().writeObject(oponente.getMano(0));
+
+			paquete.getSalida().writeObject(oponente.getNombre());
+			///// ESTA ES PARA MOSTRAR
+
+			for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
+				if (oponente.getNombre().equals(paqueteCliente.getNick())) {
+					paqueteCliente.getSalida().writeObject(oponente.getMano(0));
+					paquete.getSalida().writeObject(oponente.getMano(0));
+
+					if (jugador.getMano(0).equals(new Baron())) {
+						paquete.getSalida().writeObject(jugador.getMano(1));
+						paqueteCliente.getSalida().writeObject(jugador.getMano(1));
+					} else {
+						paquete.getSalida().writeObject(jugador.getMano(0));
+						paqueteCliente.getSalida().writeObject(jugador.getMano(0));
 					}
+
+					break;
 				}
-				
+
+			}
+
+//			paquete.getSalida().writeObject(oponente.getMano(0));
+
+			////////////////////////////////////////////
+
+			if (resultado > 0) {
+				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
+					paqueteCliente.getSalida().writeObject(oponente.getMano(0));
+					if (paqueteCliente.getNick().equals(oponente.getNombre())) {
+						paqueteCliente.getSalida().writeObject("Perdi");
+					}
+
+				}
+
 				oponente.descartar(oponente.getMano(0));
 				oponente.seJugoBaron();
 				partida.setHuboEliminacion(true);/////////////////// enviarMensaje
@@ -50,23 +76,29 @@ public class Baron extends Carta {
 			} else if (resultado < 0) {
 
 				if (jugador.getMano(0).equals(new Baron())) {
+			
 					for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
-						if (paqueteCliente.getCliente().isConnected()&& !paquete.equals(paqueteCliente)) {
-							paquete.getSalida().writeObject("actualizarTablero");
-							paquete.getSalida().writeObject(oponente.getMano(1));
+
+						paqueteCliente.getSalida().writeObject(jugador.getMano(1));
+						if (paqueteCliente.getNick().equals(jugador.getNombre())) {
+							paqueteCliente.getSalida().writeObject("Perdi");
 						}
+
 					}
-					jugador.descartar(oponente.getMano(1));
+					jugador.descartar(jugador.getMano(1));
 				} else {
+					
 					for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
-						if (paqueteCliente.getCliente().isConnected()&& !paquete.equals(paqueteCliente)) {
-							paquete.getSalida().writeObject("actualizarTablero");
-							paquete.getSalida().writeObject(oponente.getMano(0));
+
+						paqueteCliente.getSalida().writeObject(jugador.getMano(0));
+						if (paqueteCliente.getNick().equals(jugador.getNombre())) {
+							paqueteCliente.getSalida().writeObject("Perdi");
 						}
 					}
-					
-					jugador.descartar(oponente.getMano(0));
+
+					jugador.descartar(jugador.getMano(0));
 				}
+			
 				jugador.seJugoBaron();
 				partida.setHuboEliminacion(true);///////////////// enviarMensaje
 				partida.setEliminoActBaron(true);//////////////// enviarMensaje

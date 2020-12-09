@@ -38,14 +38,14 @@ public class Principe extends Carta {
 			Carta jugada = oponente.descartar(oponente.sacarCartaDeMano(0));
 
 			for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
-				if (paqueteCliente.getCliente().isConnected() && !paquete.equals(paqueteCliente)) {
-					if (paqueteCliente.getNick().equals(oponente.getNombre())) {
-						paqueteOp = paqueteCliente;
+				if (paqueteCliente.getCliente().isConnected()) {
+					if(oponente.getNombre().equals(paqueteCliente.getNick())) {
+						paqueteOp=paqueteCliente;	
 					}
-
-					paqueteCliente.getSalida().writeObject(jugada);
+					
+				
 					paqueteCliente.getSalida().writeObject(oponente.getNombre());
-
+					paqueteCliente.getSalida().writeObject(jugada);
 				}
 			}
 			if (jugada.equals(new Princesa())) {
