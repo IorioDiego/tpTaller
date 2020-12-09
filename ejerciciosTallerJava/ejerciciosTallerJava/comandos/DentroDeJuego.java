@@ -1,5 +1,6 @@
 package comandos;
 
+import comandosJuego.BloquearJugadores;
 import comandosJuego.CambioJugador;
 import comandosJuego.ComandosJuego;
 import comandosJuego.DefaultJuego;
@@ -45,12 +46,14 @@ public class DentroDeJuego implements ComandosServer {
 		ComandosJuego tomarCarta = new TomarCartas();
 		ComandosJuego jugarCarta =  new JugarCartas();
 		ComandosJuego cambioJugador = new CambioJugador();
+		ComandosJuego bloquearJugador= new BloquearJugadores();
 		
 		this.comanJuego = new VolverPantallaInicial();
 		comanJuego.establecerSiguiente(tomarCarta);
 		tomarCarta.establecerSiguiente(jugarCarta);
 		jugarCarta.establecerSiguiente(cambioJugador);
-		cambioJugador.establecerSiguiente(defaultJuego);
+		cambioJugador.establecerSiguiente(bloquearJugador);
+		bloquearJugador.establecerSiguiente(defaultJuego);
 	}
 	
 }

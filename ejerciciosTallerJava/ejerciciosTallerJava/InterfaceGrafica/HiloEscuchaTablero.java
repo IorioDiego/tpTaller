@@ -39,13 +39,14 @@ public class HiloEscuchaTablero extends Thread {
 		String nombreOp = null;
 		Carta cartaOp = null;
 		Carta cartaBaron = null;
+		Carta cartaBaronOp = null;
 		Carta cartaPerdedor = null;
+		String jugadorBaron = null;
+		String jugadorBaronOp = null;
 		boolean itsMeMario = false;
 		boolean sw = false;
-		nombreOp = (String) leerMsj(dis);
-		if (tablero.getNombreJActivo().equals(nombreOp)) {
-			itsMeMario = true;
-		}
+
+		
 
 		switch (cJugada.getNombre()) {
 		case "Princesa": {
@@ -56,15 +57,18 @@ public class HiloEscuchaTablero extends Thread {
 		}
 			break;
 		case "Principe": {
-
+			nombreOp = (String) leerMsj(dis);
 			cartaOp = (Carta) Tablero.leerMsj(dis);
+			sw = true;
+			if (tablero.getNombreJActivo().equals(nombreOp)) {
+				itsMeMario = true;
+			}
 
 			if (itsMeMario) {
 				Carta nuevaCarta = (Carta) Tablero.leerMsj(dis);
 				tablero.getMano().add(nuevaCarta);
 				tablero.getMano().remove(0);
-				sw = true;
-				itsMeMario = false;
+				
 
 			}
 
@@ -74,18 +78,40 @@ public class HiloEscuchaTablero extends Thread {
 		}
 			break;
 		case "Baron": {
-			tablero.setJugadorBaronOp(nombreOp);
-			tablero.setCartaBaronOp((Carta) leerMsj(dis));
-			cartaBaron = (Carta) leerMsj(dis);
-			tablero.setJugadorBaron(nombreJugo);
-			tablero.setCompararManos(true);
-	
-			cartaOp = (Carta) leerMsj(dis);
-			String msj = (String) leerMsj(dis);
-			if (msj.equals("Perdi")) {
-				sw = true;
+
+			nombreOp = (String) leerMsj(dis);
+			cartaBaronOp = (Carta) Tablero.leerMsj(dis);
+			cartaBaron = (Carta) Tablero.leerMsj(dis);
+			
+			if (tablero.getNombreJActivo().equals(nombreOp)) {
+				itsMeMario = true;
 			}
 			
+			jugadorBaron = nombreJugo;
+			jugadorBaronOp = nombreOp;
+			if (itsMeMario) {
+				tablero.setJugadorBaronOp(nombreOp);
+				tablero.setCartaBaronOp(cartaBaronOp);
+				tablero.setCartaBaron(cartaBaron);
+				tablero.setJugadorBaron(nombreJugo);
+				tablero.setCompararManos(true);
+				
+			}
+
+			String msj = (String) leerMsj(dis);
+			if (msj.equals("PerdioOponente")) {
+				sw = true;
+				cartaOp = cartaBaronOp;
+				nombreOp = jugadorBaronOp;
+//				tablero.getMano().remove(0); //si remuevo es porq perdio
+		
+			} else if (msj.equals("PerdioJugador")) {
+				sw = true;
+				cartaOp = cartaBaron;
+				nombreOp = jugadorBaron;
+
+			}
+
 		}
 			break;
 		case "Sacerdote": {
@@ -102,9 +128,8 @@ public class HiloEscuchaTablero extends Thread {
 		pintarCarta(cJugada, nombreJugo);
 		if (sw) {
 			pintarCarta(cartaOp, nombreOp);
-			sw = false;
 		}
-
+		sw = false;
 		tablero.refresh();
 
 	}
