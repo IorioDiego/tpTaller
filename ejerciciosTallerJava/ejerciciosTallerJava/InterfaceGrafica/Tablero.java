@@ -89,6 +89,7 @@ public class Tablero extends JFrame {
 	private boolean levantarCarta = false;
 	private boolean jugarCarta = false;
 	private boolean miTurno = false;
+	private boolean seJugoGuardia = false;
 
 //	private Map<String, ArrayList<DibujoCarta>> descarteTodos = new HashMap<String, ArrayList<DibujoCarta>>();
 
@@ -148,10 +149,21 @@ public class Tablero extends JFrame {
 	private String jugadorBaronOp;
 	private Carta cartaBaron;
 	private Carta cartaBaronOp;
+	
+	private String jugadorGuarida;
+	
+
+	private String jugadorElegSacer;
+	private Carta cartaOpSacer;
+
+	private Carta cartaElegidaGuardia;
+
+	private String jugadorGuaridaOp;
 
 	private int distDescarte = 0;
 	private Partida partida;
 	private boolean dibManoOp = false;
+	private boolean acertoGuardia = false;
 	private Sound sonidoFondo;
 	private Sound sonidoTirarCarta;
 	private ImageIcon banner;
@@ -204,8 +216,8 @@ public class Tablero extends JFrame {
 	public void bloquearBoton() {
 //comando, y pedir el array de jugadores
 		enviarMsj(out, "6");
-		partida = (Partida) leerMsj(in);
-		for (int i = 0; i < partida.getJugadores().size(); i++) {
+		Partida partida2 = (Partida) leerMsj(in);
+		for (int i = 0; i < partida2.getJugadores().size(); i++) {
 			if (jugadores.get(i).isBlockedOrDelete()) {
 				switch (i) {
 				case 0:
@@ -279,7 +291,7 @@ public class Tablero extends JFrame {
 		if (mano.get(0).equals(new Guardia()) || mano.get(0).equals(new Sacerdote()) || mano.get(0).equals(new Baron())
 				|| mano.get(0).equals(new Rey()) || mano.get(0).equals(new Principe())) {
 			lista.setVisible(true);
-			
+
 			if (mano.get(0).equals(new Guardia())) {
 				listaCartas.setVisible(true);
 
@@ -303,20 +315,19 @@ public class Tablero extends JFrame {
 			if (getNombreJActivo().equals(nombreOp)) {
 				itsMeMario = true;
 			}
-			
+
 			if (itsMeMario) {
 				Carta nuevaCarta = (Carta) Tablero.leerMsj(entrada);
 				getMano().add(nuevaCarta);
 				getMano().remove(0);
-				
+
 				itsMeMario = false;
 			}
 
 		}
 			break;
 		case "Mucama": {
-			
-			
+
 		}
 			break;
 		case "Baron": {
@@ -343,9 +354,24 @@ public class Tablero extends JFrame {
 		}
 			break;
 		case "Sacerdote": {
+			jugadorElegSacer = (String) leerMsj(entrada);
+			cartaOpSacer = (Carta) Tablero.leerMsj(entrada);
+			dibManoOp = true;
 		}
 			break;
 		case "Guardia": {
+			cartaElegidaGuardia = (Carta) Tablero.leerMsj(entrada);
+			nombreOp = (String) leerMsj(entrada);
+			jugadorGuaridaOp = nombreOp;
+			jugadorGuarida = nombreJActivo;
+			seJugoGuardia = true;
+			String msj = (String) leerMsj(entrada);
+			if (msj.equals("Acierto")) {
+				cartaOp = (Carta) Tablero.leerMsj(entrada);
+				acertoGuardia = true;
+				sw = true;
+				// Remover la carta?
+			}
 		}
 			break;
 		case "Rey": {
@@ -447,7 +473,7 @@ public class Tablero extends JFrame {
 				Carta nuevaCarta = (Carta) Tablero.leerMsj(entrada);
 				getMano().add(nuevaCarta);
 				getMano().remove(0);
-				
+
 				itsMeMario = false;
 			}
 
@@ -482,9 +508,24 @@ public class Tablero extends JFrame {
 		}
 			break;
 		case "Sacerdote": {
+			jugadorElegSacer = (String) leerMsj(entrada);
+			cartaOpSacer = (Carta) Tablero.leerMsj(entrada);
+			dibManoOp = true;
 		}
 			break;
 		case "Guardia": {
+			cartaElegidaGuardia = (Carta) Tablero.leerMsj(entrada);
+			nombreOp = (String) leerMsj(entrada);
+			jugadorGuarida = nombreJActivo;
+			jugadorGuaridaOp = nombreOp;
+			seJugoGuardia = true;
+			String msj = (String) leerMsj(entrada);
+			if (msj.equals("Acierto")) {
+				cartaOp = (Carta) Tablero.leerMsj(entrada);
+				acertoGuardia = true;
+				sw = true;
+				// Remover la carta?
+			}
 		}
 			break;
 		case "Rey": {
@@ -1050,14 +1091,15 @@ public class Tablero extends JFrame {
 				g2.setPaint(Color.WHITE);
 				g2.drawImage(fondoVerCarta, 330, 150, 555, 380, this);
 
-				for (String texto : jugadores.get(Tablero.getJugadorElegido()).getMano(0).toString().split("\n")) {
-					g2.drawString(texto, 380, 450 + renglon);
-					renglon += 20;
-				}
+//				for (String texto : jugadores.get(Tablero.getJugadorElegido()).getMano(0).toString().split("\n")) {
+//					g2.drawString(texto, 380, 450 + renglon);
+//					renglon += 20;
+//				}
+
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 40));
 
-				g2.drawString(jugadores.get(Tablero.getJugadorElegido()).getNombre(), 510, 220);
-				dibujarCartas(g2, jugadores.get(Tablero.getJugadorElegido()).getMano(0).getNombre(), 560, 280);
+				g2.drawString(jugadorElegSacer, 510, 220);
+				dibujarCartas(g2, cartaOpSacer.getNombre(), 560, 280);
 
 				dibManoOp = false;
 			}
@@ -1085,8 +1127,24 @@ public class Tablero extends JFrame {
 
 				g2.drawString(jugadorBaronOp, 640, 220);
 				dibujarCartas(g2, cartaBaronOp.getNombre(), 670, 280);
-//				dibujarCartas(g2, jugadores.get(Tablero.getJugadorElegido()).getMano(0).getNombre(), 670, 280);
 				compararManos = false;
+			}
+
+			if (seJugoGuardia) {
+
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setFont(seagram);
+				g2.setPaint(Color.WHITE);
+				g2.drawImage(fondoVerCarta, 330, 150, 555, 380, this);
+
+				g2.drawString(jugadorGuarida + " dice que " + jugadorGuaridaOp + " tiene", 510, 240);
+				dibujarCartas(g2, cartaElegidaGuardia.getNombre(), 560, 280);
+				if (acertoGuardia) {
+					g2.drawString("ACERTO", 560, 460);
+					acertoGuardia = false;
+				} else
+					g2.drawString("NO ACERTO", 545, 460);
+				seJugoGuardia = false;
 			}
 
 			if (partida.getReinicio()) {
@@ -1276,6 +1334,14 @@ public class Tablero extends JFrame {
 		return indexDes;
 	}
 
+	public Carta getCartaElegidaGuardia() {
+		return cartaElegidaGuardia;
+	}
+
+	public void setCartaElegidaGuardia(Carta cartaElegidaGuardia) {
+		this.cartaElegidaGuardia = cartaElegidaGuardia;
+	}
+
 	public void setIndexDes(Map<String, Integer> indexDes) {
 		this.indexDes = indexDes;
 	}
@@ -1300,6 +1366,14 @@ public class Tablero extends JFrame {
 		return miTurno;
 	}
 
+	public boolean isAcertoGuardia() {
+		return acertoGuardia;
+	}
+
+	public void setAcertoGuardia(boolean acertoGuardia) {
+		this.acertoGuardia = acertoGuardia;
+	}
+
 	public void setMiTurno(boolean miTurno) {
 		this.miTurno = miTurno;
 	}
@@ -1307,7 +1381,16 @@ public class Tablero extends JFrame {
 	public static int getCartaElegida() {
 		return cartaElegida;
 	}
+	
+	
+	public String getJugadorGuarida() {
+		return jugadorGuarida;
+	}
 
+	public void setJugadorGuarida(String jugadorGuarida) {
+		this.jugadorGuarida = jugadorGuarida;
+	}
+	
 	public void setCartaElegida(int cartaElegida) {
 		Tablero.cartaElegida = cartaElegida;
 	}
@@ -1334,8 +1417,24 @@ public class Tablero extends JFrame {
 		this.in = in;
 	}
 
+	public String getJugadorGuaridaOp() {
+		return jugadorGuaridaOp;
+	}
+
+	public void setJugadorGuaridaOp(String jugadorGuaridaOp) {
+		this.jugadorGuaridaOp = jugadorGuaridaOp;
+	}
+
 	public ObjectOutputStream getOut() {
 		return out;
+	}
+
+	public boolean isSeJugoGuardia() {
+		return seJugoGuardia;
+	}
+
+	public void setSeJugoGuardia(boolean seJugoGuardia) {
+		this.seJugoGuardia = seJugoGuardia;
 	}
 
 	public void setOut(ObjectOutputStream out) {

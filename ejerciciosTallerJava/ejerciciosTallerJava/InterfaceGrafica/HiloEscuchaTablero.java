@@ -37,6 +37,7 @@ public class HiloEscuchaTablero extends Thread {
 		Carta cJugada = (Carta) Tablero.leerMsj(dis);
 		String nombreJugo = (String) leerMsj(dis);
 		String nombreOp = null;
+		Carta cartaElegidaOp = null;
 		Carta cartaOp = null;
 		Carta cartaBaron = null;
 		Carta cartaBaronOp = null;
@@ -45,8 +46,6 @@ public class HiloEscuchaTablero extends Thread {
 		String jugadorBaronOp = null;
 		boolean itsMeMario = false;
 		boolean sw = false;
-
-		
 
 		switch (cJugada.getNombre()) {
 		case "Princesa": {
@@ -68,7 +67,6 @@ public class HiloEscuchaTablero extends Thread {
 				Carta nuevaCarta = (Carta) Tablero.leerMsj(dis);
 				tablero.getMano().add(nuevaCarta);
 				tablero.getMano().remove(0);
-				
 
 			}
 
@@ -78,15 +76,14 @@ public class HiloEscuchaTablero extends Thread {
 		}
 			break;
 		case "Baron": {
-
 			nombreOp = (String) leerMsj(dis);
 			cartaBaronOp = (Carta) Tablero.leerMsj(dis);
 			cartaBaron = (Carta) Tablero.leerMsj(dis);
-			
+
 			if (tablero.getNombreJActivo().equals(nombreOp)) {
 				itsMeMario = true;
 			}
-			
+
 			jugadorBaron = nombreJugo;
 			jugadorBaronOp = nombreOp;
 			if (itsMeMario) {
@@ -95,7 +92,7 @@ public class HiloEscuchaTablero extends Thread {
 				tablero.setCartaBaron(cartaBaron);
 				tablero.setJugadorBaron(nombreJugo);
 				tablero.setCompararManos(true);
-				
+
 			}
 
 			String msj = (String) leerMsj(dis);
@@ -104,7 +101,7 @@ public class HiloEscuchaTablero extends Thread {
 				cartaOp = cartaBaronOp;
 				nombreOp = jugadorBaronOp;
 //				tablero.getMano().remove(0); //si remuevo es porq perdio
-		
+
 			} else if (msj.equals("PerdioJugador")) {
 				sw = true;
 				cartaOp = cartaBaron;
@@ -115,9 +112,23 @@ public class HiloEscuchaTablero extends Thread {
 		}
 			break;
 		case "Sacerdote": {
+
 		}
 			break;
 		case "Guardia": {
+			cartaElegidaOp = (Carta) Tablero.leerMsj(dis);
+			nombreOp = (String) leerMsj(dis);
+			tablero.setSeJugoGuardia(true);
+			tablero.setCartaElegidaGuardia(cartaElegidaOp);
+			tablero.setJugadorGuaridaOp(nombreOp);
+			tablero.setJugadorGuarida(nombreJugo);
+			String msj = (String) leerMsj(dis);
+			if (msj.equals("Acierto")) {
+				cartaOp = (Carta) Tablero.leerMsj(dis);
+				tablero.setAcertoGuardia(true);
+				sw = true;
+				//Remover la carta?
+			} 
 		}
 			break;
 		case "Rey": {
