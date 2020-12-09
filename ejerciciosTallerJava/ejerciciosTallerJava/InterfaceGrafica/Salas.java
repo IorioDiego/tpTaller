@@ -38,8 +38,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
-
 import comandos.CrearSala;
 import servidor.Paquete;
 import servidor.SalaSerealizable;
@@ -54,7 +52,7 @@ public class Salas extends JFrame {
 	private JTextField textField;
 	private JList<String> list;
 	private boolean tocoEnter = false;
-	private static Integer indexSala;
+	private static Integer indexSala = -1;
 	private JButton btnIngresar;
 	private JButton crear;
 	private JButton Ingresar;
@@ -156,17 +154,22 @@ public class Salas extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				enviarMsj(dosObject, "3");
-				enviarMsj(dosObject, salas.get(indexSala).getSetPart().getNombreSala());
-				String hayEspacio = (String) leerMsj(disObject);
-				if (hayEspacio.equals("y")) {
-					DentroDeSala sala = new DentroDeSala(miSala);
-					dispose();
-					enviarMsj(dosObject, "13"); // avisa ingreso
-					sala.init(disObject, dosObject, salas.get(indexSala).getSetPart().getNombreSala());
+				if (indexSala != -1) {
+					enviarMsj(dosObject, "3");
+					enviarMsj(dosObject, salas.get(indexSala).getSetPart().getNombreSala());
+					String hayEspacio = (String) leerMsj(disObject);
+					if (hayEspacio.equals("y")) {
+						DentroDeSala sala = new DentroDeSala(miSala);
+						dispose();
+						enviarMsj(dosObject, "13"); // avisa ingreso
+						sala.init(disObject, dosObject, salas.get(indexSala).getSetPart().getNombreSala());
+						indexSala = -1;
+					} else
+						JOptionPane.showMessageDialog(null, "La sala a la cual quiere ingresar esta llena eliga otra",
+								"Sala llena", JOptionPane.ERROR_MESSAGE);
 				} else
-					JOptionPane.showMessageDialog(null, "La sala a la cual quiere ingresar esta llena eliga otra",
-							"Sala llena", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Debe seleccionar una sala", "Error sala",
+							JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -215,19 +218,30 @@ public class Salas extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					if (textField.getText().equals("") || textField.getText().equals("Ingrese Nickname"))
 
+					if (textField.getText().equals("") || textField.getText().equals("Ingrese Nickname"))
 						JOptionPane.showMessageDialog(null, "Debe ingresar un nickName para continuar",
 								"Ingreso nickName", JOptionPane.ERROR_MESSAGE);
 					else {
-						enviarMsj(dosObject, textField.getText());
-						tocoEnter = true;
-						btnCrear.setEnabled(true);
-						list.setEnabled(true);
-						if (salas.size() > 0)
-							btnIngresar.setEnabled(true);
-						btnRefresh.setEnabled(true);
-						textField.setEnabled(false);
+						if (textField.getText().length() > 10)
+							JOptionPane.showMessageDialog(null, "El nick ingresado debe ser menor a 10 caracteres",
+									"Ingreso nickName", JOptionPane.ERROR_MESSAGE);
+						else {
+							enviarMsj(dosObject, textField.getText());
+							String nom = (String) leerMsj(disObject);
+							if (nom.equals("Repetido"))
+								JOptionPane.showMessageDialog(null, "El nick ingresado ya se encuentra en uso",
+										"Ingreso nickName", JOptionPane.ERROR_MESSAGE);
+							else {
+								tocoEnter = true;
+								btnCrear.setEnabled(true);
+								list.setEnabled(true);
+								if (salas.size() > 0)
+									btnIngresar.setEnabled(true);
+								btnRefresh.setEnabled(true);
+								textField.setEnabled(false);
+							}
+						}
 					}
 				}
 			}
@@ -265,9 +279,8 @@ public class Salas extends JFrame {
 			System.exit(0);
 		}
 	}
-	
-	public void refresh()
-	{
+
+	public void refresh() {
 		salas = (ArrayList<SalaSerealizable>) leerMsj(dis);
 		dlm.clear();
 		for (SalaSerealizable item : salas) {

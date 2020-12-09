@@ -49,7 +49,6 @@ public class HiloAtencionCliente extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
 
 	@Override
 	public void run() {
@@ -58,10 +57,17 @@ public class HiloAtencionCliente extends Thread {
 			ChainOfResposability();
 			boolean existeSala = true;
 			enviarSalas();
-			String nickName = (String) entradaObj.readObject(); //en caso de que salga sin poner nickname
+			String nickName = (String) entradaObj.readObject(); // en caso de que salga sin poner nickname
 			if (nickName.equals("-/-1"))
 				cerrarConexion();
 			else {
+				while(nickRepetido(nickName))
+				{	
+					salidaObj.writeObject("Repetido");
+					nickName = (String) entradaObj.readObject();
+				}
+				salidaObj.writeObject("noRepetido");
+				
 				paquete = new Paquete(inicioConexion, cliente, nickName, entradaObj, salidaObj);
 				do {
 					do {
@@ -99,13 +105,8 @@ public class HiloAtencionCliente extends Thread {
 		}
 
 	}
-	
-	
-	
-	
-	
-	public void ChainOfResposability()
-	{
+
+	public void ChainOfResposability() {
 		ComandosServer crearSala = new CrearSala();
 		ComandosServer ingresoSala = new IngresarSala();
 		ComandosServer chatGeneral = new EnviarMsjAllSala();
@@ -118,7 +119,7 @@ public class HiloAtencionCliente extends Thread {
 		ComandosServer expulsaAtodos = new ExpulsarAtodos();
 		ComandosServer comenzarPartida = new ComenzarPartida();
 		ComandosServer dentroDeJuego = new DentroDeJuego();
-		
+
 		this.comanSer = new Salir();
 		comanSer.establecerSiguiente(crearSala);
 		crearSala.establecerSiguiente(ingresoSala);
@@ -132,6 +133,19 @@ public class HiloAtencionCliente extends Thread {
 		expulsaAtodos.establecerSiguiente(comenzarPartida);
 		comenzarPartida.establecerSiguiente(dentroDeJuego);
 		dentroDeJuego.establecerSiguiente(comDefault);
+	}
+	
+	public boolean nickRepetido(String nick)
+	{	
+		boolean repetido=false;
+		for (Map.Entry<String, ArrayList<Paquete>> entry : Servidor.getSalas().entrySet()) {
+			ArrayList<Paquete> paquetes = entry.getValue();
+			for (Paquete clientes : paquetes) {
+				if(clientes.getNick().equals(nick))
+					repetido = true;
+			}
+		}
+		return repetido;
 	}
 
 	public void enviarSalas() {

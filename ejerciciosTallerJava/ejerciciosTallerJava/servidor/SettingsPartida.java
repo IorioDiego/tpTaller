@@ -9,6 +9,7 @@ public class SettingsPartida implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer cantJugadores;
+	private boolean inGame=false;
 	private String nombreSala;
 	private Integer prendasAmor;
 	private String jugadorIncial;
@@ -31,6 +32,14 @@ public class SettingsPartida implements Serializable {
 		
 	}
 	
+
+	public boolean isInGame() {
+		return inGame;
+	}
+
+	public void setInGame(boolean inGame) {
+		this.inGame = inGame;
+	}
 
 	public Partida getPartida() {
 		return partida;

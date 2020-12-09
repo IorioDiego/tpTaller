@@ -185,14 +185,16 @@ public class Partida extends Observer implements Serializable {
 		ArrayList<Paquete> p = Servidor.darClientesDeSala(nombreSala);
 
 		try {
-			for (int i = 0; i < p.size(); i++) {
+			for (Paquete paqueteCliente : p) {
+				for (Jugador jugadorCliente : jugadores) {
+					if (paqueteCliente.getNick().equals(jugadorCliente.getNombre())) {
+						Carta cartaDada = mazo.darCarta(jugadorCliente);
+						paqueteCliente.getSalida().writeObject(cartaDada);
+						paqueteCliente.getSalida().writeObject(paqueteCliente.getNick());
+					}
 
-				Carta cartaDada = mazo.darCarta(jugadores.get(i));
-				p.get(i).getSalida().writeObject(cartaDada);
-				p.get(i).getSalida().writeObject(p.get(i).getNick());
-
+				}
 			}
-
 			for (Paquete paquete : p) {
 				if (paquete.getNick().equals(jInicial)) {
 					paquete.getSalida().writeObject("tuTurno");

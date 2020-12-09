@@ -24,7 +24,7 @@ public class JugarCartas implements ComandosJuego {
 				Carta cartaJugada = (Carta) paquete.getEntrada().readObject();
 			
 				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
-					if (paqueteCliente.getCliente().isConnected()&& !paquete.equals(paqueteCliente)) {
+					if (paqueteCliente.getCliente().isConnected() && !paquete.equals(paqueteCliente)) {
 						paqueteCliente.getSalida().writeObject("actualizarTablero");
 						paqueteCliente.getSalida().writeObject(cartaJugada);
 						paqueteCliente.getSalida().writeObject(paquete.getNick());

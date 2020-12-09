@@ -267,7 +267,6 @@ public class Tablero extends JFrame {
 		sonidoTirarCarta.play();
 		mano.remove(0);
 		refresh();
-
 		if (cartaTiradas.getCartaDib().equals(new Principe())) {
 //				distDescarte += 30;
 //				DibujoCarta cartaOp = new DibujoCarta(jugadores.get(getJugadorElegido()).getUltimaDescartada(),

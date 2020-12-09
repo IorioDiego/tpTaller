@@ -35,6 +35,7 @@ public class ComenzarPartida implements ComandosServer {
 						paqueteCliente.getSalida().writeObject(partida);
 					}
 				}
+				configPart.setInGame(true);
 				configPart.setPartida(partida);
 				configPart.getPartida().iniciarPartida();
 			} catch (IOException | ClassNotFoundException e) {

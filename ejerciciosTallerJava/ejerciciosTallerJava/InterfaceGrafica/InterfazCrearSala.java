@@ -130,13 +130,17 @@ public class InterfazCrearSala extends JFrame {
 						JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de sala", "Nombre de sala",
 								JOptionPane.ERROR_MESSAGE);
 					else {
-
-						tocoEnter = true;
-						setPartida.setNombreSala(nombSala);
-						cantPrendasAmor.setEnabled(true);
-						cantJugadores.setEnabled(true);
-						botonCrear.setEnabled(true);
-						nombreSala.setEnabled(false);
+						if (nombSala.length() > 15) {
+							JOptionPane.showMessageDialog(null, "El nombre de la sala debe ser menor a 15 caracteres",
+									"Nombre de sala", JOptionPane.ERROR_MESSAGE);
+						} else {
+							tocoEnter = true;
+							setPartida.setNombreSala(nombSala);
+							cantPrendasAmor.setEnabled(true);
+							cantJugadores.setEnabled(true);
+							botonCrear.setEnabled(true);
+							nombreSala.setEnabled(false);
+						}
 					}
 				}
 			}
@@ -168,7 +172,7 @@ public class InterfazCrearSala extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				enviarMsj(dosObject, "volver");
 				JsalaPrincipal.setVisible(true);
-				//JsalaPrincipal.refresh();
+				// JsalaPrincipal.refresh();
 				dispose();
 			}
 		});
@@ -184,7 +188,7 @@ public class InterfazCrearSala extends JFrame {
 					enviarMsj(dosObject, setPartida);
 					DentroDeSala sala = new DentroDeSala(JsalaPrincipal);
 					dispose();
-					sala.init(disObject, dosObject,setPartida.getNombreSala());
+					sala.init(disObject, dosObject, setPartida.getNombreSala());
 				} else {
 					JOptionPane.showMessageDialog(null, "El nombre de la sala ya existe debe ingresar uno distinto",
 							"Error de creacion de sala", JOptionPane.ERROR_MESSAGE);
