@@ -37,6 +37,7 @@ public class Partida extends Observer implements Serializable {
 	private int nroRonda;
 	private String jInicial;
 	private String nombreSala;
+	private Paquete paqueteActivo;
 	private Carta cartaEliminda;
 	private boolean huboEliminacion = false;
 	// baron
@@ -195,7 +196,7 @@ public class Partida extends Observer implements Serializable {
 					}
 				}
 			}
-			
+
 			for (Paquete paquete : p) {
 				if (paquete.getNick().equals(jInicial)) {
 					paquete.getSalida().writeObject("tuTurno");
@@ -246,16 +247,17 @@ public class Partida extends Observer implements Serializable {
 	@Override
 	public void notificarseEstadoEliminado() {
 		cantJugadores--;
-	
+
 		if (cantJugadores == 1) {
 			for (int i = 0; i < jugadoresActivos; i++) {
 				if (!jugadores.get(i).getEstado().equals(new Eliminado()))
 					jugadores.get(i).ganarRonda(afecto, this);
 			}
-			for (Paquete clientes : Servidor.darClientesDeSala(nombreSala) ) {
-				enviarMsj(clientes.getSalida(),"finDeRonda");				
-				enviarMsj(clientes.getSalida(),ganadoRonda.getNombre());
+			for (Paquete clientes : Servidor.darClientesDeSala(nombreSala)) {
+					enviarMsj(clientes.getSalida(), "finDeRonda");
+					enviarMsj(clientes.getSalida(), ganadoRonda.getNombre());
 			}
+			Servidor.darConfigSalas(nombreSala).setReinicioRonda("Reinicio");
 			iniciarRonda();
 		}
 	}
@@ -418,6 +420,14 @@ public class Partida extends Observer implements Serializable {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public Paquete getPaqueteActivo() {
+		return paqueteActivo;
+	}
+
+	public void setPaqueteActivo(Paquete paqueteActivo) {
+		this.paqueteActivo = paqueteActivo;
 	}
 
 }

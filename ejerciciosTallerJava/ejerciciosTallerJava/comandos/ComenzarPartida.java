@@ -28,6 +28,7 @@ public class ComenzarPartida implements ComandosServer {
 				String jInicial = (String) paquete.getEntrada().readObject();
 				configPart.setOrden(orden);
 				configPart.setJugadorIncial(jInicial);
+				configPart.setReinicioRonda("NoReinicio");
 				Partida partida = generarPartida(configPart, paquete,paquete.getSala());
 				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 					if (paqueteCliente.getCliente().isConnected()) {

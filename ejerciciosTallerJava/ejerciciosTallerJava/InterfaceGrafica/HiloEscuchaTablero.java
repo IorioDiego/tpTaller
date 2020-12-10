@@ -46,7 +46,7 @@ public class HiloEscuchaTablero extends Thread {
 		tablero.getDescartes().clear();
 		tablero.recibirCartas();
 		tablero.construirDescarte();
-		tablero.refresh();
+		//tablero.refresh();
 	}
 
 	public void finDePartida() {
@@ -69,8 +69,10 @@ public class HiloEscuchaTablero extends Thread {
 
 		switch (cJugada.getNombre()) {
 		case "Princesa": {
+			nombreOp = (String) leerMsj(dis);
+			cartaOp = (Carta) Tablero.leerMsj(dis);
+			sw=true;
 		}
-
 			break;
 		case "Condesa": {
 		}

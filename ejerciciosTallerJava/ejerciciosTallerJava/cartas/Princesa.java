@@ -1,12 +1,13 @@
 package cartas;
 
-
+import java.io.IOException;
 
 import javax.swing.JDialog;
 
 import game.Jugador;
 import game.Partida;
 import servidor.Paquete;
+import servidor.Servidor;
 
 public class Princesa extends Carta {
 
@@ -25,7 +26,15 @@ public class Princesa extends Carta {
 	}
 
 	@Override
-	public void activarEfecto(Jugador jugador, Partida partida,Paquete paquete) {
+	public void activarEfecto(Jugador jugador, Partida partida, Paquete paquete) {
+		try {
+			for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
+				paqueteCliente.getSalida().writeObject(jugador.getNombre());
+				paqueteCliente.getSalida().writeObject(jugador.getMano(0));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		jugador.seJugoPrincesa();
 	}
 

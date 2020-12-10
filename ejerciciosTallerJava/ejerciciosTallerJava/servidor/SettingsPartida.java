@@ -14,6 +14,8 @@ public class SettingsPartida implements Serializable {
 	private Integer prendasAmor;
 	private String jugadorIncial;
 	private String orden;
+	private String reinicioRonda;
+	private String finalizoRonda;
 	private Partida partida;
 	
 	public SettingsPartida(Integer cantJugadores, String nombreSala, Integer prendasAmor) {
@@ -22,6 +24,30 @@ public class SettingsPartida implements Serializable {
 		this.prendasAmor = prendasAmor;
 	}
 	
+	
+	public String getReinicioRonda() {
+		return reinicioRonda;
+	}
+
+
+	public void setReinicioRonda(String reinicioRonda) {
+		this.reinicioRonda = reinicioRonda;
+	}
+
+
+
+	public String getFinalizoRonda() {
+		return finalizoRonda;
+	}
+
+
+
+	public void setFinalizoRonda(String finalizoRonda) {
+		this.finalizoRonda = finalizoRonda;
+	}
+
+
+
 	public SettingsPartida(SettingsPartida other) {
 		cantJugadores = other.cantJugadores;
 		nombreSala = other.nombreSala;
