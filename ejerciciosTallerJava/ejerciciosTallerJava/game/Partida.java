@@ -193,12 +193,10 @@ public class Partida extends Observer implements Serializable {
 						Carta cartaDada = mazo.darCarta(jugadorCliente);
 						paqueteCliente.getSalida().writeObject(cartaDada);
 						paqueteCliente.getSalida().writeObject(paqueteCliente.getNick());
-					
-						for (Jugador j : jugadores) {
-							paqueteCliente.getSalida().writeObject(j.getAfectosConseguidos());
+						for (Jugador jug : jugadores) {
+							paqueteCliente.getSalida().writeObject(jug.getAfectosConseguidos());
 						}
 					}
-					
 				}
 			}
 
@@ -258,21 +256,26 @@ public class Partida extends Observer implements Serializable {
 				if (!jugadores.get(i).getEstado().equals(new Eliminado()))
 					jugadores.get(i).ganarRonda(afecto, this);
 			}
-			for (Paquete clientes : Servidor.darClientesDeSala(nombreSala)) {
+			if (!finalizoPartida) {
+				for (Paquete clientes : Servidor.darClientesDeSala(nombreSala)) {
 					enviarMsj(clientes.getSalida(), "finDeRonda");
+					enviarMsj(clientes.getSalida(), "NofinPartida");
 					enviarMsj(clientes.getSalida(), ganadoRonda.getNombre());
+				}
+				Servidor.darConfigSalas(nombreSala).setReinicioRonda("Reinicio");
+				iniciarRonda();
 			}
-			Servidor.darConfigSalas(nombreSala).setReinicioRonda("Reinicio");
-			iniciarRonda();
 		}
 	}
 
 	public void notificarseEndGame() {
-		for (int i = 0; i < jugadores.size(); i++) {
-			if (jugadores.get(i).getAfectosConseguidos() == afecto) {
-				finalizarPartida(i);
-			}
-		}
+		finalizarPartida(0);
+		Servidor.darConfigSalas(nombreSala).setFinalizoPartida("finPartida");
+		for (Paquete clientes : Servidor.darClientesDeSala(nombreSala)) {
+			enviarMsj(clientes.getSalida(), "NofinDeRonda");
+			enviarMsj(clientes.getSalida(), "finPartida");
+			enviarMsj(clientes.getSalida(), ganadoRonda.getNombre());
+		}	
 	}
 
 	@Override

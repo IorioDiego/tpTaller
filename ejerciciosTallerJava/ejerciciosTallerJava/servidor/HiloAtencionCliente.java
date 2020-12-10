@@ -14,13 +14,11 @@ import java.util.Map;
 
 import InterfaceGrafica.ComenzarRonda;
 import comandos.AvisarIngreso;
-import comandos.ChatPrivado;
 import comandos.ComandosServer;
 import comandos.ComenzarPartida;
 import comandos.CrearSala;
 import comandos.Default;
 import comandos.DentroDeJuego;
-import comandos.EnviarMsjAllSala;
 import comandos.ExpulsarAtodos;
 import comandos.IngresarSala;
 import comandos.Refrescar;
@@ -71,14 +69,7 @@ public class HiloAtencionCliente extends Thread {
 				paquete = new Paquete(inicioConexion, cliente, nickName, entradaObj, salidaObj);
 				do {
 					do {
-						// String salaElegida = (String)entradaObj.readObject();
-						// System.out.println("la sala elegida fue: " + salaElegida);
-						// SettingsPartida setPart = (SettingsPartida)entradaObj.readObject();
-						// System.out.println(setPart);
-
-						// salida.writeUTF(opcionesSala);
-						// if (paquete.cantidadSalas() >= 1)
-						// salida.writeUTF("4)-Salir de sala");
+						
 						msj = (String) entradaObj.readObject();
 					} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
 
@@ -89,12 +80,6 @@ public class HiloAtencionCliente extends Thread {
 							// enviarJugadores();
 							msj = (String) entradaObj.readObject();
 						} while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby"));
-//						}while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby") && 
-//							(!(resultComando = comanSer.procesar(paquete, msj)).equals("--ComenzoJuego")));
-//						if(resultComando.equals("--ComenzoJuego")){
-//							ArrayList<String> nickNames = (ArrayList<String> ) entradaObj.readObject();
-//							Partida partida = new Partida(nickName);
-//						}
 					}
 				} while (!resultComando.equals("Salir"));
 			}

@@ -37,6 +37,7 @@ public class HiloEscuchaTablero extends Thread {
 	}
 
 	public void reiniciarRonda() {
+		leerMsj(dis);  ///Consumo un mensaje que no necesito
 		String ganador = (String)leerMsj(dis);
 		tablero.setGanadorRonda(ganador);
 		tablero.setReinicioRonda(true);
@@ -47,12 +48,11 @@ public class HiloEscuchaTablero extends Thread {
 		tablero.getDescartes().clear();
 		tablero.recibirCartas();
 		tablero.construirDescarte();
-	
 		//tablero.refresh();
 	}
 
 	public void finDePartida() {
-
+		tablero.finDePartida();
 	}
 
 	public void actualizar() {

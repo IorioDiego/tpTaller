@@ -84,7 +84,6 @@ public class Jugador extends Observable implements Serializable {
 		partida.setGanadoRonda(this);
 		if (++afectosConseguidos == afectos)
 			notificarEndGame();
-		
 	}
 	
 	public Carta tomarCarta(Carta nuevaCarta) {

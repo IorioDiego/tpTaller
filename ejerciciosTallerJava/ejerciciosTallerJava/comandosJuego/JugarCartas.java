@@ -38,11 +38,13 @@ public class JugarCartas implements ComandosJuego {
 						j.jugarCarta(partida, index, paquete);
 				}
 				String reinicio = Servidor.darConfigSalas(paquete.getSala()).getReinicioRonda();
+				String finPartida = Servidor.darConfigSalas(paquete.getSala()).getFinalizoPartida();
 				if (reinicio.equals("Reinicio")) {
 					reinicio = "NoReinicio";
-				}
-				else
+				} else if (!finPartida.equals("finPartida")) {
 					paquete.getSalida().writeObject("NoReinicio");
+					paquete.getSalida().writeObject("NoFinPartida");
+				}
 				// Servidor.darConfigSalas(paquete.getSala()).setReinicioRonda("NoReinicio");
 			} catch (Exception e) {
 				e.printStackTrace();

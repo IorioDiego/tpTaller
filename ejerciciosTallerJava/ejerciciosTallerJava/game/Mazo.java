@@ -53,7 +53,7 @@ public class Mazo extends Observable implements Serializable {
 	}
 
 	public void mezclar() {
-//		Collections.shuffle(mazo);
+		//Collections.shuffle(mazo);
 	}
 
 	public Carta darCarta(Jugador jugador) {

@@ -218,6 +218,7 @@ public class Tablero extends JFrame {
 	private boolean finalizar = false;
 	private boolean compararManos = false;
 	private boolean cambiarJugador = false;
+	private boolean finPartida = false;
 
 	JPanel predefined = new JPanel();
 	private JDialog lista;
@@ -331,10 +332,13 @@ public class Tablero extends JFrame {
 		sonidoTirarCarta.play();
 		jugarCarta = true;
 		String reiniRonda = (String) leerMsj(entrada);
-		if (!reiniRonda.equals("finDeRonda"))
+		String finPartida = (String) leerMsj(entrada);
+		if (!reiniRonda.equals("finDeRonda") && !finPartida.equals("finPartida"))
 			Tablero.enviarMsj(salida, "5");
-		else
+		else if (reiniRonda.equals("finDeRonda"))
 			reiniciarRonda();
+		else if (finPartida.equals("finPartida"))
+			finDePartida();
 		refresh();
 	}
 
@@ -362,10 +366,13 @@ public class Tablero extends JFrame {
 		sonidoTirarCarta.play();
 		jugarCarta = true;
 		String reiniRonda = (String) leerMsj(entrada);
-		if (!reiniRonda.equals("finDeRonda"))
+		String finPartida = (String) leerMsj(entrada);
+		if (!reiniRonda.equals("finDeRonda") && !finPartida.equals("finPartida"))
 			Tablero.enviarMsj(salida, "5");
-		else
+		else if (reiniRonda.equals("finDeRonda"))
 			reiniciarRonda();
+		else if (finPartida.equals("finPartida"))
+			finDePartida();
 		refresh();
 
 	}
@@ -761,7 +768,8 @@ public class Tablero extends JFrame {
 				}
 				refresh();
 				if (jugarCarta && levantarCarta) {
-					miTurno = false;
+					if (!finPartida)
+						miTurno = false;
 					jugarCarta = false;
 					levantarCarta = false;
 					synchronized (espera) {
@@ -984,11 +992,26 @@ public class Tablero extends JFrame {
 
 		@Override
 		public Dimension getPreferredSize() {
-
 			return new Dimension(1366, 768);
 
 		}
 
+	}
+
+	public void finDePartida() {
+		miTurno = true;
+		finPartida = true;
+		ganadorRonda = (String) leerMsj(in);
+		
+		sala.setVisible(true);
+		dispose();
+		enviarMsj(out, "2");
+		try {
+			out.flush();
+			;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void reiniciarRonda() {
@@ -1233,6 +1256,14 @@ public class Tablero extends JFrame {
 
 	public void setPartida(Partida partida) {
 		this.partida = partida;
+	}
+
+	public Salas getSala() {
+		return sala;
+	}
+
+	public void setSala(Salas sala) {
+		this.sala = sala;
 	}
 
 	private void pintarCarta(Carta cJugada, String nombreJugo) {
