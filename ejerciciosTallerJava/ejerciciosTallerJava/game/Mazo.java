@@ -21,6 +21,7 @@ public class Mazo extends Observable implements Serializable {
 	public Mazo() {
 
 		mazo.add(new Guardia());
+		mazo.add(new Princesa());
 		mazo.add(new Guardia());
 		mazo.add(new Guardia());
 		mazo.add(new Guardia());
@@ -44,7 +45,7 @@ public class Mazo extends Observable implements Serializable {
 		mazo.add(new Rey());
 		
 
-		mazo.add(new Princesa());
+		
 	}
 
 	public Carta eliminarPrimeraCarta() {
@@ -52,7 +53,7 @@ public class Mazo extends Observable implements Serializable {
 	}
 
 	public void mezclar() {
-		Collections.shuffle(mazo);
+	//	Collections.shuffle(mazo);
 	}
 
 	public Carta darCarta(Jugador jugador) {

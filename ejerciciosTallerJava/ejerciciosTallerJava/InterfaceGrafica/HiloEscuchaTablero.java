@@ -36,7 +36,17 @@ public class HiloEscuchaTablero extends Thread {
 	}
 
 	public void reiniciarRonda() {
-
+		String ganador = (String)leerMsj(dis);
+		tablero.setGanadorRonda(ganador);
+		tablero.setReinicioRonda(true);
+		tablero.getMano().clear();
+		tablero.getIndexDes().clear();
+		tablero.getDistdDes().clear();
+		tablero.getPosiciones().clear();
+		tablero.getDescartes().clear();
+		tablero.recibirCartas();
+		tablero.construirDescarte();
+		tablero.refresh();
 	}
 
 	public void finDePartida() {

@@ -246,13 +246,15 @@ public class Partida extends Observer implements Serializable {
 	@Override
 	public void notificarseEstadoEliminado() {
 		cantJugadores--;
+	
 		if (cantJugadores == 1) {
 			for (int i = 0; i < jugadoresActivos; i++) {
 				if (!jugadores.get(i).getEstado().equals(new Eliminado()))
 					jugadores.get(i).ganarRonda(afecto, this);
 			}
 			for (Paquete clientes : Servidor.darClientesDeSala(nombreSala) ) {
-				enviarMsj(clientes.getSalida(),"finDeRonda");
+				enviarMsj(clientes.getSalida(),"finDeRonda");				
+				enviarMsj(clientes.getSalida(),ganadoRonda.getNombre());
 			}
 			iniciarRonda();
 		}

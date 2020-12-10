@@ -93,8 +93,35 @@ public class Tablero extends JFrame {
 	private boolean jugarCarta = false;
 	private boolean miTurno = false;
 	private boolean seJugoGuardia = false;
+	private String ganadorRonda;
+	private boolean reinicioRonda=false;
+	private boolean finalizarPartida=false;
 
 //	private Map<String, ArrayList<DibujoCarta>> descarteTodos = new HashMap<String, ArrayList<DibujoCarta>>();
+
+	public boolean isReinicioRonda() {
+		return reinicioRonda;
+	}
+
+	public void setReinicioRonda(boolean reinicioRonda) {
+		this.reinicioRonda = reinicioRonda;
+	}
+
+	public boolean isFinalizarPartida() {
+		return finalizarPartida;
+	}
+
+	public void setFinalizarPartida(boolean finalizarPartida) {
+		this.finalizarPartida = finalizarPartida;
+	}
+
+	public String isGanadorRonda() {
+		return ganadorRonda;
+	}
+
+	public void setGanadorRonda(String ganadorRonda) {
+		this.ganadorRonda= ganadorRonda;
+	}
 
 	private String nombreJActivo;
 
@@ -414,9 +441,7 @@ public class Tablero extends JFrame {
 		in = entrada;
 		out = salida;
 		HiloEscuchaTablero hiloTablero = new HiloEscuchaTablero(entrada, salida, this, espera);
-		Carta c = (Carta) leerMsj(entrada);
-		nombreJActivo = (String) leerMsj(entrada);
-		mano.add(c);
+		recibirCartas();
 		construirDescarte();
 
 		sonidoFondo.setVolume(volumen);
@@ -893,20 +918,34 @@ public class Tablero extends JFrame {
 					g2.drawString("NO ACERTO", 545, 460);
 				seJugoGuardia = false;
 			}
+//
+//			if (partida.getReinicio()) {
+//				dibujos.clear();
+//				partida.setReinicio(false);
+//				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 30));
+//				g2.setPaint(Color.WHITE);
+//				g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
+//				g2.drawString("Fin de ronda", 300, 170);
+//				g2.drawString(partida.getGanadoRonda().getNombre(), 270, 240);
+//				g2.drawImage(cartaAmor, 430, 210, 50, 35, this);
+//				g2.drawString("+1", 480, 240);
+//				distDescarte = 0;
+//			}
+			
+			
 
-			if (partida.getReinicio()) {
-				dibujos.clear();
-				partida.setReinicio(false);
+			if (reinicioRonda) {
+			
+				reinicioRonda=false;
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 30));
 				g2.setPaint(Color.WHITE);
 				g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
 				g2.drawString("Fin de ronda", 300, 170);
-				g2.drawString(partida.getGanadoRonda().getNombre(), 270, 240);
+				g2.drawString(ganadorRonda, 270, 240);
 				g2.drawImage(cartaAmor, 430, 210, 50, 35, this);
 				g2.drawString("+1", 480, 240);
-				distDescarte = 0;
 			}
-
+			
 			if (partida.isFinalizoPartida()) {
 
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 30));
@@ -1353,5 +1392,11 @@ public class Tablero extends JFrame {
 		}
 		sw = false;
 		
+	}
+	
+	public  void recibirCartas(){
+		Carta c = (Carta) leerMsj(in);
+		nombreJActivo = (String) leerMsj(in);
+		mano.add(c);
 	}
 }
