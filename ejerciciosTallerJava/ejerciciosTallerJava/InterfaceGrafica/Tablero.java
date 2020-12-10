@@ -296,14 +296,6 @@ public class Tablero extends JFrame {
 		Tablero.enviarMsj(salida, 0);
 		mano.remove(0);
 
-//		int idx = indexDes.get(nombreJActivo);
-//		Integer[] pos = posiciones.get(nombreJActivo);
-//		int x = pos[0];
-//		int y = pos[1];
-//		int nuevaDist = distdDes.get(nombreJActivo) + 30;
-//		distdDes.replace(nombreJActivo, nuevaDist);
-//		DibujoCarta dibujo = new DibujoCarta(mano.get(0), x + nuevaDist, y);
-//		descartes.get(idx).add(dibujo);
 
 		if (miCarta.equals(new Guardia()) || miCarta.equals(new Sacerdote()) || miCarta.equals(new Baron())
 				|| miCarta.equals(new Rey()) || miCarta.equals(new Principe())) {
@@ -466,14 +458,6 @@ public class Tablero extends JFrame {
 		Tablero.enviarMsj(salida, mano.get(1));
 		Tablero.enviarMsj(salida, 1);
 		mano.remove(1);
-//		int idx = indexDes.get(nombreJActivo);
-//		Integer[] pos = posiciones.get(nombreJActivo);
-//		int x = pos[0];
-//		int y = pos[1];
-//		int nuevaDist = distdDes.get(nombreJActivo) + 30;
-//		distdDes.replace(nombreJActivo, nuevaDist);
-//		DibujoCarta dibujo = new DibujoCarta(mano.get(1), x + nuevaDist, y);
-//		descartes.get(idx).add(dibujo);
 
 		if (miCarta.equals(new Guardia()) || miCarta.equals(new Sacerdote()) || miCarta.equals(new Baron())
 				|| miCarta.equals(new Rey()) || miCarta.equals(new Principe())) {
@@ -1099,13 +1083,8 @@ public class Tablero extends JFrame {
 			g2.setPaint(Color.decode("#653b33"));
 			g2.drawString("Ronda: " + partida.getNroRonda(), 1234, 39);
 
-			dibujarCartas(g2, "Dorso", 635, 10);
+			
 
-//				dibujarCartas(g2, jugadorActivo.getMano(1).getNombre(), 695, 615);
-
-//			dibujarCartas(g2, jugadorActivo.getMano(0).getNombre(), 575, 615);
-//			if (jugadorActivo.getTamanioMano() > 1)
-//				dibujarCartas(g2, jugadorActivo.getMano(1).getNombre(), 695, 615);
 
 			dibujarCartas(g2, mano.get(0).getNombre(), 575, 615);
 			if (mano.size() > 1) {
@@ -1116,26 +1095,11 @@ public class Tablero extends JFrame {
 			g2.setFont(seagram);
 			g2.setPaint(Color.decode("#653b33"));
 			g2.drawImage(cartaAmor, 1283, 698, 60, 39, this);
-//			g2.drawString(jugadorActivo.getNombre(), 1035, 741);
-//			g2.drawString("Afectos: " + String.valueOf(jugadorActivo.getAfectosConseguidos()), 1155, 741);
 			g2.drawString(nombreJActivo, 1035, 741);
 			g2.drawString("Afectos: " + String.valueOf(jugadorActivo.getAfectosConseguidos()), 1155, 741);
 
-			if (partida.getCantJugadores() == 3) {
-				dibujarCartas(g2, "Dorso", 20, 285);
+		
 
-			}
-
-			if (partida.getCantJugadores() == 4) {
-
-				dibujarCartas(g2, "Dorso", 20, 285);
-				dibujarCartas(g2, "Dorso", 1250, 285);
-
-			}
-
-//			for (DibujoCarta dib : dibujos) {
-//				dibujarCartas(g2, dib.getCartaDib().getNombre(), dib.getEjeX(), dib.getEjeY());
-//			}
 
 			for (int i = 0; i < partida.getJugadores().size(); i++) {
 				String nombre = partida.getJugadores().get(i).getNombre();
@@ -1166,14 +1130,7 @@ public class Tablero extends JFrame {
 				dibManoOp = false;
 			}
 
-//			if (cambiarJugador) {
-//				cambiarJugador = false;
-//				g2.drawImage(fondoVerCarta, 0, 0, getWidth(), getHeight(), this);
-//				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 30));
-//				g2.setPaint(Color.WHITE);
-//				g2.drawString("Siguiente Jugador", 265, 170);
-//				g2.drawString(jugadorActivo.getNombre(), 345, 250);
-//			}
+
 
 			if (compararManos) {
 
