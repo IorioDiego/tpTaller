@@ -109,8 +109,6 @@ public class HiloAtencionCliente extends Thread {
 	public void ChainOfResposability() {
 		ComandosServer crearSala = new CrearSala();
 		ComandosServer ingresoSala = new IngresarSala();
-		ComandosServer chatGeneral = new EnviarMsjAllSala();
-		ComandosServer chatPrivado = new ChatPrivado();
 		ComandosServer comDefault = new Default();
 		ComandosServer volverAllobby = new VolverLobby();
 		ComandosServer refrescar = new Refrescar();
@@ -123,9 +121,7 @@ public class HiloAtencionCliente extends Thread {
 		this.comanSer = new Salir();
 		comanSer.establecerSiguiente(crearSala);
 		crearSala.establecerSiguiente(ingresoSala);
-		ingresoSala.establecerSiguiente(chatGeneral);
-		chatGeneral.establecerSiguiente(chatPrivado);
-		chatPrivado.establecerSiguiente(volverAllobby);
+		ingresoSala.establecerSiguiente(volverAllobby);
 		volverAllobby.establecerSiguiente(refrescar);
 		refrescar.establecerSiguiente(refrescarPlayer);
 		refrescarPlayer.establecerSiguiente(avisarIngreso);

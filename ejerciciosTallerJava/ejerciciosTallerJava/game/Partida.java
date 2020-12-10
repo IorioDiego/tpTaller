@@ -193,7 +193,12 @@ public class Partida extends Observer implements Serializable {
 						Carta cartaDada = mazo.darCarta(jugadorCliente);
 						paqueteCliente.getSalida().writeObject(cartaDada);
 						paqueteCliente.getSalida().writeObject(paqueteCliente.getNick());
+					
+						for (Jugador j : jugadores) {
+							paqueteCliente.getSalida().writeObject(j.getAfectosConseguidos());
+						}
 					}
+					
 				}
 			}
 

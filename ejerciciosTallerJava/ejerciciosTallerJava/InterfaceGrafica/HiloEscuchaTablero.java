@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import javax.swing.JFrame;
 
 import cartas.Carta;
+import estados.Estado;
 
 public class HiloEscuchaTablero extends Thread {
 
@@ -46,6 +47,7 @@ public class HiloEscuchaTablero extends Thread {
 		tablero.getDescartes().clear();
 		tablero.recibirCartas();
 		tablero.construirDescarte();
+	
 		//tablero.refresh();
 	}
 

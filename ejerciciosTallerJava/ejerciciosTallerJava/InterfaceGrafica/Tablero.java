@@ -330,7 +330,7 @@ public class Tablero extends JFrame {
 		efectoCartas(miCarta);
 		sonidoTirarCarta.play();
 		jugarCarta = true;
-		String reiniRonda=(String)leerMsj(entrada);
+		String reiniRonda = (String) leerMsj(entrada);
 		if (!reiniRonda.equals("finDeRonda"))
 			Tablero.enviarMsj(salida, "5");
 		else
@@ -361,7 +361,7 @@ public class Tablero extends JFrame {
 		efectoCartas(miCarta);
 		sonidoTirarCarta.play();
 		jugarCarta = true;
-		String reiniRonda=(String)leerMsj(entrada);
+		String reiniRonda = (String) leerMsj(entrada);
 		if (!reiniRonda.equals("finDeRonda"))
 			Tablero.enviarMsj(salida, "5");
 		else
@@ -832,7 +832,10 @@ public class Tablero extends JFrame {
 			g2.setPaint(Color.decode("#653b33"));
 			g2.drawImage(cartaAmor, 1283, 698, 60, 39, this);
 			g2.drawString(nombreJActivo, 1035, 741);
-			g2.drawString("Afectos: " + String.valueOf(jugadorActivo.getAfectosConseguidos()), 1155, 741);
+			g2.drawString(
+					"Afectos: " + String
+							.valueOf(partida.getJugadores().get(indexDes.get(nombreJActivo)).getAfectosConseguidos()),
+					1155, 741);
 
 			for (int i = 0; i < partida.getJugadores().size(); i++) {
 				String nombre = partida.getJugadores().get(i).getNombre();
@@ -914,19 +917,19 @@ public class Tablero extends JFrame {
 				reinicioRonda = false;
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 30));
 				g2.setPaint(Color.WHITE);
-				
+
 //				g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
 //				g2.drawString("Fin de ronda", 300, 170);
 //				g2.drawString(ganadorRonda, 270, 240);
 //				g2.drawImage(cartaAmor, 430, 210, 50, 35, this);
 //				g2.drawString("+1", 480, 240);
-				
+
 				g2.drawImage(fondoVerCarta, 500, 50, 350, 200, this);
 				g2.drawString("Fin de ronda", 570, 100);
 				g2.drawString(ganadorRonda, 540, 170);
 				g2.drawImage(cartaAmor, 700, 140, 50, 35, this);
 				g2.drawString("+1", 750, 170);
-				
+
 			}
 
 			if (partida.isFinalizoPartida()) {
@@ -987,9 +990,9 @@ public class Tablero extends JFrame {
 		}
 
 	}
-	
+
 	public void reiniciarRonda() {
-		ganadorRonda = (String)leerMsj(in);
+		ganadorRonda = (String) leerMsj(in);
 		reinicioRonda = true;
 		getMano().clear();
 		getIndexDes().clear();
@@ -998,6 +1001,9 @@ public class Tablero extends JFrame {
 		getDescartes().clear();
 		recibirCartas();
 		construirDescarte();
+//		enviarMsj(out, "8");
+//		String s= (String) leerMsj(in);
+
 	}
 
 	public static void cambioJugador() {
@@ -1221,6 +1227,14 @@ public class Tablero extends JFrame {
 		this.out = out;
 	}
 
+	public Partida getPartida() {
+		return partida;
+	}
+
+	public void setPartida(Partida partida) {
+		this.partida = partida;
+	}
+
 	private void pintarCarta(Carta cJugada, String nombreJugo) {
 		int idx = getIndexDes().get(nombreJugo);
 		Integer[] pos = getPosiciones().get(nombreJugo);
@@ -1393,5 +1407,9 @@ public class Tablero extends JFrame {
 		Carta c = (Carta) leerMsj(in);
 		nombreJActivo = (String) leerMsj(in);
 		mano.add(c);
+		for (Jugador jugadores : partida.getJugadores()) {
+			int afectos = (int) leerMsj(in);
+			jugadores.setAfectosConseguidos(afectos);
+		}
 	}
 }
