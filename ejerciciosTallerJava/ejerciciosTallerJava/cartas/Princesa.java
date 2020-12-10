@@ -27,7 +27,6 @@ public class Princesa extends Carta {
 	@Override
 	public void activarEfecto(Jugador jugador, Partida partida,Paquete paquete) {
 		jugador.seJugoPrincesa();
-		
 	}
 
 }

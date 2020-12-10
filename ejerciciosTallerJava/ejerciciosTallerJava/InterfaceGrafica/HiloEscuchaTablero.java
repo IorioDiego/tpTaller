@@ -26,10 +26,20 @@ public class HiloEscuchaTablero extends Thread {
 				cambioTurno();
 			} else if (msj.equals("actualizarTablero")) {
 				actualizar();
-
+			} else if (msj.equals("finDeRonda")) {
+				reiniciarRonda();
+			} else if (msj.equals("finPartida")) {
+				finDePartida();
 			}
-
 		}
+
+	}
+
+	public void reiniciarRonda() {
+
+	}
+
+	public void finDePartida() {
 
 	}
 
@@ -127,13 +137,13 @@ public class HiloEscuchaTablero extends Thread {
 				cartaOp = (Carta) Tablero.leerMsj(dis);
 				tablero.setAcertoGuardia(true);
 				sw = true;
-				//Remover la carta?
-			} 
+				// Remover la carta?
+			}
 		}
 			break;
 		case "Rey": {
 			nombreOp = (String) leerMsj(dis);
-			
+
 			if (tablero.getNombreJActivo().equals(nombreOp)) {
 				itsMeMario = true;
 			}

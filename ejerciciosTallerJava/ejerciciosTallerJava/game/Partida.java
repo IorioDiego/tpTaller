@@ -251,6 +251,9 @@ public class Partida extends Observer implements Serializable {
 				if (!jugadores.get(i).getEstado().equals(new Eliminado()))
 					jugadores.get(i).ganarRonda(afecto, this);
 			}
+			for (Paquete clientes : Servidor.darClientesDeSala(nombreSala) ) {
+				enviarMsj(clientes.getSalida(),"finDeRonda");
+			}
 			iniciarRonda();
 		}
 	}

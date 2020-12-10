@@ -41,6 +41,8 @@ public class Mazo extends Observable implements Serializable {
 		mazo.add(new Rey());
 
 		mazo.add(new Condesa());
+		mazo.add(new Rey());
+		
 
 		mazo.add(new Princesa());
 	}
