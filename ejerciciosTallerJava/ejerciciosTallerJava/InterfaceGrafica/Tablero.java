@@ -53,6 +53,7 @@ import javax.swing.border.TitledBorder;
 import org.omg.IOP.Codec;
 
 import cartas.*;
+import estados.Eliminado;
 import estados.Estado;
 import game.Jugador;
 import game.Partida;
@@ -96,8 +97,19 @@ public class Tablero extends JFrame {
 	private String ganadorRonda;
 	private boolean reinicioRonda = false;
 	private boolean finalizarPartida = false;
+	private int nroRonda = 0;
+	private String nombreJActivo;
+	private Tablero t = this;
 
 //	private Map<String, ArrayList<DibujoCarta>> descarteTodos = new HashMap<String, ArrayList<DibujoCarta>>();
+
+	public int getNroRonda() {
+		return nroRonda;
+	}
+
+	public void setNroRonda(int nroRonda) {
+		this.nroRonda = nroRonda;
+	}
 
 	public boolean isReinicioRonda() {
 		return reinicioRonda;
@@ -122,10 +134,6 @@ public class Tablero extends JFrame {
 	public void setGanadorRonda(String ganadorRonda) {
 		this.ganadorRonda = ganadorRonda;
 	}
-
-	private String nombreJActivo;
-
-	private Tablero t = this;
 
 	int indexJ1;
 	int idnexJ2;
@@ -746,25 +754,32 @@ public class Tablero extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent m) {
 
-				if ((m.getX() >= 575 && m.getX() <= 675 && (m.getY() >= 615 && m.getY() <= 755) && mano.size() >= 1)) {
-					if (m.getButton() == MouseEvent.BUTTON3)
-						mostrarLista(0);
-					else if (miTurno && mano.size() == 2)
-						tocarCartaIzquierda(m, entrada, salida, lista, listaCartas);
+				if (!finPartida) {
+					if ((m.getX() >= 575 && m.getX() <= 675 && (m.getY() >= 615 && m.getY() <= 755)
+							&& mano.size() >= 1)) {
+						if (m.getButton() == MouseEvent.BUTTON3)
+							mostrarLista(0);
+						else if (miTurno && mano.size() == 2)
+							tocarCartaIzquierda(m, entrada, salida, lista, listaCartas);
 
-				} else if ((m.getX() >= 200 && m.getX() <= 510)
-						&& (m.getY() >= 210 && m.getY() <= 470 && mano.size() == 1)) {
-					if (miTurno) {
-						tomarCartaMazo(m, entrada, salida);
-						levantarCarta = true;
+					} else if ((m.getX() >= 200 && m.getX() <= 510)
+							&& (m.getY() >= 210 && m.getY() <= 470 && mano.size() == 1)) {
+						if (miTurno) {
+							tomarCartaMazo(m, entrada, salida);
+							levantarCarta = true;
+						}
+
+					} else if ((m.getX() >= 695 && m.getX() <= 795 && (m.getY() >= 615 && m.getY() <= 755))
+							&& mano.size() == 2) {
+						if (m.getButton() == MouseEvent.BUTTON3)
+							mostrarLista(1);
+						else if (miTurno)
+							tocarCartaDerecha(m, entrada, salida, lista, listaCartas);
 					}
 
-				} else if ((m.getX() >= 695 && m.getX() <= 795 && (m.getY() >= 615 && m.getY() <= 755))
-						&& mano.size() == 2) {
-					if (m.getButton() == MouseEvent.BUTTON3)
-						mostrarLista(1);
-					else if (miTurno)
-						tocarCartaDerecha(m, entrada, salida, lista, listaCartas);
+				} else {
+					sala.setVisible(true);
+					dispose();
 				}
 				refresh();
 				if (jugarCarta && levantarCarta) {
@@ -828,7 +843,7 @@ public class Tablero extends JFrame {
 			}
 			g2.setFont(seagram);
 			g2.setPaint(Color.decode("#653b33"));
-			g2.drawString("Ronda: " + partida.getNroRonda(), 1234, 39);
+			g2.drawString("Ronda: " + nroRonda, 1234, 39);
 
 			dibujarCartas(g2, mano.get(0).getNombre(), 575, 615);
 			if (mano.size() > 1) {
@@ -844,6 +859,13 @@ public class Tablero extends JFrame {
 					"Afectos: " + String
 							.valueOf(partida.getJugadores().get(indexDes.get(nombreJActivo)).getAfectosConseguidos()),
 					1155, 741);
+			
+//			Estado estadoActual = partida.getJugadores().get(indexDes.get(nombreJActivo)).getEstado();
+			if (miTurno ) {
+				g2.drawString("Tu Turno", 1050, 741);
+			} else  {
+				g2.drawString("Esperando", 1050, 741);
+			}
 
 			for (int i = 0; i < partida.getJugadores().size(); i++) {
 				String nombre = partida.getJugadores().get(i).getNombre();
@@ -940,13 +962,13 @@ public class Tablero extends JFrame {
 
 			}
 
-			if (partida.isFinalizoPartida()) {
+			if (finPartida) {
 
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 30));
 				g2.setPaint(Color.WHITE);
 				g2.drawImage(fondoVerCarta, 230, 120, 350, 200, this);
 				g2.drawString("Partida finalizada", 245, 170);
-				g2.drawString(" Ganador " + jugadorActivo.getNombre(), 250, 240);
+				g2.drawString(" Ganador " + ganadorRonda, 250, 240);
 			}
 
 		}
@@ -1002,19 +1024,11 @@ public class Tablero extends JFrame {
 		miTurno = true;
 		finPartida = true;
 		ganadorRonda = (String) leerMsj(in);
-		
-		sala.setVisible(true);
-		dispose();
 		enviarMsj(out, "2");
-		try {
-			out.flush();
-			;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void reiniciarRonda() {
+		nroRonda++;
 		ganadorRonda = (String) leerMsj(in);
 		reinicioRonda = true;
 		getMano().clear();

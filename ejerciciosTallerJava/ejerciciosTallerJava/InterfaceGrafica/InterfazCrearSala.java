@@ -11,6 +11,8 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -146,23 +148,28 @@ public class InterfazCrearSala extends JFrame {
 			}
 		});
 
-		cantJugadores.addActionListener(new ActionListener() {
 
+		
+		cantJugadores.addItemListener(new ItemListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				String selectValue = (String) cantJugadores.getSelectedItem();
-				setPartida.setCantJugadores(Integer.valueOf(selectValue));
-
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+					/* Modificamos esta linea, ahora utilizamos getSelectedItem() y toString() */
+					setPartida.setCantJugadores( Integer.valueOf( cantJugadores.getSelectedItem().toString()));
+				
+				}
 			}
 		});
 
-		cantPrendasAmor.addActionListener(new ActionListener() {
 
+		cantPrendasAmor.addItemListener(new ItemListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				String selectValue = (String) cantJugadores.getSelectedItem();
-				setPartida.setPrendasAmor(Integer.valueOf(selectValue));
-
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+					/* Modificamos esta linea, ahora utilizamos getSelectedItem() y toString() */
+					setPartida.setPrendasAmor( Integer.valueOf( cantPrendasAmor.getSelectedItem().toString()));
+				
+				}
 			}
 		});
 
