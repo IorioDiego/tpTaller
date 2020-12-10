@@ -289,6 +289,7 @@ public class Tablero extends JFrame {
 		String nombreOp = null;
 		Carta cartaPerdedor = null;
 		boolean sw = false;
+		boolean itsMeMario = false;
 		bloquearBoton();
 		desbloquearBoton();
 		Tablero.enviarMsj(salida, "4");
@@ -307,141 +308,17 @@ public class Tablero extends JFrame {
 			}
 		}
 
-		boolean itsMeMario = false;
+		efectoCartas(miCarta);
+		
 
-		switch (miCarta.getNombre()) {
-		case "Princesa": {
-		}
 
-			break;
-		case "Condesa": {
-		}
-			break;
-		case "Principe": {
-			nombreOp = (String) leerMsj(entrada);
-			cartaOp = (Carta) Tablero.leerMsj(entrada);
-			sw = true;
-			if (getNombreJActivo().equals(nombreOp)) {
-				itsMeMario = true;
-			}
 
-			if (itsMeMario) {
-				Carta nuevaCarta = (Carta) Tablero.leerMsj(entrada);
-				getMano().add(nuevaCarta);
-				getMano().remove(0);
 
-				itsMeMario = false;
-			}
-
-		}
-			break;
-		case "Mucama": {
-
-		}
-			break;
-		case "Baron": {
-			nombreOp = (String) leerMsj(entrada);
-			cartaBaronOp = (Carta) leerMsj(entrada);
-			cartaBaron = (Carta) leerMsj(entrada);
-			jugadorBaron = nombreJActivo;
-			jugadorBaronOp = nombreOp;
-			setCompararManos(true);
-
-			String msj = (String) leerMsj(entrada);
-			if (msj.equals("PerdioOponente")) {
-				sw = true;
-				cartaOp = cartaBaronOp;
-				nombreOp = jugadorBaronOp;
-
-//		
-			} else if (msj.equals("PerdioJugador")) {
-				sw = true;
-				cartaOp = cartaBaron;
-				nombreOp = jugadorBaron;
-
-			}
-		}
-			break;
-		case "Sacerdote": {
-			jugadorElegSacer = (String) leerMsj(entrada);
-			cartaOpSacer = (Carta) Tablero.leerMsj(entrada);
-			dibManoOp = true;
-		}
-			break;
-		case "Guardia": {
-			cartaElegidaGuardia = (Carta) Tablero.leerMsj(entrada);
-			nombreOp = (String) leerMsj(entrada);
-			jugadorGuaridaOp = nombreOp;
-			jugadorGuarida = nombreJActivo;
-			seJugoGuardia = true;
-			String msj = (String) leerMsj(entrada);
-			if (msj.equals("Acierto")) {
-				cartaOp = (Carta) Tablero.leerMsj(entrada);
-				acertoGuardia = true;
-				sw = true;
-				// Remover la carta?
-			}
-		}
-			break;
-		case "Rey": {
-			
-			nombreOp = (String) leerMsj(entrada);
-			cartaOp = (Carta) leerMsj(entrada);
-			if (getNombreJActivo().equals(nombreOp)) {
-				itsMeMario = true;
-			}
-
-			if (itsMeMario) {
-				cartaOp = (Carta) leerMsj(entrada);
-			}
-			getMano().remove(0);
-			getMano().add(cartaOp);
-
-		}
-			break;
-		}
-
-		pintarCarta(miCarta, nombreJActivo);
-		if (sw) {
-			pintarCarta(cartaOp, nombreOp);
-
-		}
-		sw = false;
-
-		distDescarte += 30;
-//			DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(0), 430 + distDescarte, 295);
-		DibujoCarta cartaTiradas = new DibujoCarta(miCarta, 430 + distDescarte, 295);
-		dibujos.add(cartaTiradas);
-//			if (jugadorActivo.getMano(0).equals(new Sacerdote()))
-		if (miCarta.equals(new Sacerdote()))
-//				dibManoOp = true;
-
-//			if (jugadorActivo.getMano(0).equals(new Baron())) {
-			if (miCarta.equals(new Baron())) {
-//				jugadorBaron = jugadorActivo;
-//				cartaBaron = jugadorActivo.getMano(1);
-//				cartaBaronOp = jugadores.get(getJugadorElegido()).getMano(0);
-//				compararManos = true;
-			}
-
-//			jugadorActivo.jugarCarta(partida, 0, lista, listaCartas);
 
 		sonidoTirarCarta.play();
-
 		refresh();
-		if (cartaTiradas.getCartaDib().equals(new Principe())) {
-//				distDescarte += 30;
-//				DibujoCarta cartaOp = new DibujoCarta(jugadores.get(getJugadorElegido()).getUltimaDescartada(),
-//						430 + distDescarte, 295);
-//				dibujos.add(cartaOp);
-//
-//				if (jugadores.get(getJugadorElegido()).getManoCompleta().isEmpty())
-//					jugadores.get(getJugadorElegido()).getManoCompleta().add(partida.getCartaEliminda());
-
-		}
 		jugarCarta = true;
 		Tablero.enviarMsj(salida, "5");
-		// turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 		refresh();
 	}
 
@@ -449,15 +326,13 @@ public class Tablero extends JFrame {
 			JDialog listaCartas) {
 
 		Carta miCarta = mano.get(1);
-		Carta cartaOp = null;
-		String nombreOp = null;
-		boolean sw = false;
-		bloquearBoton();
 		desbloquearBoton();
 		Tablero.enviarMsj(salida, "4");
 		Tablero.enviarMsj(salida, mano.get(1));
 		Tablero.enviarMsj(salida, 1);
 		mano.remove(1);
+		
+		
 
 		if (miCarta.equals(new Guardia()) || miCarta.equals(new Sacerdote()) || miCarta.equals(new Baron())
 				|| miCarta.equals(new Rey()) || miCarta.equals(new Principe())) {
@@ -469,138 +344,10 @@ public class Tablero extends JFrame {
 
 			}
 		}
-		boolean itsMeMario = false;
-
-		switch (miCarta.getNombre()) {
-		case "Princesa": {
-		}
-
-			break;
-		case "Condesa": {
-		}
-			break;
-		case "Principe": {
-			nombreOp = (String) leerMsj(entrada);
-			cartaOp = (Carta) Tablero.leerMsj(entrada);
-			sw = true;
-			if (getNombreJActivo().equals(nombreOp)) {
-				itsMeMario = true;
-			}
-			if (itsMeMario) {
-				Carta nuevaCarta = (Carta) Tablero.leerMsj(entrada);
-				getMano().add(nuevaCarta);
-				getMano().remove(0);
-
-				itsMeMario = false;
-			}
-
-		}
-			break;
-		case "Mucama": {
-
-		}
-			break;
-		case "Baron": {
-
-			nombreOp = (String) leerMsj(entrada);
-			cartaBaronOp = (Carta) leerMsj(entrada);
-			cartaBaron = (Carta) leerMsj(entrada);
-			jugadorBaron = nombreJActivo;
-			jugadorBaronOp = nombreOp;
-			compararManos = true;
-
-			String msj = (String) leerMsj(entrada);
-			if (msj.equals("PerdioOponente")) {
-				sw = true;
-				cartaOp = cartaBaronOp;
-				nombreOp = jugadorBaronOp;
-
-			} else if (msj.equals("PerdioJugador")) {
-				sw = true;
-				cartaOp = cartaBaron;
-				nombreOp = jugadorBaron;
-
-			}
-
-		}
-			break;
-		case "Sacerdote": {
-			jugadorElegSacer = (String) leerMsj(entrada);
-			cartaOpSacer = (Carta) Tablero.leerMsj(entrada);
-			dibManoOp = true;
-		}
-			break;
-		case "Guardia": {
-			cartaElegidaGuardia = (Carta) Tablero.leerMsj(entrada);
-			nombreOp = (String) leerMsj(entrada);
-			jugadorGuarida = nombreJActivo;
-			jugadorGuaridaOp = nombreOp;
-			seJugoGuardia = true;
-			String msj = (String) leerMsj(entrada);
-			if (msj.equals("Acierto")) {
-				cartaOp = (Carta) Tablero.leerMsj(entrada);
-				acertoGuardia = true;
-				sw = true;
-				// Remover la carta?
-			}
-		}
-			break;
-		case "Rey": {
-			nombreOp = (String) leerMsj(entrada);
-			cartaOp = (Carta) leerMsj(entrada);
-			if (getNombreJActivo().equals(nombreOp)) {
-				itsMeMario = true;
-			}
-
-			if (itsMeMario) {
-				cartaOp = (Carta) leerMsj(entrada);
-			}
-			getMano().remove(0);
-			getMano().add(cartaOp);
-		}
-			break;
-		}
-
-		pintarCarta(miCarta, nombreJActivo);
-		if (sw) {
-			pintarCarta(cartaOp, nombreOp);
-		}
-		sw = false;
-
-		distDescarte += 30;
-//			DibujoCarta cartaTiradas = new DibujoCarta(jugadorActivo.getMano(1), 430 + distDescarte, 295);
-		DibujoCarta cartaTiradas = new DibujoCarta(miCarta, 430 + distDescarte, 295);
-		dibujos.add(cartaTiradas);
-
-//			if (jugadorActivo.getMano(1).equals(new Sacerdote()))
-		if (miCarta.equals(new Sacerdote()))
-//				dibManoOp = true;
-
-//			if (jugadorActivo.getMano(1).equals(new Baron())) {
-			if (miCarta.equals(new Baron())) {
-//				jugadorBaron = jugadorActivo;
-//				cartaBaron = jugadorActivo.getMano(0);
-//				cartaBaronOp = jugadores.get(getJugadorElegido()).getMano(0);
-//				compararManos = true;
-
-			}
-
-//			jugadorActivo.jugarCarta(partida, 1, lista, listaCartas);
+		efectoCartas(miCarta);
 		sonidoTirarCarta.play();
-
-		if (cartaTiradas.getCartaDib().equals(new Principe())) {
-//				distDescarte += 30;
-//				DibujoCarta cartaOp = new DibujoCarta(jugadores.get(getJugadorElegido()).getUltimaDescartada(),
-//						430 + distDescarte, 295);
-//				dibujos.add(cartaOp);
-//
-//				if (jugadores.get(getJugadorElegido()).getManoCompleta().isEmpty())
-//					jugadores.get(getJugadorElegido()).getManoCompleta().add(partida.getCartaEliminda());
-		}
-		// turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
 		jugarCarta = true;
 		Tablero.enviarMsj(salida, "5");
-
 		refresh();
 
 	}
@@ -634,27 +381,8 @@ public class Tablero extends JFrame {
 		}
 		
 
-//		if (new Condesa().equals(partida.getMazo().darCarta(jugadorActivo))
-//				&& new Condesa().equals(jugadorActivo.getUltimaDescartada())) {
-//			distDescarte += 30;
-//			DibujoCarta cartaTiradas = new DibujoCarta(new Condesa(), 430 + distDescarte, 295);
-//			dibujos.add(cartaTiradas);
-//
-//			turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
-//		}
 
-//		if (new Condesa().equals(cTomada) && new Condesa().equals(cDescartada)) {
-//			distDescarte += 30;
-//			DibujoCarta cartaTiradas = new DibujoCarta(new Condesa(), 430 + distDescarte, 295);
-//			dibujos.add(cartaTiradas);
-//			int i = mano.indexOf(cTomada);
-//			mano.remove(i);
-//
-////			turnoJugador(partida.proximoTurnoJugador(jugadorActivo));
-//			Tablero.enviarMsj(salida, "5");
-//		}
-
-			tomoCarta = true;
+		tomoCarta = true;
 		refresh();
 
 	}
@@ -1521,5 +1249,109 @@ public class Tablero extends JFrame {
 			j.dispose();
 		});
 		j.add(cartaDescrip);
+	}
+	
+	public void efectoCartas(Carta miCarta) {
+		Carta cartaOp = null;
+		String nombreOp = null;
+		boolean sw = false;
+		boolean itsMeMario = false;
+	
+		switch (miCarta.getNombre()) {
+		case "Princesa": {
+		}
+
+			break;
+		case "Condesa": {
+		}
+			break;
+		case "Principe": {
+			nombreOp = (String) leerMsj(in);
+			cartaOp = (Carta) Tablero.leerMsj(in);
+			sw = true;
+			if (getNombreJActivo().equals(nombreOp)) {
+				itsMeMario = true;
+			}
+			if (itsMeMario) {
+				Carta nuevaCarta = (Carta) Tablero.leerMsj(in);
+				getMano().add(nuevaCarta);
+				getMano().remove(0);
+
+				itsMeMario = false;
+			}
+
+		}
+			break;
+		case "Mucama": {
+
+		}
+			break;
+		case "Baron": {
+
+			nombreOp = (String) leerMsj(in);
+			cartaBaronOp = (Carta) leerMsj(in);
+			cartaBaron = (Carta) leerMsj(in);
+			jugadorBaron = nombreJActivo;
+			jugadorBaronOp = nombreOp;
+			compararManos = true;
+
+			String msj = (String) leerMsj(in);
+			if (msj.equals("PerdioOponente")) {
+				sw = true;
+				cartaOp = cartaBaronOp;
+				nombreOp = jugadorBaronOp;
+
+			} else if (msj.equals("PerdioJugador")) {
+				sw = true;
+				cartaOp = cartaBaron;
+				nombreOp = jugadorBaron;
+
+			}
+
+		}
+			break;
+		case "Sacerdote": {
+			jugadorElegSacer = (String) leerMsj(in);
+			cartaOpSacer = (Carta) Tablero.leerMsj(in);
+			dibManoOp = true;
+		}
+			break;
+		case "Guardia": {
+			cartaElegidaGuardia = (Carta) Tablero.leerMsj(in);
+			nombreOp = (String) leerMsj(in);
+			jugadorGuarida = nombreJActivo;
+			jugadorGuaridaOp = nombreOp;
+			seJugoGuardia = true;
+			String msj = (String) leerMsj(in);
+			if (msj.equals("Acierto")) {
+				cartaOp = (Carta) Tablero.leerMsj(in);
+				acertoGuardia = true;
+				sw = true;
+				// Remover la carta?
+			}
+		}
+			break;
+		case "Rey": {
+			nombreOp = (String) leerMsj(in);
+			cartaOp = (Carta) leerMsj(in);
+			if (getNombreJActivo().equals(nombreOp)) {
+				itsMeMario = true;
+			}
+
+			if (itsMeMario) {
+				cartaOp = (Carta) leerMsj(in);
+			}
+			getMano().remove(0);
+			getMano().add(cartaOp);
+		}
+			break;
+		}
+
+		pintarCarta(miCarta, nombreJActivo);
+		if (sw) {
+			pintarCarta(cartaOp, nombreOp);
+		}
+		sw = false;
+		
 	}
 }
