@@ -248,7 +248,24 @@ public class Tablero extends JFrame {
 
 		for (int i = 0; i < partida.getJugadores().size(); i++) {
 			if (jugadores.get(i).isBlockedOrDelete()) {
-				switchBloqueo(i);
+				
+				switch (i) {
+				case 0:
+					j1.setEnabled(false);
+					break;
+				case 1:
+					j2.setEnabled(false);
+					break;
+				case 2:
+					j3.setEnabled(false);
+					break;
+				case 3:
+					j4.setEnabled(false);
+					break;
+
+				default:
+					break;
+				}
 			}
 
 		}
@@ -868,11 +885,17 @@ public class Tablero extends JFrame {
 //			g2.drawString(nombre, descartes.get(idx).get(0).getEjeX(),descartes.get(idx).get(0).getEjeY());
 			
 			for (int i = 0; i < partida.getJugadores().size(); i++) {
-				String nombre = partida.getJugadores().get(i).getNombre();				
+				String nombre = partida.getJugadores().get(i).getNombre();		
+				muestroAfectos = "Afectos:" + String.valueOf(partida.getJugadores().get(indexDes.get(nombre)).getAfectosConseguidos());
 				int idx = indexDes.get(nombre);				
 				for (DibujoCarta dib : descartes.get(idx)) {
 					dibujarCartas(g2, dib.getCartaDib().getNombre(), dib.getEjeX(), dib.getEjeY());
 				}
+				
+				
+				
+				///-->SOLO SIRVE PARA 2 JUGADORES
+				
 				if(!nombreJActivo.equals(nombre)) { //nombre arriba de los descartes de los oponentes
 					Integer[]  pos = posiciones.get(nombre);					
 					g2.drawImage(fondoPlayerName, pos[0], pos[1]-50, 190, 60, this);
@@ -1093,7 +1116,7 @@ public class Tablero extends JFrame {
 			
 			Integer[] pos3 = { 450, 50 };
 			posiciones.put(n.get(1), pos3);
-			if (n.size() == 3) {
+			if (n.size() > 3) {
 				Integer[] pos4 = { 750, 50 };
 				posiciones.put(n.get(2), pos4);
 			}
@@ -1463,24 +1486,24 @@ public class Tablero extends JFrame {
 		}
 		int index = partida.getJugadores().indexOf(player);
 		partida.getJugadores().remove(player);
-		switchBloqueo(index);
+		switchNotVisible(index);
 		
 	}
 	
-	public void switchBloqueo(int index)
+	public void switchNotVisible(int index)
 	{
 		switch (index) {
 		case 0:
-			j1.setEnabled(false);
+			j1.setVisible(false);
 			break;
 		case 1:
-			j2.setEnabled(false);
+			j2.setVisible(false);
 			break;
 		case 2:
-			j3.setEnabled(false);
+			j3.setVisible(false);
 			break;
 		case 3:
-			j4.setEnabled(false);
+			j4.setVisible(false);
 			break;
 
 		default:
