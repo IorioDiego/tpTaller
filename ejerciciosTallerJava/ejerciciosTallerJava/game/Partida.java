@@ -16,6 +16,7 @@ import cartas.Princesa;
 import cartas.Principe;
 import cartas.Rey;
 import cartas.Sacerdote;
+import comandosJuego.JugarCartas;
 import estados.Eliminado;
 import estados.Protegido;
 import servidor.Paquete;
@@ -243,28 +244,30 @@ public class Partida extends Observer implements Serializable {
 	public void observarJugadores() {
 		for (Jugador jugador : jugadores) {
 			jugador.register(this);
-
 		}
 	}
 
 	@Override
 	public void notificarseEstadoEliminado() {
 		cantJugadores--;
-
 		if (cantJugadores == 1) {
-			for (int i = 0; i < jugadoresActivos; i++) {
+			for (int i = 0; i < jugadores.size(); i++) {
 				if (!jugadores.get(i).getEstado().equals(new Eliminado()))
 					jugadores.get(i).ganarRonda(afecto, this);
 			}
-			if (!finalizoPartida) {
-				for (Paquete clientes : Servidor.darClientesDeSala(nombreSala)) {
-					enviarMsj(clientes.getSalida(), "finDeRonda");
-					enviarMsj(clientes.getSalida(), "NofinPartida");
-					enviarMsj(clientes.getSalida(), ganadoRonda.getNombre());
-				}
-				Servidor.darConfigSalas(nombreSala).setReinicioRonda("Reinicio");
-				iniciarRonda();
+			avisarFinRonda();
+		}
+	}
+
+	public void avisarFinRonda() {
+		if (!finalizoPartida) {
+			for (Paquete clientes : Servidor.darClientesDeSala(nombreSala)) {
+				enviarMsj(clientes.getSalida(), "finDeRonda");
+				enviarMsj(clientes.getSalida(), "NofinPartida");
+				enviarMsj(clientes.getSalida(), ganadoRonda.getNombre());
 			}
+			Servidor.darConfigSalas(nombreSala).setReinicioRonda("Reinicio");
+			iniciarRonda();
 		}
 	}
 
@@ -275,7 +278,7 @@ public class Partida extends Observer implements Serializable {
 			enviarMsj(clientes.getSalida(), "NofinDeRonda");
 			enviarMsj(clientes.getSalida(), "finPartida");
 			enviarMsj(clientes.getSalida(), ganadoRonda.getNombre());
-		}	
+		}
 	}
 
 	@Override
@@ -284,16 +287,6 @@ public class Partida extends Observer implements Serializable {
 		int fuerza = 0, ganador = 0, empate = 0;
 		int primeroValido = 0;
 		ArrayList<Integer> jEmpatados = new ArrayList<Integer>();
-
-//		for (Jugador j : jugadores) {
-//			if(! j.getEstado().equals(new Eliminado())) {
-//				if(j.getManoCompleta().isEmpty()) {
-//					j.tomarCarta(cartaEliminda);
-//				}
-//				
-//			}
-//				
-//		}
 
 		while (jugadores.get(primeroValido).getEstado().equals(new Eliminado())) {
 			primeroValido++;
@@ -335,7 +328,7 @@ public class Partida extends Observer implements Serializable {
 
 		jugadores.get(ganador).ganarRonda(afecto, this);
 		ganadoRonda = jugadores.get(ganador);
-		iniciarRonda();
+		avisarFinRonda();
 	}
 
 	public Jugador proximoTurnoJugador(Jugador jugadorActivo) {
@@ -405,7 +398,6 @@ public class Partida extends Observer implements Serializable {
 
 	public int finalizarPartida(int i) {
 		finalizoPartida = true;
-		// enviarMsj(dos,"2"); ///mandar un mensaje a todos los clientes
 		return i;
 	}
 

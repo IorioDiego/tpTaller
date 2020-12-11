@@ -31,6 +31,7 @@ public class VolverPantallaInicial implements ComandosJuego {
 								player = players;
 						}
 						partida.getJugadores().remove(player);
+						//partida.observarJugadores();
 					} else
 						for (Paquete paqueteClient : Servidor.darClientesDeSala(sala)) {
 							if (!paqueteClient.getNick().equals(paquete.getNick())) {
