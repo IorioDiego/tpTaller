@@ -118,18 +118,6 @@ public class Salas extends JFrame {
 
 		botones.setPreferredSize(new Dimension(450, 25));
 		botones.setMaximumSize(new Dimension(450, 25));
-//        DefaultListModel dlm = new DefaultListModel();
-//        ArrayList<String> salas = new ArrayList<String>();
-//        
-//        for (int i = 0; i < 100; i++) {
-//            salas.add("Sala " + (i+1));
-//        }
-//        
-//        for (String item : salas) {
-//            dlm.addElement(item);
-//          }
-//
-// 		
 
 		dlm = new DefaultListModel();
 
@@ -149,7 +137,6 @@ public class Salas extends JFrame {
 		scroll.getViewport().add(list);
 		list.setEnabled(false);
 
-		// btnIngresar.setEnabled(false);
 		btnIngresar.addActionListener(new ActionListener() {
 
 			@Override
@@ -200,19 +187,11 @@ public class Salas extends JFrame {
 				if (e.getFirstIndex() != -1 && !e.getValueIsAdjusting()) {
 					indexSala = list.getSelectedIndex();
 					btnIngresar.setEnabled(true);
-
-					/// Borrado---
-					// list.removeListSelectionListener(this);
-					// list.clearSelection();
-					// dlm.remove(firstIndex);
-					// salas.remove(firstIndex);
-					// list.addListSelectionListener(this);
 				}
 			}
 		});
 
-//		JOptionPane.showMessageDialog(null, "Debe ingresar un nickName para continuar", 
-//		"Sala llena", JOptionPane.ERROR_MESSAGE);
+
 
 		textField.addKeyListener(new KeyAdapter() {
 			@Override

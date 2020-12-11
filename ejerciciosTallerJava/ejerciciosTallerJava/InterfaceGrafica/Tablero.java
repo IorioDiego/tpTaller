@@ -23,6 +23,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +55,8 @@ import javax.swing.border.TitledBorder;
 import org.omg.IOP.Codec;
 
 import cartas.*;
+import comandos.Salir;
+import comandosJuego.TomarCartas;
 import estados.Eliminado;
 import estados.Estado;
 import game.Jugador;
@@ -262,23 +266,7 @@ public class Tablero extends JFrame {
 
 		for (int i = 0; i < partida.getJugadores().size(); i++) {
 			if (jugadores.get(i).isBlockedOrDelete()) {
-				switch (i) {
-				case 0:
-					j1.setEnabled(false);
-					break;
-				case 1:
-					j2.setEnabled(false);
-					break;
-				case 2:
-					j3.setEnabled(false);
-					break;
-				case 3:
-					j4.setEnabled(false);
-					break;
-
-				default:
-					break;
-				}
+				switchBloqueo(i);
 			}
 
 		}
@@ -287,7 +275,6 @@ public class Tablero extends JFrame {
 
 	public void desbloquearBoton() {
 		enviarMsj(out, "6");
-
 		for (int i = 0; i < partida.getJugadores().size(); i++) {
 			Estado estado = (Estado) leerMsj(in);
 			partida.getJugadores().get(i).setEstado(estado);
@@ -317,14 +304,47 @@ public class Tablero extends JFrame {
 		}
 	}
 
+	public void rendirse() {
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				confirmarSalida();
+			}
+
+		});
+	}
+
+	public void confirmarSalida() {
+		int valor = JOptionPane.showConfirmDialog(this, "Desea rendirse", "Cerrar", JOptionPane.WARNING_MESSAGE);
+		if (valor == JOptionPane.YES_OPTION) {
+			if (miTurno && !tomoCarta && !jugarCarta) {
+				if (partida.getJugadores().size() > 2) {
+					enviarMsj(out, "9");
+					enviarMsj(out, "5");
+				}
+				this.dispose();
+				sala.setVisible(true);
+				enviarMsj(out, "2");
+				synchronized (espera) {
+					espera.notify();
+				}
+			} else {
+				if (levantarCarta && !jugarCarta)
+					JOptionPane.showMessageDialog(this, "Debe terminar de jugar antes de rendirse");
+				if (!miTurno)
+					JOptionPane.showMessageDialog(this, "Debe esperar su turno antes de rendirse");
+			}
+
+		}
+	}
+
 	public void tocarCartaIzquierda(MouseEvent m, ObjectInputStream entrada, ObjectOutputStream salida, JDialog lista,
 			JDialog listaCartas) {
 		Carta miCarta = mano.get(0);
 		bloquearBoton();
 		desbloquearBoton();
-		Tablero.enviarMsj(salida, "4");
-		Tablero.enviarMsj(salida, mano.get(0));
-		Tablero.enviarMsj(salida, 0);
+		enviarMsj(salida, "4");
+		enviarMsj(salida, mano.get(0));
+		enviarMsj(salida, 0);
 		mano.remove(0);
 
 		if (miCarta.equals(new Guardia()) || miCarta.equals(new Sacerdote()) || miCarta.equals(new Baron())
@@ -342,7 +362,7 @@ public class Tablero extends JFrame {
 		String reiniRonda = (String) leerMsj(entrada);
 		String finPartida = (String) leerMsj(entrada);
 		if (!reiniRonda.equals("finDeRonda") && !finPartida.equals("finPartida"))
-			Tablero.enviarMsj(salida, "5");
+			enviarMsj(salida, "5");
 		else if (reiniRonda.equals("finDeRonda"))
 			reiniciarRonda();
 		else if (finPartida.equals("finPartida"))
@@ -355,9 +375,9 @@ public class Tablero extends JFrame {
 		Carta miCarta = mano.get(1);
 		desbloquearBoton();
 		bloquearBoton();
-		Tablero.enviarMsj(salida, "4");
-		Tablero.enviarMsj(salida, mano.get(1));
-		Tablero.enviarMsj(salida, 1);
+		enviarMsj(salida, "4");
+		enviarMsj(salida, mano.get(1));
+		enviarMsj(salida, 1);
 		mano.remove(1);
 
 		if (miCarta.equals(new Guardia()) || miCarta.equals(new Sacerdote()) || miCarta.equals(new Baron())
@@ -376,7 +396,7 @@ public class Tablero extends JFrame {
 		String reiniRonda = (String) leerMsj(entrada);
 		String finPartida = (String) leerMsj(entrada);
 		if (!reiniRonda.equals("finDeRonda") && !finPartida.equals("finPartida"))
-			Tablero.enviarMsj(salida, "5");
+			enviarMsj(salida, "5");
 		else if (reiniRonda.equals("finDeRonda"))
 			reiniciarRonda();
 		else if (finPartida.equals("finPartida"))
@@ -716,11 +736,12 @@ public class Tablero extends JFrame {
 
 		pack();
 		setTitle("LoveLetter");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setFocusable(true);
 		requestFocusInWindow();
+		rendirse();
 
 		setResizable(false);
 		// setBounds(500, 156, 905, 727);***1
@@ -744,11 +765,6 @@ public class Tablero extends JFrame {
 			}
 
 		});
-
-//		if (partida.isFinalizoPartida()) {
-//		miTablero.dispose();
-//		sala.setVisible(true);
-//	}
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -859,11 +875,10 @@ public class Tablero extends JFrame {
 					"Afectos: " + String
 							.valueOf(partida.getJugadores().get(indexDes.get(nombreJActivo)).getAfectosConseguidos()),
 					1155, 741);
-			
-//			Estado estadoActual = partida.getJugadores().get(indexDes.get(nombreJActivo)).getEstado();
-			if (miTurno ) {
+
+			if (miTurno) {
 				g2.drawString("Tu Turno", 1050, 741);
-			} else  {
+			} else {
 				g2.drawString("Esperando", 1050, 741);
 			}
 
@@ -1446,6 +1461,39 @@ public class Tablero extends JFrame {
 		}
 		sw = false;
 
+	}
+
+	public void eliminarJugadorTablero(String nickAbandono) {
+		Jugador player = null;
+		for (Jugador players : partida.getJugadores()) {
+			if (nickAbandono.equals(players.getNombre()))
+				player = players;
+		}
+		int index = partida.getJugadores().indexOf(player);
+		partida.getJugadores().remove(player);
+		switchBloqueo(index);
+		
+	}
+	
+	public void switchBloqueo(int index)
+	{
+		switch (index) {
+		case 0:
+			j1.setEnabled(false);
+			break;
+		case 1:
+			j2.setEnabled(false);
+			break;
+		case 2:
+			j3.setEnabled(false);
+			break;
+		case 3:
+			j4.setEnabled(false);
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	public void recibirCartas() {

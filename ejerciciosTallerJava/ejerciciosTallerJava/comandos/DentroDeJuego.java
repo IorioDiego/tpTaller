@@ -6,6 +6,7 @@ import comandosJuego.ComandosJuego;
 import comandosJuego.DefaultJuego;
 import comandosJuego.DibujarCondesa;
 import comandosJuego.JugarCartas;
+import comandosJuego.Rendirse;
 import comandosJuego.TomarCartas;
 import comandosJuego.VolverPantallaInicial;
 import game.Partida;
@@ -49,6 +50,7 @@ public class DentroDeJuego implements ComandosServer {
 		ComandosJuego cambioJugador = new CambioJugador();
 		ComandosJuego bloquearJugador= new BloquearJugadores();
 		ComandosJuego dibujarCondesa = new DibujarCondesa();
+		ComandosJuego rendirse = new Rendirse();
 		
 		this.comanJuego = new VolverPantallaInicial();
 		comanJuego.establecerSiguiente(tomarCarta);
@@ -56,7 +58,8 @@ public class DentroDeJuego implements ComandosServer {
 		jugarCarta.establecerSiguiente(cambioJugador);
 		cambioJugador.establecerSiguiente(dibujarCondesa);
 		dibujarCondesa.establecerSiguiente(bloquearJugador);
-		bloquearJugador.establecerSiguiente(defaultJuego);
+		bloquearJugador.establecerSiguiente(rendirse);
+		rendirse.establecerSiguiente(defaultJuego);
 	}
 	
 }

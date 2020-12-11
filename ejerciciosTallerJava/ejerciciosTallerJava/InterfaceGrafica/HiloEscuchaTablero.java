@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import javax.swing.JFrame;
 
 import cartas.Carta;
+import estados.Eliminado;
 import estados.Estado;
 
 public class HiloEscuchaTablero extends Thread {
@@ -19,10 +20,8 @@ public class HiloEscuchaTablero extends Thread {
 	private Integer espera;
 
 	public void run() {
-
 		while (!tablero.isMiTurno()) {
 			String msj = (String) leerMsj(dis);
-
 			if (msj.equals("tuTurno")) {
 				cambioTurno();
 			} else if (msj.equals("actualizarTablero")) {
@@ -31,15 +30,17 @@ public class HiloEscuchaTablero extends Thread {
 				reiniciarRonda();
 			} else if (msj.equals("finPartida")) {
 				finDePartida();
+			} else if (msj.equals("Abandono")) {
+				abandono();
 			}
 		}
 
 	}
 
 	public void reiniciarRonda() {
-		tablero.setNroRonda(tablero.getNroRonda()+1);
-		leerMsj(dis);  ///Consumo un mensaje que no necesito
-		String ganador = (String)leerMsj(dis);
+		tablero.setNroRonda(tablero.getNroRonda() + 1);
+		leerMsj(dis); /// Consumo un mensaje que no necesito
+		String ganador = (String) leerMsj(dis);
 		tablero.setGanadorRonda(ganador);
 		tablero.setReinicioRonda(true);
 		tablero.getMano().clear();
@@ -49,11 +50,19 @@ public class HiloEscuchaTablero extends Thread {
 		tablero.getDescartes().clear();
 		tablero.recibirCartas();
 		tablero.construirDescarte();
-		//tablero.refresh();
+		// tablero.refresh();
 	}
-
+	
+	
+	public void abandono()
+	{
+		String nickAbandono = (String)leerMsj(dis);
+		tablero.eliminarJugadorTablero(nickAbandono);
+	}
+	
 	public void finDePartida() {
 		tablero.finDePartida();
+		tablero.refresh();
 	}
 
 	public void actualizar() {
@@ -74,7 +83,7 @@ public class HiloEscuchaTablero extends Thread {
 		case "Princesa": {
 			nombreOp = (String) leerMsj(dis);
 			cartaOp = (Carta) Tablero.leerMsj(dis);
-			sw=true;
+			sw = true;
 		}
 			break;
 		case "Condesa": {
@@ -192,7 +201,6 @@ public class HiloEscuchaTablero extends Thread {
 	}
 
 	public void cambioTurno() {
-
 		tablero.setMiTurno(true);
 		synchronized (espera) {
 			try {
