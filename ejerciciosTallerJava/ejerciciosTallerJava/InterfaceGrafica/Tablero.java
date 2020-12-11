@@ -2,78 +2,54 @@ package InterfaceGrafica;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Label;
-import java.awt.Paint;
 import java.awt.RenderingHints;
-import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SpringLayout;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import org.omg.IOP.Codec;
-
-import cartas.*;
-import estados.Eliminado;
+import cartas.Baron;
+import cartas.Carta;
+import cartas.Condesa;
+import cartas.Guardia;
+import cartas.Mucama;
+import cartas.Princesa;
+import cartas.Principe;
+import cartas.Rey;
+import cartas.Sacerdote;
 import estados.Estado;
 import game.Jugador;
 import game.Partida;
-import servidor.Paquete;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import java.awt.CardLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Frame;
-import java.awt.GradientPaint;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 
 public class Tablero extends JFrame {
 
@@ -99,7 +75,7 @@ public class Tablero extends JFrame {
 	private boolean finalizarPartida = false;
 	private int nroRonda = 0;
 	private String nombreJActivo;
-	private Tablero t = this;
+//	private Tablero t = this;
 
 //	private Map<String, ArrayList<DibujoCarta>> descarteTodos = new HashMap<String, ArrayList<DibujoCarta>>();
 
@@ -144,7 +120,7 @@ public class Tablero extends JFrame {
 	ObjectOutputStream out;
 
 	private JPanel contentPane;
-	private Tablero miTablero = this;
+	//private Tablero miTablero = this;
 	private BufferedImage dorso;
 	private DrawPanel drawPanel;
 	private Jugador jugadorActivo;
@@ -204,8 +180,9 @@ public class Tablero extends JFrame {
 	private Sound sonidoFondo;
 	private Sound sonidoTirarCarta;
 	private ImageIcon banner;
+	private BufferedImage fondoPlayerName;
 	private BufferedImage background;
-	private int CantJugadores;
+	private int cantJugadores;
 	private int anchoCarta = 100;
 	private int largoCarta = 140;
 	private float volumen = (float) 0.7;
@@ -322,9 +299,9 @@ public class Tablero extends JFrame {
 		Carta miCarta = mano.get(0);
 		bloquearBoton();
 		desbloquearBoton();
-		Tablero.enviarMsj(salida, "4");
-		Tablero.enviarMsj(salida, mano.get(0));
-		Tablero.enviarMsj(salida, 0);
+		enviarMsj(salida, "4");
+		enviarMsj(salida, mano.get(0));
+		enviarMsj(salida, 0);
 		mano.remove(0);
 
 		if (miCarta.equals(new Guardia()) || miCarta.equals(new Sacerdote()) || miCarta.equals(new Baron())
@@ -342,7 +319,7 @@ public class Tablero extends JFrame {
 		String reiniRonda = (String) leerMsj(entrada);
 		String finPartida = (String) leerMsj(entrada);
 		if (!reiniRonda.equals("finDeRonda") && !finPartida.equals("finPartida"))
-			Tablero.enviarMsj(salida, "5");
+			enviarMsj(salida, "5");
 		else if (reiniRonda.equals("finDeRonda"))
 			reiniciarRonda();
 		else if (finPartida.equals("finPartida"))
@@ -355,9 +332,9 @@ public class Tablero extends JFrame {
 		Carta miCarta = mano.get(1);
 		desbloquearBoton();
 		bloquearBoton();
-		Tablero.enviarMsj(salida, "4");
-		Tablero.enviarMsj(salida, mano.get(1));
-		Tablero.enviarMsj(salida, 1);
+		enviarMsj(salida, "4");
+		enviarMsj(salida, mano.get(1));
+		enviarMsj(salida, 1);
 		mano.remove(1);
 
 		if (miCarta.equals(new Guardia()) || miCarta.equals(new Sacerdote()) || miCarta.equals(new Baron())
@@ -376,7 +353,7 @@ public class Tablero extends JFrame {
 		String reiniRonda = (String) leerMsj(entrada);
 		String finPartida = (String) leerMsj(entrada);
 		if (!reiniRonda.equals("finDeRonda") && !finPartida.equals("finPartida"))
-			Tablero.enviarMsj(salida, "5");
+			enviarMsj(salida, "5");
 		else if (reiniRonda.equals("finDeRonda"))
 			reiniciarRonda();
 		else if (finPartida.equals("finPartida"))
@@ -389,10 +366,10 @@ public class Tablero extends JFrame {
 
 		sonidoTirarCarta.play();
 
-		Tablero.enviarMsj(salida, "3");
-		Carta cTomada = (Carta) Tablero.leerMsj(entrada);
-		String quienJuega = (String) Tablero.leerMsj(entrada);
-		Carta cDescartada = (Carta) Tablero.leerMsj(entrada);
+		enviarMsj(salida, "3");
+		Carta cTomada = (Carta) leerMsj(entrada);
+		String quienJuega = (String) leerMsj(entrada);
+		Carta cDescartada = (Carta) leerMsj(entrada);
 		boolean condesa = false;
 		mano.add(cTomada);
 		if (cTomada.equals(new Condesa()) && (mano.contains(new Principe()) || mano.contains(new Rey()))) {
@@ -434,6 +411,7 @@ public class Tablero extends JFrame {
 			sonidoFondo = new Sound("sounds/music.wav");
 			banner = new ImageIcon("loveImg/banner.jpg");
 			exit = new ImageIcon("loveImg/exit.png");
+			fondoPlayerName = ImageIO.read(new File("loveImg/fondoNombreJug.png"));
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -450,7 +428,7 @@ public class Tablero extends JFrame {
 //		sonidoFondo.loopear();
 		this.sala = salaPrincipal;
 		this.jugadores = jugadores;
-		CantJugadores = jugadores.size();
+		cantJugadores = jugadores.size();
 		this.partida = partida;
 
 		drawPanel = new DrawPanel();
@@ -493,12 +471,12 @@ public class Tablero extends JFrame {
 		predefined.add(j1);
 		predefined.add(j2);
 
-		if (CantJugadores >= 3) {
+		if (cantJugadores >= 3) {
 
 			j3 = new JButton(jugadores.get(2).getNombre());
 			j3.setBackground(Color.decode("#f7db97"));
 			predefined.add(j3);
-			if (CantJugadores == 4) {
+			if (cantJugadores == 4) {
 				j4 = new JButton(jugadores.get(3).getNombre());
 				j4.setBackground(Color.decode("#f7db97"));
 				predefined.add(j4);
@@ -545,7 +523,7 @@ public class Tablero extends JFrame {
 			}
 		});
 
-		if (CantJugadores >= 3) {
+		if (cantJugadores >= 3) {
 			j3.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					setJugadorElegido(2);
@@ -557,7 +535,7 @@ public class Tablero extends JFrame {
 
 		}
 
-		if (CantJugadores == 4) {
+		if (cantJugadores == 4) {
 			j4.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					setJugadorElegido(3);
@@ -818,7 +796,7 @@ public class Tablero extends JFrame {
 
 			if (partida.isHuboEliminacion()) {
 				distDescarte += 30;
-				Jugador eliminado = jugadores.get(Tablero.getJugadorElegido());
+				Jugador eliminado = jugadores.get(getJugadorElegido());
 
 				if (partida.isEliminoActBaron()) {
 					eliminado = jugadorActivo;
@@ -854,25 +832,30 @@ public class Tablero extends JFrame {
 			g2.setFont(seagram);
 			g2.setPaint(Color.decode("#653b33"));
 			g2.drawImage(cartaAmor, 1283, 698, 60, 39, this);
-			g2.drawString(nombreJActivo, 1035, 741);
-			g2.drawString(
-					"Afectos: " + String
-							.valueOf(partida.getJugadores().get(indexDes.get(nombreJActivo)).getAfectosConseguidos()),
-					1155, 741);
+			g2.drawString(nombreJActivo, 1020, 741);
+			String muestroAfectos = "Afectos:" + String.valueOf(partida.getJugadores().get(indexDes.get(nombreJActivo)).getAfectosConseguidos());
+			g2.drawString(muestroAfectos, 1185, 741);
 			
 //			Estado estadoActual = partida.getJugadores().get(indexDes.get(nombreJActivo)).getEstado();
 			if (miTurno ) {
-				g2.drawString("Tu Turno", 1050, 741);
+				g2.drawString("Tu Turno", 1080, 741);
 			} else  {
-				g2.drawString("Esperando", 1050, 741);
+				g2.drawString("Esperando", 1080, 741);
 			}
 
+//			g2.drawImage(fondoPlayerName, descartes.get(idx).get(0).getEjeX(),descartes.get(idx).get(0).getEjeY()+30,60,39,this);
+//			g2.drawString(nombre, descartes.get(idx).get(0).getEjeX(),descartes.get(idx).get(0).getEjeY());
+			
 			for (int i = 0; i < partida.getJugadores().size(); i++) {
-				String nombre = partida.getJugadores().get(i).getNombre();
-				int idx = indexDes.get(nombre);
-
+				String nombre = partida.getJugadores().get(i).getNombre();				
+				int idx = indexDes.get(nombre);				
 				for (DibujoCarta dib : descartes.get(idx)) {
 					dibujarCartas(g2, dib.getCartaDib().getNombre(), dib.getEjeX(), dib.getEjeY());
+				}
+				if(!nombreJActivo.equals(nombre)) { //nombre arriba de los descartes de los oponentes
+					Integer[]  pos = posiciones.get(nombre);					
+					g2.drawImage(fondoPlayerName, pos[0], pos[1]-50, 190, 60, this);
+					g2.drawString(nombre+" "+muestroAfectos, pos[0]+20, pos[1]-16);
 				}
 			}
 
@@ -1031,11 +1014,11 @@ public class Tablero extends JFrame {
 		nroRonda++;
 		ganadorRonda = (String) leerMsj(in);
 		reinicioRonda = true;
-		getMano().clear();
-		getIndexDes().clear();
-		getDistdDes().clear();
-		getPosiciones().clear();
-		getDescartes().clear();
+		mano.clear();
+		indexDes.clear();
+		distdDes.clear();
+		posiciones.clear();
+		descartes.clear();
 		recibirCartas();
 		construirDescarte();
 //		enviarMsj(out, "8");
@@ -1081,18 +1064,21 @@ public class Tablero extends JFrame {
 		int miIdx = n.indexOf(nombreJActivo);
 		Integer[] pos = { 500, 450 };
 		posiciones.put(n.get(miIdx), pos);
-		n.remove(miIdx);
+		n.remove(miIdx);		
 
-		Integer[] pos2 = { 300, 50 };
-		posiciones.put(n.get(0), pos2);
-
-		if (n.size() >= 2) {
-			Integer[] pos3 = { 635, 50 };
+		if (n.size() > 2) {			
+			Integer[] pos2 = { 150, 50 };
+			posiciones.put(n.get(0), pos2);
+			
+			Integer[] pos3 = { 450, 50 };
 			posiciones.put(n.get(1), pos3);
 			if (n.size() == 3) {
-				Integer[] pos4 = { 800, 50 };
+				Integer[] pos4 = { 750, 50 };
 				posiciones.put(n.get(2), pos4);
 			}
+		}else {
+			Integer[] pos2 = { 450, 50 };
+			posiciones.put(n.get(0), pos2);
 		}
 
 	}
@@ -1215,7 +1201,7 @@ public class Tablero extends JFrame {
 	}
 
 	public void setCartaElegida(int cartaElegida) {
-		Tablero.cartaElegida = cartaElegida;
+		this.cartaElegida = cartaElegida;
 	}
 
 	public static int getJugadorElegido() {
@@ -1223,7 +1209,7 @@ public class Tablero extends JFrame {
 	}
 
 	public void setJugadorElegido(int jugadorElegido) {
-		Tablero.jugadorElegido = jugadorElegido;
+		this.jugadorElegido = jugadorElegido;
 	}
 
 	public void turnoJugador(Jugador jugador) {
@@ -1281,14 +1267,14 @@ public class Tablero extends JFrame {
 	}
 
 	private void pintarCarta(Carta cJugada, String nombreJugo) {
-		int idx = getIndexDes().get(nombreJugo);
-		Integer[] pos = getPosiciones().get(nombreJugo);
+		int idx = indexDes.get(nombreJugo);
+		Integer[] pos = posiciones.get(nombreJugo);
 		int x = pos[0];
 		int y = pos[1];
-		int nuevaDist = getDistdDes().get(nombreJugo) + 30;
-		getDistdDes().replace(nombreJugo, nuevaDist);
+		int nuevaDist = distdDes.get(nombreJugo) + 30;
+		distdDes.replace(nombreJugo, nuevaDist);
 		DibujoCarta dibujo = new DibujoCarta(cJugada, x + nuevaDist, y);
-		getDescartes().get(idx).add(dibujo);
+		descartes.get(idx).add(dibujo);
 	}
 
 	public void mostrarLista(int indexMano) {
@@ -1352,7 +1338,7 @@ public class Tablero extends JFrame {
 		switch (miCarta.getNombre()) {
 		case "Princesa": {
 			nombreOp = (String) leerMsj(in);
-			cartaOp = (Carta) Tablero.leerMsj(in);
+			cartaOp = (Carta) leerMsj(in);
 			sw = true;
 		}
 			break;
@@ -1361,15 +1347,15 @@ public class Tablero extends JFrame {
 			break;
 		case "Principe": {
 			nombreOp = (String) leerMsj(in);
-			cartaOp = (Carta) Tablero.leerMsj(in);
+			cartaOp = (Carta) leerMsj(in);
 			sw = true;
-			if (getNombreJActivo().equals(nombreOp)) {
+			if (nombreJActivo.equals(nombreOp)) {
 				itsMeMario = true;
 			}
 			if (itsMeMario) {
-				Carta nuevaCarta = (Carta) Tablero.leerMsj(in);
-				getMano().add(nuevaCarta);
-				getMano().remove(0);
+				Carta nuevaCarta = (Carta) leerMsj(in);
+				mano.add(nuevaCarta);
+				mano.remove(0);
 
 				itsMeMario = false;
 			}
@@ -1405,19 +1391,19 @@ public class Tablero extends JFrame {
 			break;
 		case "Sacerdote": {
 			jugadorElegSacer = (String) leerMsj(in);
-			cartaOpSacer = (Carta) Tablero.leerMsj(in);
+			cartaOpSacer = (Carta) leerMsj(in);
 			dibManoOp = true;
 		}
 			break;
 		case "Guardia": {
-			cartaElegidaGuardia = (Carta) Tablero.leerMsj(in);
+			cartaElegidaGuardia = (Carta) leerMsj(in);
 			nombreOp = (String) leerMsj(in);
 			jugadorGuarida = nombreJActivo;
 			jugadorGuaridaOp = nombreOp;
 			seJugoGuardia = true;
 			String msj = (String) leerMsj(in);
 			if (msj.equals("Acierto")) {
-				cartaOp = (Carta) Tablero.leerMsj(in);
+				cartaOp = (Carta) leerMsj(in);
 				acertoGuardia = true;
 				sw = true;
 				// Remover la carta?
@@ -1427,15 +1413,15 @@ public class Tablero extends JFrame {
 		case "Rey": {
 			nombreOp = (String) leerMsj(in);
 			cartaOp = (Carta) leerMsj(in);
-			if (getNombreJActivo().equals(nombreOp)) {
+			if (nombreJActivo.equals(nombreOp)) {
 				itsMeMario = true;
 			}
 
 			if (itsMeMario) {
 				cartaOp = (Carta) leerMsj(in);
 			}
-			getMano().remove(0);
-			getMano().add(cartaOp);
+			mano.remove(0);
+			mano.add(cartaOp);
 		}
 			break;
 		}
