@@ -1110,7 +1110,7 @@ public class Tablero extends JFrame {
 		posiciones.put(n.get(miIdx), pos);
 		n.remove(miIdx);		
 
-		if (n.size() > 2) {			
+		if (n.size() > 1) {			
 			Integer[] pos2 = { 150, 50 };
 			posiciones.put(n.get(0), pos2);
 			
