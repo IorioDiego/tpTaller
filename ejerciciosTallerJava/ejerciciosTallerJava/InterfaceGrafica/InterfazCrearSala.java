@@ -1,11 +1,8 @@
 package InterfaceGrafica;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
@@ -21,7 +18,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.print.attribute.standard.JobName;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -35,11 +31,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import comandos.CrearSala;
 import servidor.SettingsPartida;
 
 public class InterfazCrearSala extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private SettingsPartida setPartida = new SettingsPartida(2, "default", 1);
 	private boolean tocoEnter = false;

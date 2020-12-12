@@ -1,15 +1,14 @@
 package cartas;
 
 import java.io.IOException;
-
-import javax.swing.JDialog;
-
 import game.Jugador;
 import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
 
 public class Princesa extends Carta {
+
+	private static final long serialVersionUID = 1L;
 
 	public Princesa() {
 		super(8, "Princesa", "descripciones/princesaDescrip.png");

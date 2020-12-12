@@ -1,16 +1,12 @@
 package servidor;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import game.Jugador;
-import game.Partida;
 
 public class Servidor {
 
@@ -27,7 +23,6 @@ public class Servidor {
 			HiloAtencionCliente hc = new HiloAtencionCliente(cliente);
 			hc.start();
 		}
-
 		System.out.println("Server Finalizado");
 		servidor.close();
 	}
@@ -97,17 +92,4 @@ public class Servidor {
 	public static void setMaxSalas(Map<String, SettingsPartida> maxSalas) {
 		Servidor.maxSalas = maxSalas;
 	}
-
-	
-//	public static Partida generarPartida(Paquete host) {
-//		int id = 0;
-//		ArrayList<Jugador> jugadores = new ArrayList<>();
-//		for (Paquete paqueteCliente : darClientesDeSala(host.getSala())) {
-//			jugadores.add(new Jugador(paqueteCliente.getNick(), id));
-//
-//		}
-//
-//		return new Partida(maxSalas.get(host.getSala()).getPrendasAmor(),
-//				maxSalas.get(host.getSala()).getCantJugadores(), jugadores,host.getNick());
-//	}
 }

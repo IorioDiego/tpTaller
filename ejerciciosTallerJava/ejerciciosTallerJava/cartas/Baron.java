@@ -2,15 +2,14 @@ package cartas;
 
 import java.io.IOException;
 
-import javax.swing.JDialog;
-
-import InterfaceGrafica.Tablero;
 import game.Jugador;
 import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
 
 public class Baron extends Carta {
+
+	private static final long serialVersionUID = 1L;
 
 	public Baron() {
 		super(3, "Baron", "descripciones/baronDescrip.png");
@@ -31,11 +30,8 @@ public class Baron extends Carta {
 		try {
 			int jElegido = (int) paquete.getEntrada().readObject();
 
-			Paquete paquetOp = null;
 			Jugador oponente = partida.getJugadores().get(jElegido);
 			int resultado = jugador.compararMano(oponente);
-
-			///// ESTA ES PARA MOSTRAR
 
 			for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 				paqueteCliente.getSalida().writeObject(oponente.getNombre());
@@ -47,10 +43,8 @@ public class Baron extends Carta {
 				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 					paqueteCliente.getSalida().writeObject("PerdioOponente");
 				}
-
 				oponente.descartar(oponente.getMano(0));
 				oponente.seJugoBaron();
-				partida.setHuboEliminacion(true);
 			} else if (resultado < 0) {
 
 				if (jugador.getMano(0).equals(new Baron())) {
@@ -64,15 +58,12 @@ public class Baron extends Carta {
 
 					for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 						paqueteCliente.getSalida().writeObject("PerdioJugador");
-
 					}
 
 					jugador.descartar(jugador.getMano(0));
 				}
-
 				jugador.seJugoBaron();
-				partida.setHuboEliminacion(true);///////////////// enviarMensaje
-				partida.setEliminoActBaron(true);//////////////// enviarMensaje
+				partida.setEliminoActBaron(true);
 			} else {
 				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 					paqueteCliente.getSalida().writeObject("Empate");
@@ -80,10 +71,8 @@ public class Baron extends Carta {
 				}
 			}
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

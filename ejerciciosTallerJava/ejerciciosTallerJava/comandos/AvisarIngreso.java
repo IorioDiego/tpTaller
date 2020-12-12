@@ -1,7 +1,6 @@
 package comandos;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import servidor.Paquete;
 import servidor.Servidor;

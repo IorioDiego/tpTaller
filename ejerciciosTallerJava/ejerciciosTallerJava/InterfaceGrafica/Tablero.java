@@ -129,7 +129,7 @@ public class Tablero extends JFrame {
 	ObjectOutputStream out;
 
 	private JPanel contentPane;
-	//private Tablero miTablero = this;
+	// private Tablero miTablero = this;
 	private BufferedImage dorso;
 	private DrawPanel drawPanel;
 	private Jugador jugadorActivo;
@@ -248,7 +248,7 @@ public class Tablero extends JFrame {
 
 		for (int i = 0; i < partida.getJugadores().size(); i++) {
 			if (jugadores.get(i).isBlockedOrDelete()) {
-				
+
 				switch (i) {
 				case 0:
 					j1.setEnabled(false);
@@ -409,21 +409,21 @@ public class Tablero extends JFrame {
 		sonidoTirarCarta.play();
 
 		enviarMsj(salida, "3");
-	
+
 		Carta cTomada = (Carta) leerMsj(entrada);
 		String reiniRonda = (String) leerMsj(entrada);
 		String finPartida = (String) leerMsj(entrada);
-		//		String quienJuega = (String) leerMsj(entrada);
+		// String quienJuega = (String) leerMsj(entrada);
 		Carta cDescartada = null;
 		boolean condesa = false;
-		if(cTomada != null) {
-			mano.add(cTomada);	
+		if (cTomada != null) {
+			mano.add(cTomada);
 		}
-		
+
 		if ((new Condesa()).equals(cTomada) && (mano.contains(new Principe()) || mano.contains(new Rey()))) {
 			cDescartada = mano.remove(1);
 			condesa = true;
-		} else if (mano.contains(new Condesa()) && ((new Principe()).equals(cTomada) || (new Rey() ).equals(cTomada)) ) {
+		} else if (mano.contains(new Condesa()) && ((new Principe()).equals(cTomada) || (new Rey()).equals(cTomada))) {
 			cDescartada = mano.remove(0);
 			condesa = true;
 		}
@@ -435,14 +435,15 @@ public class Tablero extends JFrame {
 			enviarMsj(salida, "5");
 			jugarCarta = true;
 		}
-		
 
 		if (reiniRonda.equals("finDeRonda")) {
-			jugarCarta =true; 
+			jugarCarta = true;
 			reiniciarRonda();
-		}else if ( finPartida.equals("finPartida") )
+		} else if (finPartida.equals("finPartida")) {
+			jugarCarta = true;
 			finDePartida();
-		tomoCarta = true;
+		}
+		levantarCarta = true;
 		refresh();
 
 	}
@@ -474,7 +475,7 @@ public class Tablero extends JFrame {
 
 		in = entrada;
 		out = salida;
-		HiloEscuchaTablero hiloTablero = new HiloEscuchaTablero(entrada, salida, this, espera);
+		HiloEscuchaTablero hiloTablero = new HiloEscuchaTablero(entrada, this, espera);
 		recibirCartas();
 		construirDescarte();
 
@@ -795,7 +796,7 @@ public class Tablero extends JFrame {
 							&& (m.getY() >= 210 && m.getY() <= 470 && mano.size() == 1)) {
 						if (miTurno) {
 							tomarCartaMazo(m, entrada, salida);
-							levantarCarta = true;
+
 						}
 
 					} else if ((m.getX() >= 695 && m.getX() <= 795 && (m.getY() >= 615 && m.getY() <= 755))
@@ -845,21 +846,6 @@ public class Tablero extends JFrame {
 				g2.drawRect(280 + i * 2, 285 + i * 3, 100, 140);
 			}
 
-			if (partida.isHuboEliminacion()) {
-				distDescarte += 30;
-				Jugador eliminado = jugadores.get(getJugadorElegido());
-
-				if (partida.isEliminoActBaron()) {
-					eliminado = jugadorActivo;
-					partida.setEliminoActBaron(false);
-				}
-
-				DibujoCarta cartaJugadorElim = new DibujoCarta(eliminado.getMano(0), 430 + distDescarte, 295);
-				dibujos.add(cartaJugadorElim);
-				partida.setHuboEliminacion(false);
-
-			}
-
 			Font seagram = null;
 
 			try {
@@ -884,35 +870,35 @@ public class Tablero extends JFrame {
 			g2.setPaint(Color.decode("#653b33"));
 			g2.drawImage(cartaAmor, 1283, 698, 60, 39, this);
 			g2.drawString(nombreJActivo, 1020, 741);
-			String muestroAfectos = "Afectos:" + String.valueOf(partida.getJugadores().get(indexDes.get(nombreJActivo)).getAfectosConseguidos());
+			String muestroAfectos = "Afectos:"
+					+ String.valueOf(partida.getJugadores().get(indexDes.get(nombreJActivo)).getAfectosConseguidos());
 			g2.drawString(muestroAfectos, 1185, 741);
-			
+
 //			Estado estadoActual = partida.getJugadores().get(indexDes.get(nombreJActivo)).getEstado();
-			if (miTurno ) {
+			if (miTurno) {
 				g2.drawString("Tu Turno", 1080, 741);
-			} else{
+			} else {
 				g2.drawString("Esperando", 1080, 741);
 			}
 
 //			g2.drawImage(fondoPlayerName, descartes.get(idx).get(0).getEjeX(),descartes.get(idx).get(0).getEjeY()+30,60,39,this);
 //			g2.drawString(nombre, descartes.get(idx).get(0).getEjeX(),descartes.get(idx).get(0).getEjeY());
-			
+
 			for (int i = 0; i < partida.getJugadores().size(); i++) {
-				String nombre = partida.getJugadores().get(i).getNombre();		
-				muestroAfectos = "Afectos:" + String.valueOf(partida.getJugadores().get(indexDes.get(nombre)).getAfectosConseguidos());
-				int idx = indexDes.get(nombre);				
+				String nombre = partida.getJugadores().get(i).getNombre();
+				muestroAfectos = "Afectos:"
+						+ String.valueOf(partida.getJugadores().get(indexDes.get(nombre)).getAfectosConseguidos());
+				int idx = indexDes.get(nombre);
 				for (DibujoCarta dib : descartes.get(idx)) {
 					dibujarCartas(g2, dib.getCartaDib().getNombre(), dib.getEjeX(), dib.getEjeY());
 				}
-				
-				
-				
-				///-->SOLO SIRVE PARA 2 JUGADORES
-				
-				if(!nombreJActivo.equals(nombre)) { //nombre arriba de los descartes de los oponentes
-					Integer[]  pos = posiciones.get(nombre);					
-					g2.drawImage(fondoPlayerName, pos[0], pos[1]-50, 190, 60, this);
-					g2.drawString(nombre+" "+muestroAfectos, pos[0]+20, pos[1]-16);
+
+				/// -->SOLO SIRVE PARA 2 JUGADORES
+
+				if (!nombreJActivo.equals(nombre)) { // nombre arriba de los descartes de los oponentes
+					Integer[] pos = posiciones.get(nombre);
+					g2.drawImage(fondoPlayerName, pos[0], pos[1] - 50, 190, 60, this);
+					g2.drawString(nombre + " " + muestroAfectos, pos[0] + 20, pos[1] - 16);
 				}
 			}
 
@@ -1121,19 +1107,19 @@ public class Tablero extends JFrame {
 		int miIdx = n.indexOf(nombreJActivo);
 		Integer[] pos = { 500, 450 };
 		posiciones.put(n.get(miIdx), pos);
-		n.remove(miIdx);		
+		n.remove(miIdx);
 
-		if (n.size() > 1) {			
+		if (n.size() > 1) {
 			Integer[] pos2 = { 150, 50 };
 			posiciones.put(n.get(0), pos2);
-			
+
 			Integer[] pos3 = { 450, 50 };
 			posiciones.put(n.get(1), pos3);
 			if (n.size() > 3) {
 				Integer[] pos4 = { 750, 50 };
 				posiciones.put(n.get(2), pos4);
 			}
-		}else {
+		} else {
 			Integer[] pos2 = { 450, 50 };
 			posiciones.put(n.get(0), pos2);
 		}
@@ -1500,11 +1486,10 @@ public class Tablero extends JFrame {
 		int index = partida.getJugadores().indexOf(player);
 		partida.getJugadores().remove(player);
 		switchNotVisible(index);
-		
+
 	}
-	
-	public void switchNotVisible(int index)
-	{
+
+	public void switchNotVisible(int index) {
 		switch (index) {
 		case 0:
 			j1.setVisible(false);

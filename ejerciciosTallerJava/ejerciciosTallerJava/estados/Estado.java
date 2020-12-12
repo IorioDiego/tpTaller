@@ -3,7 +3,9 @@ package estados;
 import java.io.Serializable;
 
 public abstract class Estado implements Serializable {
-	
+
+	private static final long serialVersionUID = 1L;
+
 	public  Estado seJugoMucama() {
 		return this;
 	}

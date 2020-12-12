@@ -12,15 +12,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -38,24 +34,17 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import comandos.CrearSala;
-import servidor.Paquete;
 import servidor.SalaSerealizable;
-import servidor.SettingsPartida;
 
 public class Salas extends JFrame {
 
 	private ArrayList<SalaSerealizable> salas = new ArrayList<SalaSerealizable>();
 	private JPanel contentPane;
 	private DefaultListModel dlm;
-	private JPanel nickname = new JPanel();
 	private JTextField textField;
-	private JList<String> list;
 	private boolean tocoEnter = false;
 	private static Integer indexSala = -1;
 	private JButton btnIngresar;
-	private JButton crear;
-	private JButton Ingresar;
 	private Salas miSala = this;
 	private ObjectInputStream dis;
 	private ObjectOutputStream dos;
@@ -63,9 +52,6 @@ public class Salas extends JFrame {
 
 	Font fuente = new Font("Calibri", Font.PLAIN, 16);
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public void init(ObjectInputStream disObject, ObjectOutputStream dosObject, Socket cliente) {
@@ -145,15 +131,21 @@ public class Salas extends JFrame {
 					enviarMsj(dosObject, "3");
 					enviarMsj(dosObject, salas.get(indexSala).getSetPart().getNombreSala());
 					String hayEspacio = (String) leerMsj(disObject);
-					if (hayEspacio.equals("y")) {
+					if (hayEspacio.equals("y") && !salas.get(indexSala).getSetPart().isInGame()) {
 						DentroDeSala sala = new DentroDeSala(miSala);
 						dispose();
-						enviarMsj(dosObject, "13"); // avisa ingreso
+						enviarMsj(dosObject, "13");
 						sala.init(disObject, dosObject, salas.get(indexSala).getSetPart().getNombreSala());
 						indexSala = -1;
-					} else
-						JOptionPane.showMessageDialog(null, "La sala a la cual quiere ingresar esta llena eliga otra",
-								"Sala llena", JOptionPane.ERROR_MESSAGE);
+					} else {
+						if (salas.get(indexSala).getSetPart().isInGame())
+							JOptionPane.showMessageDialog(null, "El juego ya ha iniciado en esta sala elija otra",
+									"Juego Iniciado", JOptionPane.ERROR_MESSAGE);
+						else
+							JOptionPane.showMessageDialog(null,
+									"La sala a la cual quiere ingresar esta llena eliga otra", "Sala llena",
+									JOptionPane.ERROR_MESSAGE);
+					}
 				} else
 					JOptionPane.showMessageDialog(null, "Debe seleccionar una sala", "Error sala",
 							JOptionPane.ERROR_MESSAGE);
@@ -190,8 +182,6 @@ public class Salas extends JFrame {
 				}
 			}
 		});
-
-
 
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -245,7 +235,6 @@ public class Salas extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				confirmarSalida();
 			}
-
 		});
 	}
 
@@ -273,10 +262,8 @@ public class Salas extends JFrame {
 
 	public Salas() {
 		contentPane = new JPanel();
-		// this.partida = partida;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setBounds(200, 117, 1366, 768);
-		// getContentPane().setBounds(626, 417, 800, 513);**7
 		setContentPane(contentPane);
 		salas = new ArrayList<>();
 

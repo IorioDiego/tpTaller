@@ -1,6 +1,5 @@
 package comandosJuego;
 
-import cartas.Carta;
 import game.Jugador;
 import game.Partida;
 import servidor.Paquete;

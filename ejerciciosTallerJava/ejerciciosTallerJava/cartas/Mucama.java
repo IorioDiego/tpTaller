@@ -1,6 +1,5 @@
 package cartas;
 
-import javax.swing.JDialog;
 
 import game.Jugador;
 import game.Partida;
@@ -9,6 +8,8 @@ import servidor.Paquete;
 
 public class Mucama extends Carta{
 	
+	private static final long serialVersionUID = 1L;
+
 	public Mucama() {
 		super(4, "Mucama", "descripciones/mucamaDescrip.png");
 		

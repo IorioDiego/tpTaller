@@ -2,7 +2,6 @@ package servidor;
 
 import java.io.Serializable;
 
-import game.Mazo;
 import game.Partida;
 
 public class SettingsPartida implements Serializable {

@@ -1,16 +1,14 @@
 package cartas;
 
 import java.io.IOException;
-
-import javax.swing.JDialog;
-
-import InterfaceGrafica.Tablero;
 import game.Jugador;
 import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
 
 public class Principe extends Carta {
+
+	private static final long serialVersionUID = 1L;
 
 	public Principe() {
 		super(5, "Principe", "descripciones/principeDescrip.png");

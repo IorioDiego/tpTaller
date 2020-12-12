@@ -21,7 +21,6 @@ public class ExpulsarAtodos implements ComandosServer {
 		if (msj.equals("14")) {
 			try {
 				if (Servidor.darClientesDeSala(paquete.getSala()).size() > 1) {
-					String sala = paquete.getSala();
 					ArrayList<Paquete> paquetes = new ArrayList<>(Servidor.darClientesDeSala(paquete.getSala()));
 					for (Paquete paqueteCliente : paquetes) {
 						if (paqueteCliente.getCliente().isConnected()) {

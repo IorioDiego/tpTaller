@@ -3,7 +3,7 @@ package servidor;
 import java.io.Serializable;
 
 public class SalaSerealizable implements Serializable{
-
+	private static final long serialVersionUID = 1L;
 	private Integer JugadoresConetados;
 	private SettingsPartida setPart;
 	
@@ -14,7 +14,8 @@ public class SalaSerealizable implements Serializable{
 
 	@Override
 	public String toString() {
-		return  String.format("Sala: %-15s [%s]   Prendas: %-17sJugadores: %02d/%02d",setPart.getNombreSala(),setPart.isInGame()?"En Juego":"disponible",setPart.getPrendasAmor(),JugadoresConetados,setPart.getCantJugadores());
+		boolean llena = (JugadoresConetados.equals(setPart.getCantJugadores()));
+		return  String.format("Sala: %-15s [%s]   Prendas: %-17sJugadores: %02d/%02d",setPart.getNombreSala(),setPart.isInGame()?"En Juego":(llena?"llena":"disponible"),setPart.getPrendasAmor(),JugadoresConetados,setPart.getCantJugadores());
 	}
 
 	

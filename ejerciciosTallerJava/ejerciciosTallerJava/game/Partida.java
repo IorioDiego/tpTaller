@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import InterfaceGrafica.Salas;
+
 import cartas.Baron;
 import cartas.Carta;
 import cartas.Condesa;
@@ -16,22 +16,21 @@ import cartas.Princesa;
 import cartas.Principe;
 import cartas.Rey;
 import cartas.Sacerdote;
-import comandosJuego.JugarCartas;
+
 import estados.Eliminado;
-import estados.Protegido;
+
 import servidor.Paquete;
 import servidor.Servidor;
 
 public class Partida extends Observer implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private int afecto;
-	// private ArrayList<Paquete> jugadores; ---> setearlo con el server
 	private int cantJugadores;
 	private ArrayList<Jugador> jugadores;
 	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
 	private Mazo mazo;
 	private int jugadoresActivos;
-	private ObjectOutputStream dos;
-	private ObjectInputStream dis;
 	private boolean reinicio = false;
 	private boolean finalizoPartida;
 	private Jugador ganadoRonda = new Jugador();
@@ -40,7 +39,6 @@ public class Partida extends Observer implements Serializable {
 	private String nombreSala;
 	private Paquete paqueteActivo;
 	private Carta cartaEliminda;
-	private boolean huboEliminacion = false;
 	// baron
 	private boolean eliminoOpBaron = false;
 	private boolean eliminoActBaron = false;
@@ -63,22 +61,6 @@ public class Partida extends Observer implements Serializable {
 
 	public int getNroRonda() {
 		return nroRonda;
-	}
-
-	public ObjectOutputStream getDos() {
-		return dos;
-	}
-
-	public void setDos(ObjectOutputStream dos) {
-		this.dos = dos;
-	}
-
-	public ObjectInputStream getDis() {
-		return dis;
-	}
-
-	public void setDis(ObjectInputStream dis) {
-		this.dis = dis;
 	}
 
 	public void setNroRonda(int nroRonda) {
@@ -120,6 +102,10 @@ public class Partida extends Observer implements Serializable {
 			Collections.reverse(this.jugadores);
 	}
 
+	public void setJugadoresActivos(int jugadoresActivos) {
+		this.jugadoresActivos = jugadoresActivos;
+	}
+
 	public boolean isEliminoOpBaron() {
 		return eliminoOpBaron;
 	}
@@ -144,14 +130,6 @@ public class Partida extends Observer implements Serializable {
 		this.ganadoRonda = ganadoRonda;
 	}
 
-	public boolean isHuboEliminacion() {
-		return huboEliminacion;
-	}
-
-	public void setHuboEliminacion(boolean huboEliminacion) {
-		this.huboEliminacion = huboEliminacion;
-	}
-
 	public void iniciarPartida() {
 
 		observarJugadores();
@@ -161,7 +139,6 @@ public class Partida extends Observer implements Serializable {
 
 	public void iniciarRonda() {
 
-		Paquete primerJ = null;
 		nroRonda++;
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
@@ -171,20 +148,12 @@ public class Partida extends Observer implements Serializable {
 		if (nroRonda > 1)
 			reinicio = true;
 
-		huboEliminacion = false;
-
-		// enviarMsj(dos, "1");
-		// mazo = (Mazo) leerMsj(dis);
 		mazo = new Mazo();
 		mazo.register(this);
 		mazo.mezclar();
 		cartaEliminda = mazo.eliminarPrimeraCarta();
 
 		cantJugadores = jugadoresActivos;
-
-//		for (Jugador jugador : jugadores) {
-//			mazo.darCarta(jugador);
-//		}
 		ArrayList<Paquete> p = Servidor.darClientesDeSala(nombreSala);
 
 		try {
@@ -209,7 +178,6 @@ public class Partida extends Observer implements Serializable {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -326,16 +294,14 @@ public class Partida extends Observer implements Serializable {
 			ganador = jEmpatados.get(ganador);
 		}
 		
-		jugadores.get(ganador).ganarRonda(afecto, this);
-		ganadoRonda = jugadores.get(ganador);
-
 		try {
 			paqueteActivo.getSalida().writeObject(null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		jugadores.get(ganador).ganarRonda(afecto, this);
+		ganadoRonda = jugadores.get(ganador);
 		avisarFinRonda();
 	}
 
@@ -355,16 +321,15 @@ public class Partida extends Observer implements Serializable {
 				return j;
 		}
 
-//		for (Jugador jugador : jugadores) {
-//			if (!jugador.getEstado().equals(new Eliminado()) && !jugador.getNombre().equals(jugadorActivo.getNombre())
-//					&& !jugador.isPasoTurno()) {
-//				return jugador;
-//			}
-//		}
+		Jugador player = null;
 		for (Jugador jugador : jugadores) {
 			jugador.setPasoTurno(false);
+			if(jugador.getNombre().equals(jInicial))
+				player = jugador;	
 		}
-		return proximoTurnoJugador(jugadorActivo);
+		
+		//return proximoTurnoJugador(jugadorActivo);
+		return player;
 	}
 
 	public int getCantJugadores() {

@@ -1,6 +1,5 @@
 package InterfaceGrafica;
 
-import java.awt.Graphics2D;
 
 import cartas.Carta;
 

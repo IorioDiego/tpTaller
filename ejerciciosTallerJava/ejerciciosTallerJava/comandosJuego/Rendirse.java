@@ -2,7 +2,6 @@ package comandosJuego;
 
 import java.io.IOException;
 
-import game.Jugador;
 import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
@@ -33,6 +32,7 @@ public class Rendirse implements ComandosJuego {
 				if (partida.getjInicial().equals(paquete.getNick()))
 					partida.setjInicial(nuevoJinicial);
 				partida.setCantJugadores(partida.getCantJugadores() - 1);
+				partida.setJugadoresActivos(partida.getJugadoresActivos() - 1);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -1,12 +1,6 @@
 package cartas;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.io.Serializable;
-
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 
 import game.Jugador;
 import game.Partida;
@@ -14,17 +8,11 @@ import servidor.Paquete;
 
 public abstract class Carta implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private int fuerza;
 	private String nombre;
 	private String descEfecto;
 	
-	////////////////////////////////////////////
-	private JLabel imagen;
-	private JLabel trasera;
-	
-	
-	
-	///////////////////////////////////
 	public Carta(int fuerza, String nombre, String descEfecto) {
 		this.fuerza = fuerza;
 		this.nombre = nombre;

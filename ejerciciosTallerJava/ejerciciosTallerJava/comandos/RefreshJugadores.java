@@ -2,12 +2,9 @@ package comandos;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
-
 import servidor.Paquete;
-import servidor.SalaSerealizable;
 import servidor.Servidor;
-import servidor.SettingsPartida;
+
 
 public class RefreshJugadores implements ComandosServer {
 

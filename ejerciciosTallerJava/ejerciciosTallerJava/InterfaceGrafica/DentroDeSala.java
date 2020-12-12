@@ -1,10 +1,7 @@
 package InterfaceGrafica;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +13,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -26,14 +22,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 
 import Cliente.HiloEscuchar;
-import game.Partida;
-import servidor.SalaSerealizable;
 
 public class DentroDeSala extends JFrame {
 
@@ -108,19 +99,15 @@ public class DentroDeSala extends JFrame {
 		combo1.addItem("Derecha");
 
 		for (String item : nickNames) {
-//			combo1.addItem(item);
 			combo2.addItem(item);
 		}
 
 
 		combo1.setSelectedIndex(0);
 		orden=combo1.getSelectedItem().toString();
-//		orden="Izquierda";
-		System.out.println(orden);
 		
 		combo2.setSelectedIndex(0);
 		jugadorInicial=combo2.getSelectedItem().toString();
-		System.out.println(jugadorInicial);
 		
 		botonVolver.addActionListener(new ActionListener() {
 
@@ -144,7 +131,6 @@ public class DentroDeSala extends JFrame {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
 				if (event.getStateChange() == ItemEvent.SELECTED) {
-					/* Modificamos esta linea, ahora utilizamos getSelectedItem() y toString() */
 					orden = combo1.getSelectedItem().toString();
 				
 				}
@@ -179,12 +165,9 @@ public class DentroDeSala extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				enviarMsj(dosObject, "16");//añadorConfig
-			
-				enviarMsj(dosObject, "15");		//comenzarPartida
+				enviarMsj(dosObject, "15");		
 				enviarMsj(dosObject, orden);
 				enviarMsj(dosObject, jugadorInicial);
-				//Partida nuevaPartida = (Partida)leerMsj(disObject);
 			}
 		});
 		
@@ -216,8 +199,8 @@ public class DentroDeSala extends JFrame {
 		setVisible(true);
 		setBounds(500, 250, 500, 270);
 
-		HiloEscuchar ingresoJug = new HiloEscuchar(disObject, dosObject, dlm, combo1, combo2, salaPrincipal, this);
-		ingresoJug.start(); // hilo de actualizacion
+		HiloEscuchar ingresoJug = new HiloEscuchar(disObject, dosObject, dlm,salaPrincipal, this);
+		ingresoJug.start(); 
 	}
 
 	public DentroDeSala(Salas sala) {

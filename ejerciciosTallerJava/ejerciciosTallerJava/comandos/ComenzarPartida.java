@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import game.Jugador;
-import game.Mazo;
 import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;

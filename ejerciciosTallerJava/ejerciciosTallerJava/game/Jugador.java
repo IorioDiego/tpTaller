@@ -1,13 +1,10 @@
 package game;
 
 import java.io.Serializable;
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
-import javax.swing.JDialog;
 
 import cartas.Carta;
 import cartas.Condesa;
-import cartas.Guardia;
 import cartas.Principe;
 import cartas.Rey;
 import estados.Eliminado;
@@ -18,8 +15,8 @@ import servidor.Paquete;
 
 public class Jugador extends Observable implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private String nombre;
-	private int id;
 	private int afectosConseguidos;
 	private ArrayList<Carta> descarte = new ArrayList<Carta>();
 	private ArrayList<Carta> mano = new ArrayList<Carta>();
@@ -30,7 +27,6 @@ public class Jugador extends Observable implements Serializable {
 	
 	public Jugador(String nombre) {
 		this.nombre = nombre;
-		//this.id = id;
 		this.afectosConseguidos = 0;
 	}
 
@@ -102,18 +98,14 @@ public class Jugador extends Observable implements Serializable {
 	}
 
 
-	public void jugarCarta(Partida partida,int index,Paquete paquete) {// recive indice del evento
-//		int indiceAux = this.elegirCartaParaJugar(index); // revisar esto, elegirCarta.. devuelve el index q recive x param
-//		Carta cartaElegida = sacarCartaDeMano(indiceAux); // 
-		
+	public void jugarCarta(Partida partida,int index,Paquete paquete) {
 		Carta cartaElegida = sacarCartaDeMano(index);
 		cartaElegida.activarEfecto(this, partida,paquete);
 		descartar(cartaElegida);
 		pasoTurno=true;
 	}
 
-	public int compararMano(Jugador oponente) {// si devuleve negativo perdi, si es 0 empatamos
-												// si es positivo gane
+	public int compararMano(Jugador oponente) {
 		return this.mano.get(0).getFuerzaCarta() - oponente.mano.get(0).getFuerzaCarta();
 	}
 
@@ -164,17 +156,16 @@ public class Jugador extends Observable implements Serializable {
 	}
 
 	
-	public int elegirCartaParaJugar(int i) {// izquierda 0, derecha 1
+	public int elegirCartaParaJugar(int i) {
 		return i;
 	}
 
 	public Carta descartar(Carta cartaJugada) {
 		descarte.add(cartaJugada);
-		return cartaJugada;////////////
+		return cartaJugada;
 	}
 	
 	public Jugador seleccionarJugador(Partida partida) {
-		/// evento de seleccion de jugador
 		int i = 1;
 		return partida.elegirJugador(i);
 	}
@@ -187,7 +178,7 @@ public class Jugador extends Observable implements Serializable {
 		return suma;
 	}
 	
-	public Carta getMano(int i) {// para cuando tiene uno solo
+	public Carta getMano(int i) {
 		return mano.get(i);
 	}
 	
@@ -204,15 +195,6 @@ public class Jugador extends Observable implements Serializable {
 	public String getNombre()
 	{
 		return nombre;
-	}
-	
-	public void mostrarDescarte() {
-
-		System.out.println("\nEl jugador: " + id + "\nNombre: " + nombre + "\ntiene en su descarte: \n");
-
-		for (Carta carta : descarte) {
-			System.out.println(carta);
-		}
 	}
 	
 	public int getAfectosConseguidos() {

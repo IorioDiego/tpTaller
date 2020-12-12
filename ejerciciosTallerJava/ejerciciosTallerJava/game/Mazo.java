@@ -16,41 +16,32 @@ import cartas.Sacerdote;
 
 public class Mazo extends Observable implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Carta> mazo = new ArrayList<Carta>();
 
 	public Mazo() {
 
 		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		
+		mazo.add(new Sacerdote());
+		mazo.add(new Sacerdote());
+
+		mazo.add(new Baron());
+		mazo.add(new Baron());
+
+		mazo.add(new Mucama());
+		mazo.add(new Mucama());
+
+		mazo.add(new Principe());
+		mazo.add(new Principe());
+ 
+		mazo.add(new Rey());
+		mazo.add(new Condesa());
 		mazo.add(new Princesa());
-//		mazo.add(new Guardia());
-//		mazo.add(new Guardia());
-//		mazo.add(new Guardia());
-//		mazo.add(new Guardia());
-//
-//		mazo.add(new Sacerdote());
-//		mazo.add(new Sacerdote());
-//
-//		mazo.add(new Baron());
-//		mazo.add(new Baron());
-
-		mazo.add(new Mucama());
-		mazo.add(new Mucama());
-
-//		mazo.add(new Principe());
-//		mazo.add(new Principe());
-// 
-//		mazo.add(new Rey());
-//
-//		mazo.add(new Condesa());
-//		mazo.add(new Rey());
-		
-		
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
-		
-		//mazo.add(new Rey());
 	}
 
 	public Carta eliminarPrimeraCarta() {
@@ -58,7 +49,7 @@ public class Mazo extends Observable implements Serializable {
 	}
 
 	public void mezclar() {
-		//Collections.shuffle(mazo);
+		Collections.shuffle(mazo);
 	}
 
 	public Carta darCarta(Jugador jugador) {

@@ -2,6 +2,8 @@ package estados;
 
 public class Normal extends Estado {
 	
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public Estado seJugoMucama() {
 		return new Protegido();		

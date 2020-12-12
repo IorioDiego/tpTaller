@@ -1,21 +1,17 @@
 package InterfaceGrafica;
 
-import java.awt.Color;
-import java.awt.Graphics;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.swing.JFrame;
+
 
 import cartas.Carta;
-import estados.Eliminado;
-import estados.Estado;
 
 public class HiloEscuchaTablero extends Thread {
 
 	private ObjectInputStream dis;
-	private ObjectOutputStream dos;
 	private Tablero tablero;
 	private Integer espera;
 
@@ -39,7 +35,7 @@ public class HiloEscuchaTablero extends Thread {
 
 	public void reiniciarRonda() {
 		tablero.setNroRonda(tablero.getNroRonda() + 1);
-		leerMsj(dis); 		/// Consumo un mensaje que no necesito
+		leerMsj(dis); 	
 		String ganador = (String) leerMsj(dis);
 		tablero.setGanadorRonda(ganador);
 		tablero.setReinicioRonda(true);
@@ -49,8 +45,7 @@ public class HiloEscuchaTablero extends Thread {
 		tablero.getPosiciones().clear();
 		tablero.getDescartes().clear();
 		tablero.recibirCartas();
-		tablero.construirDescarte();
-		// tablero.refresh();
+		tablero.construirDescarte();;
 	}
 	
 	public void abandono()
@@ -72,7 +67,6 @@ public class HiloEscuchaTablero extends Thread {
 		Carta cartaOp = null;
 		Carta cartaBaron = null;
 		Carta cartaBaronOp = null;
-		Carta cartaPerdedor = null;
 		String jugadorBaron = null;
 		String jugadorBaronOp = null;
 		boolean itsMeMario = false;
@@ -133,8 +127,6 @@ public class HiloEscuchaTablero extends Thread {
 				sw = true;
 				cartaOp = cartaBaronOp;
 				nombreOp = jugadorBaronOp;
-//				tablero.getMano().remove(0); //si remuevo es porq perdio
-
 			} else if (msj.equals("PerdioJugador")) {
 				sw = true;
 				cartaOp = cartaBaron;
@@ -160,7 +152,6 @@ public class HiloEscuchaTablero extends Thread {
 				cartaOp = (Carta) Tablero.leerMsj(dis);
 				tablero.setAcertoGuardia(true);
 				sw = true;
-				// Remover la carta?
 			}
 		}
 			break;
@@ -171,7 +162,7 @@ public class HiloEscuchaTablero extends Thread {
 				itsMeMario = true;
 			}
 			if (itsMeMario) {
-				cartaOp = (Carta) leerMsj(dis);// en este caso es el que me la juego
+				cartaOp = (Carta) leerMsj(dis);
 				tablero.getMano().remove(0);
 				tablero.getMano().add(cartaOp);
 			}
@@ -205,7 +196,6 @@ public class HiloEscuchaTablero extends Thread {
 			try {
 				espera.wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -213,9 +203,8 @@ public class HiloEscuchaTablero extends Thread {
 
 	}
 
-	public HiloEscuchaTablero(ObjectInputStream dis, ObjectOutputStream dos, Tablero tablero, Integer espera) {
+	public HiloEscuchaTablero(ObjectInputStream dis, Tablero tablero, Integer espera) {
 		this.dis = dis;
-		this.dos = dos;
 		this.tablero = tablero;
 		this.espera = espera;
 	}

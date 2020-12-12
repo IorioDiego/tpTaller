@@ -1,18 +1,13 @@
 package servidor;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
-import InterfaceGrafica.ComenzarRonda;
 import comandos.AvisarIngreso;
 import comandos.ComandosServer;
 import comandos.ComenzarPartida;
@@ -25,7 +20,6 @@ import comandos.Refrescar;
 import comandos.RefreshJugadores;
 import comandos.Salir;
 import comandos.VolverLobby;
-import game.Partida;
 
 public class HiloAtencionCliente extends Thread {
 
@@ -53,9 +47,8 @@ public class HiloAtencionCliente extends Thread {
 		try {
 			String msj, resultComando;
 			ChainOfResposability();
-			boolean existeSala = true;
 			enviarSalas();
-			String nickName = (String) entradaObj.readObject(); // en caso de que salga sin poner nickname
+			String nickName = (String) entradaObj.readObject();
 			if (nickName.equals("-/-1"))
 				cerrarConexion();
 			else {
@@ -73,11 +66,8 @@ public class HiloAtencionCliente extends Thread {
 						msj = (String) entradaObj.readObject();
 					} while ((resultComando = comanSer.procesar(paquete, msj)).equals("y"));
 
-///------>			Dentro de sala
 					if (!resultComando.equals("Salir")) {
 						do {
-							String sala;
-							// enviarJugadores();
 							msj = (String) entradaObj.readObject();
 						} while (!(resultComando = comanSer.procesar(paquete, msj)).equals("--VolverAlLobby"));
 					}

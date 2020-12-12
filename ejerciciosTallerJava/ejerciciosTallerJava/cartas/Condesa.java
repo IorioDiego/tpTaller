@@ -1,19 +1,13 @@
 package cartas;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-
-import javax.imageio.ImageIO;
-import javax.swing.JDialog;
-
 import game.Jugador;
 import game.Partida;
 import servidor.Paquete;
 
 public class Condesa extends Carta{
 	
+	private static final long serialVersionUID = 1L;
+
 	public Condesa() {
 		super(7, "Condesa", "descripciones/condesaDescrip.png");
 		

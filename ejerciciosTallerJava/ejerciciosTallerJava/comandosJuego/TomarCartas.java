@@ -2,7 +2,6 @@ package comandosJuego;
 
 import cartas.Carta;
 import game.Jugador;
-import game.Mazo;
 import game.Partida;
 import servidor.Paquete;
 import servidor.Servidor;
@@ -29,9 +28,7 @@ public class TomarCartas implements ComandosJuego {
 						jugadorActivo = j;
 					}
 				}
-				
 				Carta cartaTomada = partida.getMazo().darCarta(jugadorActivo);
-				
 				if (cantC == 0) {
 					Servidor.darConfigSalas(paquete.getSala()).setReinicioRonda("NoReinicio");
 				} else {
