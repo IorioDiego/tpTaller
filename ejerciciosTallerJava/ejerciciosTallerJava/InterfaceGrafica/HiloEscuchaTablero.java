@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 
 import cartas.Carta;
 
+
 public class HiloEscuchaTablero extends Thread {
 
 	private ObjectInputStream dis;

@@ -20,12 +20,17 @@ public class Mazo extends Observable implements Serializable {
 	private ArrayList<Carta> mazo = new ArrayList<Carta>();
 
 	public Mazo() {
+	
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
+		mazo.add(new Guardia());
 
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
+		mazo.add(new Sacerdote());
+		mazo.add(new Sacerdote());
+
+		mazo.add(new Baron());
 		
 		mazo.add(new Sacerdote());
 		mazo.add(new Sacerdote());
