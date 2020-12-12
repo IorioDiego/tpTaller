@@ -9,26 +9,36 @@ import servidor.Servidor;
 
 public class TomarCartas implements ComandosJuego {
 	private ComandosJuego siguiente;
+
 	@Override
 	public void establecerSiguiente(ComandosJuego siguiente) {
 		this.siguiente = siguiente;
 
 	}
+
 	@Override
 	public String procesar(Paquete paquete, String msj, Partida partida) {
 		String resp = "?";
 		if (msj.equals("3")) {
 			try {
+				partida.setPaqueteActivo(paquete);
+				int cantC = partida.getMazo().getCantCartas();
 				Jugador jugadorActivo = null;
 				for (Jugador j : partida.getJugadores()) {
 					if (j.getNombre().equals(paquete.getNick())) {
 						jugadorActivo = j;
 					}
 				}
+				
 				Carta cartaTomada = partida.getMazo().darCarta(jugadorActivo);
-				paquete.getSalida().writeObject(cartaTomada);
-				paquete.getSalida().writeObject(paquete.getNick());
-				paquete.getSalida().writeObject(jugadorActivo.getUltimaDescartada());
+				
+				if (cantC == 0) {
+					Servidor.darConfigSalas(paquete.getSala()).setReinicioRonda("NoReinicio");
+				} else {
+					paquete.getSalida().writeObject(cartaTomada);
+					paquete.getSalida().writeObject("noReinicio");
+					paquete.getSalida().writeObject("noFinPartida");
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

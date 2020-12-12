@@ -409,15 +409,21 @@ public class Tablero extends JFrame {
 		sonidoTirarCarta.play();
 
 		enviarMsj(salida, "3");
+	
 		Carta cTomada = (Carta) leerMsj(entrada);
-		String quienJuega = (String) leerMsj(entrada);
-		Carta cDescartada = (Carta) leerMsj(entrada);
+		String reiniRonda = (String) leerMsj(entrada);
+		String finPartida = (String) leerMsj(entrada);
+		//		String quienJuega = (String) leerMsj(entrada);
+		Carta cDescartada = null;
 		boolean condesa = false;
-		mano.add(cTomada);
-		if (cTomada.equals(new Condesa()) && (mano.contains(new Principe()) || mano.contains(new Rey()))) {
+		if(cTomada != null) {
+			mano.add(cTomada);	
+		}
+		
+		if ((new Condesa()).equals(cTomada) && (mano.contains(new Principe()) || mano.contains(new Rey()))) {
 			cDescartada = mano.remove(1);
 			condesa = true;
-		} else if (mano.contains(new Condesa()) && (cTomada.equals(new Principe()) || cTomada.equals(new Rey()))) {
+		} else if (mano.contains(new Condesa()) && ((new Principe()).equals(cTomada) || (new Rey() ).equals(cTomada)) ) {
 			cDescartada = mano.remove(0);
 			condesa = true;
 		}
@@ -429,6 +435,13 @@ public class Tablero extends JFrame {
 			enviarMsj(salida, "5");
 			jugarCarta = true;
 		}
+		
+
+		if (reiniRonda.equals("finDeRonda")) {
+			jugarCarta =true; 
+			reiniciarRonda();
+		}else if ( finPartida.equals("finPartida") )
+			finDePartida();
 		tomoCarta = true;
 		refresh();
 
@@ -877,7 +890,7 @@ public class Tablero extends JFrame {
 //			Estado estadoActual = partida.getJugadores().get(indexDes.get(nombreJActivo)).getEstado();
 			if (miTurno ) {
 				g2.drawString("Tu Turno", 1080, 741);
-			} else  {
+			} else{
 				g2.drawString("Esperando", 1080, 741);
 			}
 

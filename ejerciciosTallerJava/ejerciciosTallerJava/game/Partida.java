@@ -160,6 +160,7 @@ public class Partida extends Observer implements Serializable {
 	}
 
 	public void iniciarRonda() {
+
 		Paquete primerJ = null;
 		nroRonda++;
 		for (Jugador jugador : jugadores) {
@@ -175,7 +176,7 @@ public class Partida extends Observer implements Serializable {
 		// enviarMsj(dos, "1");
 		// mazo = (Mazo) leerMsj(dis);
 		mazo = new Mazo();
-		// mazo.register(this);
+		mazo.register(this);
 		mazo.mezclar();
 		cartaEliminda = mazo.eliminarPrimeraCarta();
 
@@ -327,6 +328,14 @@ public class Partida extends Observer implements Serializable {
 		
 		jugadores.get(ganador).ganarRonda(afecto, this);
 		ganadoRonda = jugadores.get(ganador);
+
+		try {
+			paqueteActivo.getSalida().writeObject(null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		avisarFinRonda();
 	}
 
