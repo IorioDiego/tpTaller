@@ -131,8 +131,10 @@ public class Partida extends Observer implements Serializable {
 	}
 
 	public void iniciarPartida() {
+
 		observarJugadores();
 		iniciarRonda();
+
 	}
 
 	public void iniciarRonda() {
@@ -140,17 +142,20 @@ public class Partida extends Observer implements Serializable {
 		nroRonda++;
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
+
 		}
 
-		if (nroRonda > 1) {
+		if (nroRonda > 1)
 			reinicio = true;
 
 		mazo = new Mazo();
 		mazo.register(this);
 		mazo.mezclar();
 		cartaEliminda = mazo.eliminarPrimeraCarta();
+
 		cantJugadores = jugadoresActivos;
 		ArrayList<Paquete> p = Servidor.darClientesDeSala(nombreSala);
+
 		try {
 
 			for (Paquete paqueteCliente : p) {
