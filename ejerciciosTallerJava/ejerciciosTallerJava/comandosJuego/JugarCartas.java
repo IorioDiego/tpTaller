@@ -40,7 +40,7 @@ public class JugarCartas implements ComandosJuego {
 				String reinicio = Servidor.darConfigSalas(paquete.getSala()).getReinicioRonda();
 				String finPartida = Servidor.darConfigSalas(paquete.getSala()).getFinalizoPartida();
 				if (reinicio.equals("Reinicio")) {
-					reinicio = "NoReinicio";
+					Servidor.darConfigSalas(paquete.getSala()).setReinicioRonda("NoReinicio");
 				} else if (!finPartida.equals("finPartida")) {
 					paquete.getSalida().writeObject("NoReinicio");
 					paquete.getSalida().writeObject("NoFinPartida");

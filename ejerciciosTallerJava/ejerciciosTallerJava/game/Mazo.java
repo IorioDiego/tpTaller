@@ -22,27 +22,27 @@ public class Mazo extends Observable implements Serializable {
 
 		mazo.add(new Guardia());
 		mazo.add(new Princesa());
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
-		mazo.add(new Guardia());
-
-		mazo.add(new Sacerdote());
-		mazo.add(new Sacerdote());
-
-		mazo.add(new Baron());
-		mazo.add(new Baron());
+//		mazo.add(new Guardia());
+//		mazo.add(new Guardia());
+//		mazo.add(new Guardia());
+//		mazo.add(new Guardia());
+//
+//		mazo.add(new Sacerdote());
+//		mazo.add(new Sacerdote());
+//
+//		mazo.add(new Baron());
+//		mazo.add(new Baron());
 
 		mazo.add(new Mucama());
 		mazo.add(new Mucama());
 
-		mazo.add(new Principe());
-		mazo.add(new Principe());
- 
-		mazo.add(new Rey());
-
-		mazo.add(new Condesa());
-		mazo.add(new Rey());
+//		mazo.add(new Principe());
+//		mazo.add(new Principe());
+// 
+//		mazo.add(new Rey());
+//
+//		mazo.add(new Condesa());
+//		mazo.add(new Rey());
 		
 
 		
@@ -58,7 +58,7 @@ public class Mazo extends Observable implements Serializable {
 
 	public Carta darCarta(Jugador jugador) {
 		Carta robada = null;
-		if (getCantCartas() != 0) {
+		if (mazo.size() != 0) {
 			robada = jugador.tomarCarta(mazo.remove(0));
 		} else
 			this.notificarFinMazo();
