@@ -315,7 +315,7 @@ public class Tablero extends JFrame {
 	public void confirmarSalida() {
 		int valor = JOptionPane.showConfirmDialog(this, "Desea rendirse", "Cerrar", JOptionPane.WARNING_MESSAGE);
 		if (valor == JOptionPane.YES_OPTION) {
-			if (miTurno && !tomoCarta && !jugarCarta) {
+			if (miTurno && !levantarCarta && !jugarCarta) {
 				if (partida.getJugadores().size() > 2) {
 					enviarMsj(out, "9");
 					enviarMsj(out, "5");

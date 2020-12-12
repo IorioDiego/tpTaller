@@ -283,7 +283,6 @@ public class Partida extends Observer implements Serializable {
 
 	@Override
 	public void notificarseFinMazo() {
-
 		int fuerza = 0, ganador = 0, empate = 0;
 		int primeroValido = 0;
 		ArrayList<Integer> jEmpatados = new ArrayList<Integer>();
@@ -325,7 +324,7 @@ public class Partida extends Observer implements Serializable {
 			}
 			ganador = jEmpatados.get(ganador);
 		}
-
+		
 		jugadores.get(ganador).ganarRonda(afecto, this);
 		ganadoRonda = jugadores.get(ganador);
 		avisarFinRonda();

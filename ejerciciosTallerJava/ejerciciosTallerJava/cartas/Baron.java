@@ -40,32 +40,17 @@ public class Baron extends Carta {
 			for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 				paqueteCliente.getSalida().writeObject(oponente.getNombre());
 				paqueteCliente.getSalida().writeObject(oponente.getMano(0));
-
-				if (jugador.getMano(0).equals(new Baron())) {
-
-					paqueteCliente.getSalida().writeObject(jugador.getMano(1));
-				} else {
-
-					paqueteCliente.getSalida().writeObject(jugador.getMano(0));
-				}
-
+				paqueteCliente.getSalida().writeObject(jugador.getMano(0));
 			}
-
-//			paquete.getSalida().writeObject(oponente.getMano(0));
-
-			////////////////////////////////////////////
 
 			if (resultado > 0) {
 				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
 					paqueteCliente.getSalida().writeObject("PerdioOponente");
-					paqueteCliente.getSalida().writeObject(oponente.getMano(0));
-
 				}
 
 				oponente.descartar(oponente.getMano(0));
 				oponente.seJugoBaron();
-				partida.setHuboEliminacion(true);/////////////////// enviarMensaje
-//					partida.setEliminoOpBaron(true);
+				partida.setHuboEliminacion(true);
 			} else if (resultado < 0) {
 
 				if (jugador.getMano(0).equals(new Baron())) {
@@ -101,27 +86,6 @@ public class Baron extends Carta {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-//		lista.setVisible(true);
-//		Jugador oponente = partida.getJugadores().get(Tablero.getJugadorElegido());
-//		int resultado = jugador.compararMano( oponente );
-//		if( resultado >0  ) {
-//				oponente.descartar(oponente.getMano(0));
-//				oponente.seJugoBaron();
-//				partida.setHuboEliminacion(true);
-////				partida.setEliminoOpBaron(true);
-//				}
-//		else if( resultado < 0) {
-//			
-//			if(jugador.getMano(0).equals(new Baron()))
-//				jugador.descartar(oponente.getMano(1));
-//			else
-//				jugador.descartar(oponente.getMano(0));
-//			jugador.seJugoBaron();
-//			partida.setHuboEliminacion(true);
-//			partida.setEliminoActBaron(true);
-//		}
-
 	}
 
 }

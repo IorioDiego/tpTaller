@@ -19,7 +19,6 @@ public class TomarCartas implements ComandosJuego {
 		String resp = "?";
 		if (msj.equals("3")) {
 			try {
-
 				Jugador jugadorActivo = null;
 				for (Jugador j : partida.getJugadores()) {
 					if (j.getNombre().equals(paquete.getNick())) {
