@@ -74,7 +74,6 @@ public class Tablero extends JFrame {
 	private boolean seJugoGuardia = false;
 	private String ganadorRonda;
 	private boolean reinicioRonda = false;
-	private boolean finalizarPartida = false;
 	private int nroRonda = 0;
 	private String nombreJActivo;
 
@@ -145,13 +144,10 @@ public class Tablero extends JFrame {
 	private BufferedImage background;
 	private BufferedImage dorso;
 
-	private boolean tomoCarta = false;
-	private boolean finalizar = false;
 	private boolean compararManos = false;
 	private boolean cambiarJugador = false;
 	private boolean finPartida = false;
 
-	// private ImageIcon descriprueca = new ImageIcon("loveImg/banner.jpg");
 
 	public void bloquearBoton() {
 		enviarMsj(out, "6");
@@ -393,8 +389,8 @@ public class Tablero extends JFrame {
 		construirDescarte();
 
 		sonidoFondo.setVolume(volumen);
-//		sonidoFondo.play();
-//		sonidoFondo.loopear();
+		sonidoFondo.play();
+		sonidoFondo.loopear();
 		this.sala = salaPrincipal;
 		this.jugadores = jugadores;
 		cantJugadores = jugadores.size();
@@ -816,7 +812,7 @@ public class Tablero extends JFrame {
 				g2.setPaint(Color.WHITE);
 				g2.drawImage(fondoVerCarta, 500, 50, 350, 200, this);
 				g2.drawString("Fin de ronda", 570, 100);
-				g2.drawString("dieguin", 540, 170);
+				g2.drawString(ganadorRonda, 540, 170);
 				g2.drawImage(cartaAmor, 680, 140, 50, 35, this);
 				g2.drawString("+  1", 750, 170);
 
@@ -829,7 +825,7 @@ public class Tablero extends JFrame {
 				g2.setPaint(Color.WHITE);
 				g2.drawImage(fondoVerCarta, 500, 50, 350, 200, this);
 				g2.drawString("Partida finalizada", 515, 140);
-				g2.drawString(" Ganador " + "Dieguin", 517, 180);
+				g2.drawString(" Ganador " + ganadorRonda, 517, 180);
 			}
 			
 			
@@ -892,7 +888,6 @@ public class Tablero extends JFrame {
 		descartes.clear();
 		recibirCartas();
 		construirDescarte();
-
 	}
 
 	public static void cambioJugador() {

@@ -52,6 +52,7 @@ public class HiloEscuchaTablero extends Thread {
 	{
 		String nickAbandono = (String)leerMsj(dis);
 		tablero.eliminarJugadorTablero(nickAbandono);
+		tablero.refresh();
 	}
 	
 	public void finDePartida() {
