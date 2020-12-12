@@ -17,13 +17,11 @@ public abstract class Carta implements Serializable {
 	private int fuerza;
 	private String nombre;
 	private String descEfecto;
-	
+
 	////////////////////////////////////////////
 	private JLabel imagen;
 	private JLabel trasera;
-	
-	
-	
+
 	///////////////////////////////////
 	public Carta(int fuerza, String nombre, String descEfecto) {
 		this.fuerza = fuerza;
@@ -35,10 +33,8 @@ public abstract class Carta implements Serializable {
 
 	public abstract int getFuerzaCarta();
 
-	public abstract void activarEfecto(Jugador jugador, Partida partida,Paquete paquete);
+	public abstract void activarEfecto(Jugador jugador, Partida partida, Paquete paquete);
 
-
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -55,20 +51,19 @@ public abstract class Carta implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 
 		return descEfecto;
 	}
-	
+
 	public int getFuerza() {
 		return fuerza;
 	}
-	
-	
+
 	public String getNombre() {
 		return nombre;
 	}
-		
+
 }

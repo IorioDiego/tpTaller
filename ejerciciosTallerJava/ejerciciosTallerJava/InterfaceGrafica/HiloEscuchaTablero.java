@@ -1,16 +1,11 @@
 package InterfaceGrafica;
 
-import java.awt.Color;
-import java.awt.Graphics;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import javax.swing.JFrame;
-
 import cartas.Carta;
-import estados.Eliminado;
-import estados.Estado;
+
 
 public class HiloEscuchaTablero extends Thread {
 
@@ -72,7 +67,6 @@ public class HiloEscuchaTablero extends Thread {
 		Carta cartaOp = null;
 		Carta cartaBaron = null;
 		Carta cartaBaronOp = null;
-		Carta cartaPerdedor = null;
 		String jugadorBaron = null;
 		String jugadorBaronOp = null;
 		boolean itsMeMario = false;
@@ -133,7 +127,6 @@ public class HiloEscuchaTablero extends Thread {
 				sw = true;
 				cartaOp = cartaBaronOp;
 				nombreOp = jugadorBaronOp;
-//				tablero.getMano().remove(0); //si remuevo es porq perdio
 
 			} else if (msj.equals("PerdioJugador")) {
 				sw = true;
@@ -205,7 +198,6 @@ public class HiloEscuchaTablero extends Thread {
 			try {
 				espera.wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

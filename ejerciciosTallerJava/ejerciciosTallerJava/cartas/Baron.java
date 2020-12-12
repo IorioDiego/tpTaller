@@ -2,9 +2,6 @@ package cartas;
 
 import java.io.IOException;
 
-import javax.swing.JDialog;
-
-import InterfaceGrafica.Tablero;
 import game.Jugador;
 import game.Partida;
 import servidor.Paquete;

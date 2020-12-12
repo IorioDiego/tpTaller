@@ -6,8 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import InterfaceGrafica.Salas;
 import cartas.Baron;
 import cartas.Carta;
 import cartas.Condesa;
@@ -16,15 +14,13 @@ import cartas.Princesa;
 import cartas.Principe;
 import cartas.Rey;
 import cartas.Sacerdote;
-import comandosJuego.JugarCartas;
 import estados.Eliminado;
-import estados.Protegido;
 import servidor.Paquete;
 import servidor.Servidor;
 
 public class Partida extends Observer implements Serializable {
 	private int afecto;
-	// private ArrayList<Paquete> jugadores; ---> setearlo con el server
+
 	private int cantJugadores;
 	private ArrayList<Jugador> jugadores;
 	private ArrayList<Carta> listaCartas = new ArrayList<Carta>();
@@ -153,40 +149,28 @@ public class Partida extends Observer implements Serializable {
 	}
 
 	public void iniciarPartida() {
-
 		observarJugadores();
 		iniciarRonda();
-
 	}
 
 	public void iniciarRonda() {
-
 		Paquete primerJ = null;
 		nroRonda++;
 		for (Jugador jugador : jugadores) {
 			jugador.seReiniciaRonda();
-
 		}
 
-		if (nroRonda > 1)
+		if (nroRonda > 1) {
 			reinicio = true;
-
+		}
 		huboEliminacion = false;
-
-		// enviarMsj(dos, "1");
-		// mazo = (Mazo) leerMsj(dis);
 		mazo = new Mazo();
 		mazo.register(this);
 		mazo.mezclar();
 		cartaEliminda = mazo.eliminarPrimeraCarta();
-
 		cantJugadores = jugadoresActivos;
 
-//		for (Jugador jugador : jugadores) {
-//			mazo.darCarta(jugador);
-//		}
 		ArrayList<Paquete> p = Servidor.darClientesDeSala(nombreSala);
-
 		try {
 
 			for (Paquete paqueteCliente : p) {
@@ -209,7 +193,6 @@ public class Partida extends Observer implements Serializable {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -325,16 +308,16 @@ public class Partida extends Observer implements Serializable {
 			}
 			ganador = jEmpatados.get(ganador);
 		}
-		
-		jugadores.get(ganador).ganarRonda(afecto, this);
-		ganadoRonda = jugadores.get(ganador);
 
 		try {
 			paqueteActivo.getSalida().writeObject(null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
+
+		jugadores.get(ganador).ganarRonda(afecto, this);
+		ganadoRonda = jugadores.get(ganador);
 
 		avisarFinRonda();
 	}
