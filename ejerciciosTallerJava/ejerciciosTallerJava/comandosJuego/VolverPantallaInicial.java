@@ -25,13 +25,21 @@ public class VolverPantallaInicial implements ComandosJuego {
 				String enGame = Servidor.darConfigSalas(sala).getFinalizoPartida();
 				if (!enGame.equals("finPartida")) {
 					if (partida.getJugadores().size() > 2) {
-						Jugador player = null;		///-----> mas de 2 jugadores
+						Jugador player = null; /// -----> mas de 2 jugadores
 						for (Jugador players : partida.getJugadores()) {
 							if (paquete.getNick().equals(players.getNombre()))
 								player = players;
 						}
 						partida.getJugadores().remove(player);
-						//partida.observarJugadores();
+						player = Servidor.darConfigSalas(paquete.getSala()).getGanador();
+						paquete.dejarSala(sala);
+						Servidor.eliminarClienteDeSala(paquete, sala);
+						if (player != null) {
+							player.ganarRonda(partida.getAfecto(), partida);
+							partida.avisarFinRonda();
+							Servidor.darConfigSalas(sala).setReinicioRonda("NoReinicio");
+							Servidor.darConfigSalas(sala).setGanador(null);
+						}
 					} else
 						for (Paquete paqueteClient : Servidor.darClientesDeSala(sala)) {
 							if (!paqueteClient.getNick().equals(paquete.getNick())) {
@@ -39,9 +47,12 @@ public class VolverPantallaInicial implements ComandosJuego {
 								paqueteClient.getSalida().writeObject(paqueteClient.getNick());
 							}
 						}
+					paquete.dejarSala(sala);
+					Servidor.eliminarClienteDeSala(paquete, sala);
+				} else {
+					paquete.dejarSala(sala);
+					Servidor.eliminarClienteDeSala(paquete, sala);
 				}
-				paquete.dejarSala(sala);
-				Servidor.eliminarClienteDeSala(paquete, sala);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -51,6 +51,7 @@ public class DentroDeJuego implements ComandosServer {
 		ComandosJuego bloquearJugador= new BloquearJugadores();
 		ComandosJuego dibujarCondesa = new DibujarCondesa();
 		ComandosJuego rendirse = new Rendirse();
+
 		
 		this.comanJuego = new VolverPantallaInicial();
 		comanJuego.establecerSiguiente(tomarCarta);

@@ -8,23 +8,31 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Servidor {
+public class Servidor extends Thread {
 
 	private static Map<String, SettingsPartida> maxSalas = new HashMap<String, SettingsPartida>();
 	private static Map<String, ArrayList<Paquete>> salas = new HashMap<String, ArrayList<Paquete>>();
-
+	private static boolean apagar = false;
+	private int puerto;
 
 	public Servidor(int puerto) throws IOException {
-		ServerSocket servidor = new ServerSocket(puerto);
-		System.out.println("Server inicializando...");
-		for (int i = 1; i <= 200; i++) {
-			Socket cliente = servidor.accept();
+		this.puerto = puerto;
+	}
 
-			HiloAtencionCliente hc = new HiloAtencionCliente(cliente);
-			hc.start();
+	@Override
+	public void run() {
+		ServerSocket servidor;
+		try {
+			servidor = new ServerSocket(puerto);
+			while (!apagar) {
+				Socket cliente = servidor.accept();
+				HiloAtencionCliente hc = new HiloAtencionCliente(cliente);
+				hc.start();
+			}
+			servidor.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		System.out.println("Server Finalizado");
-		servidor.close();
 	}
 
 	static public void eliminarClienteDeSalas(Paquete paqueteClient) {
@@ -58,6 +66,14 @@ public class Servidor {
 		}
 	}
 
+	public static boolean isApagar() {
+		return apagar;
+	}
+
+	public static void setApagar(boolean apagar) {
+		Servidor.apagar = apagar;
+	}
+
 	public static boolean existeSala(String sala) {
 		return salas.containsKey(sala);
 	}
@@ -83,11 +99,10 @@ public class Servidor {
 	public static Map<String, SettingsPartida> getMaxSalas() {
 		return maxSalas;
 	}
-	
+
 	public static SettingsPartida darConfigSalas(String sala) {
 		return maxSalas.get(sala);
 	}
-
 
 	public static void setMaxSalas(Map<String, SettingsPartida> maxSalas) {
 		Servidor.maxSalas = maxSalas;

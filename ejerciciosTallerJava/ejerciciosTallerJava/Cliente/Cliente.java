@@ -16,7 +16,7 @@ import InterfaceGrafica.Salas;
 import servidor.SalaSerealizable;
 
 
-public class Cliente {
+public class Cliente extends Thread {
 
 	private String ip;
 	private int puerto;
@@ -29,10 +29,9 @@ public class Cliente {
 	public Cliente(String ip, int puerto) throws UnknownHostException, IOException {
 		this.puerto = puerto;
 		this.ip = ip;
-		conectarse();
 	}
 
-	public void conectarse() {
+	public void run() {
 		try {
 			socket = new Socket(ip, puerto);
 			dosObj = new ObjectOutputStream(socket.getOutputStream());

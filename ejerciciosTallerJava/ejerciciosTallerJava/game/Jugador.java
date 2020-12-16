@@ -23,8 +23,9 @@ public class Jugador extends Observable implements Serializable {
 	private Estado estado = new Normal();
 	private boolean pasoTurno = false;
 
-	public Jugador() {};
-	
+	public Jugador() {
+	};
+
 	public Jugador(String nombre) {
 		this.nombre = nombre;
 		this.afectosConseguidos = 0;
@@ -47,7 +48,6 @@ public class Jugador extends Observable implements Serializable {
 		descarte.clear();
 		vaciarMano();
 	}
-	
 
 	public boolean isPasoTurno() {
 		return pasoTurno;
@@ -75,41 +75,40 @@ public class Jugador extends Observable implements Serializable {
 		estado = estado.seJugoPrincesa();
 		notificarEstadoEliminado();
 	}
-	
-	public void ganarRonda(int afectos,Partida partida) {
+
+	public void ganarRonda(int afectos, Partida partida) {
 		partida.setGanadoRonda(this);
 		if (++afectosConseguidos == afectos)
 			notificarEndGame();
 	}
-	
+
 	public Carta tomarCarta(Carta nuevaCarta) {
-		Carta tomada= nuevaCarta;
+		Carta tomada = nuevaCarta;
 		if (nuevaCarta.equals(new Condesa()) && (mano.contains(new Rey()) || mano.contains(new Principe())))
 			descartar(nuevaCarta);
-			
 		else {
-			if (mano.contains(new Condesa()) && (nuevaCarta.equals(new Rey()) || nuevaCarta.equals(new Principe())))
-				tomada=descartar(sacarCartaDeMano(0));
+			if (mano.contains(new Condesa()) && (nuevaCarta.equals(new Rey()) || nuevaCarta.equals(new Principe()))) {
+				descartar(sacarCartaDeMano(0));
+				tomada = nuevaCarta;
+			}
 			mano.add(nuevaCarta);
-		
+
 		}
 		estado = estado.seRoboCarta();
 		return tomada;
 	}
 
-
-	public void jugarCarta(Partida partida,int index,Paquete paquete) {
+	public void jugarCarta(Partida partida, int index, Paquete paquete) {
 		Carta cartaElegida = sacarCartaDeMano(index);
-		cartaElegida.activarEfecto(this, partida,paquete);
+		cartaElegida.activarEfecto(this, partida, paquete);
 		descartar(cartaElegida);
-		pasoTurno=true;
+		pasoTurno = true;
 	}
 
 	public int compararMano(Jugador oponente) {
 		return this.mano.get(0).getFuerzaCarta() - oponente.mano.get(0).getFuerzaCarta();
 	}
 
-	
 	public void intercabiarMano(Jugador oponente) {
 		ArrayList<Carta> cambioDemano = new ArrayList<>(this.mano);
 		this.mano.clear();
@@ -118,16 +117,15 @@ public class Jugador extends Observable implements Serializable {
 		oponente.mano.addAll(cambioDemano);
 
 	}
-	
-	public ArrayList<Carta> getManoCompleta()
-	{
+
+	public ArrayList<Carta> getManoCompleta() {
 		return mano;
 	}
-	
+
 	public boolean tengoLaCarta(Carta carta) {
 		return this.mano.contains(carta);
 	}
-	
+
 	public Carta getDescarte(int index) {
 		return descarte.get(index);
 	}
@@ -155,7 +153,6 @@ public class Jugador extends Observable implements Serializable {
 		return mano.size();
 	}
 
-	
 	public int elegirCartaParaJugar(int i) {
 		return i;
 	}
@@ -164,12 +161,12 @@ public class Jugador extends Observable implements Serializable {
 		descarte.add(cartaJugada);
 		return cartaJugada;
 	}
-	
+
 	public Jugador seleccionarJugador(Partida partida) {
 		int i = 1;
 		return partida.elegirJugador(i);
 	}
-	
+
 	public int sumarDescarte() {
 		int suma = 0;
 		for (Carta carta : descarte) {
@@ -177,26 +174,23 @@ public class Jugador extends Observable implements Serializable {
 		}
 		return suma;
 	}
-	
+
 	public Carta getMano(int i) {
 		return mano.get(i);
 	}
-	
-	public Carta getCarta(int i)
-	{
+
+	public Carta getCarta(int i) {
 		return mano.get(i);
 	}
-	
-	public Carta ultimaCartaDescarte()
-	{
-		return descarte.get(descarte.size()-1);
+
+	public Carta ultimaCartaDescarte() {
+		return descarte.get(descarte.size() - 1);
 	}
-	
-	public String getNombre()
-	{
+
+	public String getNombre() {
 		return nombre;
 	}
-	
+
 	public int getAfectosConseguidos() {
 		return afectosConseguidos;
 	}
@@ -204,12 +198,12 @@ public class Jugador extends Observable implements Serializable {
 	public boolean isBlockedOrDelete() {
 		return getEstado().equals(new Eliminado()) || getEstado().equals(new Protegido());
 	}
-	
+
 	public Carta getUltimaDescartada() {
-		if( descarte.size() >1 && descarte.get(descarte.size()-1).equals(new Principe()))
-			return descarte.get(descarte.size()-2);
-		else if(!descarte.isEmpty())
-			return descarte.get(descarte.size()-1);
+		if (descarte.size() > 1 && descarte.get(descarte.size() - 1).equals(new Principe()))
+			return descarte.get(descarte.size() - 2);
+		else if (!descarte.isEmpty())
+			return descarte.get(descarte.size() - 1);
 		return null;
 	}
 }

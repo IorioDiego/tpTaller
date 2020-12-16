@@ -47,6 +47,7 @@ public class Principe extends Carta {
 				}
 			}
 			if (jugada.equals(new Princesa())) {
+				paqueteOp.getSalida().writeObject(new Princesa());
 				oponente.seJugoPrincesa();
 			} else {
 				if (partida.getMazo().getCantCartas() != 0)

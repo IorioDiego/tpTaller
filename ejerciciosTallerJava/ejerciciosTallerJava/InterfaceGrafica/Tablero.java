@@ -49,6 +49,7 @@ import cartas.Princesa;
 import cartas.Principe;
 import cartas.Rey;
 import cartas.Sacerdote;
+import estados.Eliminado;
 import estados.Estado;
 import game.Jugador;
 import game.Partida;
@@ -148,15 +149,8 @@ public class Tablero extends JFrame {
 	private boolean cambiarJugador = false;
 	private boolean finPartida = false;
 
-
 	public void bloquearBoton() {
-		enviarMsj(out, "6");
-
-		for (int i = 0; i < partida.getJugadores().size(); i++) {
-			Estado estado = (Estado) leerMsj(in);
-			partida.getJugadores().get(i).setEstado(estado);
-		}
-
+		pedirEstados();
 		for (int i = 0; i < partida.getJugadores().size(); i++) {
 			if (jugadores.get(i).isBlockedOrDelete()) {
 
@@ -184,12 +178,7 @@ public class Tablero extends JFrame {
 	}
 
 	public void desbloquearBoton() {
-		enviarMsj(out, "6");
-		for (int i = 0; i < partida.getJugadores().size(); i++) {
-			Estado estado = (Estado) leerMsj(in);
-			partida.getJugadores().get(i).setEstado(estado);
-		}
-
+		pedirEstados();
 		for (int i = 0; i < jugadores.size(); i++) {
 			if (!jugadores.get(i).isBlockedOrDelete()) {
 				switch (i) {
@@ -214,6 +203,14 @@ public class Tablero extends JFrame {
 		}
 	}
 
+	public void pedirEstados() {
+		enviarMsj(out, "6");
+		for (int i = 0; i < partida.getJugadores().size(); i++) {
+			Estado estado = (Estado) leerMsj(in);
+			partida.getJugadores().get(i).setEstado(estado);
+		}
+	}
+
 	public void rendirse() {
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -225,11 +222,14 @@ public class Tablero extends JFrame {
 
 	public void confirmarSalida() {
 		int valor = JOptionPane.showConfirmDialog(this, "Desea rendirse", "Cerrar", JOptionPane.WARNING_MESSAGE);
+		String darTurno = "";
 		if (valor == JOptionPane.YES_OPTION) {
 			if (miTurno && !levantarCarta && !jugarCarta) {
 				if (partida.getJugadores().size() > 2) {
 					enviarMsj(out, "9");
-					enviarMsj(out, "5");
+					darTurno = (String) leerMsj(in);
+					if (darTurno.equals("DarTurno"))
+						enviarMsj(out, "5");
 				}
 				this.dispose();
 				sala.setVisible(true);
@@ -389,8 +389,8 @@ public class Tablero extends JFrame {
 		construirDescarte();
 
 		sonidoFondo.setVolume(volumen);
-		sonidoFondo.play();
-		sonidoFondo.loopear();
+		//sonidoFondo.play();
+		//sonidoFondo.loopear();
 		this.sala = salaPrincipal;
 		this.jugadores = jugadores;
 		cantJugadores = jugadores.size();
@@ -771,7 +771,7 @@ public class Tablero extends JFrame {
 				dibujarCartas(g2, cartaOpSacer.getNombre(), 630, 280);
 				dibManoOp = false;
 			}
-			
+
 			if (compararManos) {
 
 				g2.drawImage(fondoVerCarta, 400, 150, 555, 380, this);
@@ -818,7 +818,6 @@ public class Tablero extends JFrame {
 
 			}
 
-		
 			if (finPartida) {
 
 				g2.setFont(new Font("Segoe Script", Font.HANGING_BASELINE, 30));
@@ -827,8 +826,6 @@ public class Tablero extends JFrame {
 				g2.drawString("Partida finalizada", 515, 140);
 				g2.drawString(" Ganador " + ganadorRonda, 517, 180);
 			}
-			
-			
 
 		}
 
@@ -1141,7 +1138,7 @@ public class Tablero extends JFrame {
 		int index = partida.getJugadores().indexOf(player);
 		partida.getJugadores().remove(player);
 		switchNotVisible(index);
-
+		construirDescarte();
 	}
 
 	public void switchNotVisible(int index) {

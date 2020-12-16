@@ -19,19 +19,16 @@ public class DibujarCondesa implements ComandosJuego{
 		if (msj.equals("7")) {
 			try {
 			
-				Carta cartaJugada = (Carta) paquete.getEntrada().readObject();
-			
+				Carta cartaJugada = (Carta) paquete.getEntrada().readObject();		
 				for (Paquete paqueteCliente : Servidor.darClientesDeSala(paquete.getSala())) {
-					if ( !paquete.equals(paqueteCliente)) {
+					if (!paquete.getCliente().equals(paqueteCliente.getCliente())) {
 						paqueteCliente.getSalida().writeObject("actualizarTablero");
 						paqueteCliente.getSalida().writeObject(cartaJugada);
 						paqueteCliente.getSalida().writeObject(paquete.getNick());
 						
 					}
 				}
-				
-			
-			
+	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

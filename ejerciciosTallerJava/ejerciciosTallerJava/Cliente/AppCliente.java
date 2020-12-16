@@ -9,5 +9,6 @@ public class AppCliente {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+		//192.168.2.38
 	}
 }

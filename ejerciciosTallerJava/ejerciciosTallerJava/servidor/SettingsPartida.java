@@ -2,6 +2,7 @@ package servidor;
 
 import java.io.Serializable;
 
+import game.Jugador;
 import game.Partida;
 
 public class SettingsPartida implements Serializable {
@@ -16,7 +17,9 @@ public class SettingsPartida implements Serializable {
 	private String reinicioRonda;
 	private String finalizoPartida;
 	private Partida partida;
+	private Jugador ganador;
 	
+
 	public SettingsPartida(Integer cantJugadores, String nombreSala, Integer prendasAmor) {
 		this.cantJugadores = cantJugadores;
 		this.nombreSala = nombreSala;
@@ -58,6 +61,15 @@ public class SettingsPartida implements Serializable {
 	}
 	
 
+	public Jugador getGanador() {
+		return ganador;
+	}
+
+
+	public void setGanador(Jugador ganador) {
+		this.ganador = ganador;
+	}
+	
 	public boolean isInGame() {
 		return inGame;
 	}
