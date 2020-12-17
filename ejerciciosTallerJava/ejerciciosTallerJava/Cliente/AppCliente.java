@@ -5,7 +5,8 @@ import java.io.IOException;
 public class AppCliente {
 	public static void main(String[] args) {
 		try {
-			new Cliente("localhost", 20000);
+			Cliente client = new Cliente("localhost", 20000);
+			client.start();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

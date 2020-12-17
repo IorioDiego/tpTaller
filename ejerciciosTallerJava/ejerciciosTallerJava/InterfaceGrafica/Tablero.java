@@ -66,7 +66,6 @@ public class Tablero extends JFrame {
 	private ArrayList<Carta> mano = new ArrayList<>();
 
 	// hilos
-	private HiloEscuchaTablero hiloTablero;
 	private Integer espera = 0;
 
 	private boolean levantarCarta = false;
@@ -84,7 +83,6 @@ public class Tablero extends JFrame {
 	// FRAMES-DIALOGS-BUTTONS-PANELS
 	private JPanel contentPane;
 	private DrawPanel drawPanel;
-	private Jugador jugadorActivo;
 	private Salas sala;
 	JPanel predefined = new JPanel();
 	private JDialog lista;
@@ -146,7 +144,6 @@ public class Tablero extends JFrame {
 	private BufferedImage dorso;
 
 	private boolean compararManos = false;
-	private boolean cambiarJugador = false;
 	private boolean finPartida = false;
 
 	public void bloquearBoton() {
@@ -232,6 +229,7 @@ public class Tablero extends JFrame {
 						enviarMsj(out, "5");
 				}
 				this.dispose();
+				sonidoFondo.apagar();
 				sala.setVisible(true);
 				enviarMsj(out, "2");
 				synchronized (espera) {
@@ -389,8 +387,8 @@ public class Tablero extends JFrame {
 		construirDescarte();
 
 		sonidoFondo.setVolume(volumen);
-		//sonidoFondo.play();
-		//sonidoFondo.loopear();
+		sonidoFondo.play();
+		sonidoFondo.loopear();
 		this.sala = salaPrincipal;
 		this.jugadores = jugadores;
 		cantJugadores = jugadores.size();
@@ -398,11 +396,6 @@ public class Tablero extends JFrame {
 
 		drawPanel = new DrawPanel();
 		getContentPane().add(drawPanel);
-
-		for (Jugador jugador : jugadores) {
-			if (jugador.getNombre().equals(partida.getjInicial()))
-				turnoJugador(jugador);
-		}
 
 		lista = new JDialog(this, "Lista Jugadores", true);
 
@@ -677,6 +670,7 @@ public class Tablero extends JFrame {
 
 				} else {
 					sala.setVisible(true);
+					sonidoFondo.apagar();
 					dispose();
 				}
 				refresh();
@@ -1169,12 +1163,6 @@ public class Tablero extends JFrame {
 			int afectos = (int) leerMsj(in);
 			jugadores.setAfectosConseguidos(afectos);
 		}
-	}
-
-	public void turnoJugador(Jugador jugador) {
-		if (!compararManos && !dibManoOp)
-			cambiarJugador = true;
-		jugadorActivo = jugador;
 	}
 
 	public String getNombreJActivo() {

@@ -1,6 +1,5 @@
 package servidor;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -47,6 +46,13 @@ public class pantallaServer extends JFrame {
 
 		JLabel lblMantengaEstaVentana = new JLabel("MANTENGA ESTA VENTANA ABIERTA MIENTRAS USTED SEA EL SERVER");
 		lblNewLabel.setLabelFor(lblMantengaEstaVentana);
+		
+		JLabel labelPrender = new JLabel("Server inicializado.....");
+		
+		JLabel labelApagar = new JLabel("Server apagado....");
+		
+		labelApagar.setVisible(false);
+		labelPrender.setVisible(false);
 
 		JButton btnApagarServer = new JButton("Apagar server");
 		btnApagarServer.addActionListener(new ActionListener() {
@@ -54,10 +60,14 @@ public class pantallaServer extends JFrame {
 				if (serverIniciado) {
 					Servidor.setApagar(true);
 					serverIniciado = false;
+					labelApagar.setVisible(true);
+					labelPrender.setVisible(false);
 				} else
 					JOptionPane.showMessageDialog(null, "El server esta apagado", "Server", JOptionPane.ERROR_MESSAGE);
 			}
 		});
+		
+		
 
 		JButton btnIniciarServer = new JButton("Iniciar server");
 		btnIniciarServer.addActionListener(new ActionListener() {
@@ -67,6 +77,8 @@ public class pantallaServer extends JFrame {
 						Servidor server = new Servidor(20000);
 						server.start();
 						serverIniciado = true;
+						labelPrender.setVisible(true);
+						labelApagar.setVisible(false);
 					} else
 						JOptionPane.showMessageDialog(null, "El server ya ha sido prendido", "Server",
 								JOptionPane.ERROR_MESSAGE);
@@ -76,27 +88,49 @@ public class pantallaServer extends JFrame {
 
 			}
 		});
+		
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap(41, Short.MAX_VALUE)
-				.addComponent(btnApagarServer, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE).addGap(85)
-				.addComponent(btnIniciarServer, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE).addGap(58))
-				.addGroup(gl_contentPane.createSequentialGroup().addGap(185).addComponent(lblNewLabel)
-						.addContainerGap(198, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING,
-						gl_contentPane.createSequentialGroup().addContainerGap()
-								.addComponent(lblMantengaEstaVentana, GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
-								.addGap(31)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addGap(27)
-				.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(lblMantengaEstaVentana, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-				.addGap(28)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(51, Short.MAX_VALUE)
+					.addComponent(btnApagarServer, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+					.addGap(85)
+					.addComponent(btnIniciarServer, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+					.addGap(58))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(185)
+					.addComponent(lblNewLabel)
+					.addContainerGap(208, Short.MAX_VALUE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblMantengaEstaVentana, GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+					.addGap(31))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(114)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(labelApagar, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelPrender, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(151, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(27)
+					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblMantengaEstaVentana, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+					.addGap(28)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnApagarServer, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnIniciarServer, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(44, Short.MAX_VALUE)));
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(labelPrender, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(labelApagar)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
 		contentPane.setLayout(gl_contentPane);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setResizable(false);

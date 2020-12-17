@@ -9,7 +9,7 @@ import javax.sound.sampled.FloatControl;
 
 public class Sound {
 	
-	Clip clip;
+	private Clip clip;
 
 	public Sound(String path) throws Exception {
 		AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(path));
@@ -34,6 +34,12 @@ public class Sound {
 	public void loopear()
 	{
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
+	}
+	
+	public void apagar()
+	{	
+		clip.stop();
+		clip.close();
 	}
 	
 }
